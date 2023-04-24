@@ -1,4 +1,4 @@
-import ArticleM from '@/models/article'
+import ArticleM from '../models/article'
 import type { Article, ListConfig, Req, ReqQuery, Res } from '@/types'
 
 function replaceHtmlTag(html: string) {

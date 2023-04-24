@@ -2,10 +2,10 @@ import md5 from 'md5'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
-import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '@/config'
-import { strLen } from '@/utils'
+import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../config'
+import { strLen } from '../utils'
 
-import UserM from '@/models/user'
+import UserM from '../models/user'
 import type { Req, Res, User, UserModify } from '@/types'
 
 /**

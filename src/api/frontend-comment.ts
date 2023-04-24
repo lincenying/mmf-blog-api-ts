@@ -1,9 +1,8 @@
 import moment from 'moment'
 
+import ArticleM from '../models/article'
+import CommentM from '../models/comment'
 import type { Article, Comment, Req, ReqQuery, Res } from '@/types'
-
-import ArticleM from '@/models/article'
-import CommentM from '@/models/comment'
 
 /**
  * 发布评论

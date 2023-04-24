@@ -1,14 +1,14 @@
 import express from 'express'
 import multipart from 'connect-multiparty'
 
-import * as frontendArticle from '@/api/frontend-article'
-import * as frontendComment from '@/api/frontend-comment'
-import * as frontendLike from '@/api/frontend-like'
-import * as frontendUser from '@/api/frontend-user'
+import * as frontendArticle from '../api/frontend-article'
+import * as frontendComment from '../api/frontend-comment'
+import * as frontendLike from '../api/frontend-like'
+import * as frontendUser from '../api/frontend-user'
 
-import cors from '@/middlewares/cors'
-import isAdmin from '@/middlewares/is-admin'
-import isUser from '@/middlewares/is-user'
+import cors from '../middlewares/cors'
+import isAdmin from '../middlewares/is-admin'
+import isUser from '../middlewares/is-user'
 
 const router = express.Router()
 

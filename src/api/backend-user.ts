@@ -3,13 +3,10 @@ import md5 from 'md5'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 
-import { fsExistsSync } from '@/utils'
-import config from '@/config'
-import AdminM from '@/models/admin'
+import { fsExistsSync } from '../utils'
+import { md5Pre, secretServer as secret } from '../config'
+import AdminM from '../models/admin'
 import type { Req, Res, User, UserModify } from '@/types'
-
-const md5Pre = config.md5Pre
-const secret = config.secretServer
 
 /**
  * 获取管理员列表
@@ -109,7 +106,7 @@ export async function insert(email: string, password: string, username: string) 
     let message = ''
 
     if (fsExistsSync('./admin.lock')) {
-        message = '请先把 admin.lock 删除'
+        message = '请先把项目根目录的 admin.lock 文件删除'
     }
     else if (!username || !password || !email) {
         message = '请将表单填写完整'

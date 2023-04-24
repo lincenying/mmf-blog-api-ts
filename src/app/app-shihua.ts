@@ -2,12 +2,14 @@ import fs from 'node:fs'
 import multer from 'multer'
 import moment from 'moment'
 import base64Img from 'base64-img'
-import { imageClassify as AipImageClassifyClient } from 'baidu-aip-sdk'
-import { cdnDomain, domain, shihua as shihuaConfig } from '@/config'
+import pkg from 'baidu-aip-sdk'
 
-import { checkJWT } from '@/utils/check-jwt'
-import ShiHuaM from '@/models/shihua'
+import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
+import { checkJWT } from '../utils/check-jwt'
+import ShiHuaM from '../models/shihua'
 import type { ListConfig, Req, Res, ShiHua } from '@/types'
+
+const { imageClassify: AipImageClassifyClient } = pkg
 
 const storage = multer.diskStorage({
     destination(_req, _file, cb) {

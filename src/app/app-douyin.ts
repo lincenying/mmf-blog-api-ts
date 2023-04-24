@@ -2,9 +2,9 @@ import axios from 'axios'
 import moment from 'moment'
 
 import crc32 from '../utils/crc32'
-import { douyinCache as lruCache } from '@/utils/lru-cache'
-import DouYinM from '@/models/douyin'
-import DouYinUserM from '@/models/douyin-user'
+import { douyinCache as lruCache } from '../utils/lru-cache'
+import DouYinM from '../models/douyin'
+import DouYinUserM from '../models/douyin-user'
 import type { DouYin, DouYinInsert, DouYinUser, DouYinUserInsert, Req, Res } from '@/types'
 
 export async function insertUser(req: Req<DouYinUserInsert>, res: Res) {

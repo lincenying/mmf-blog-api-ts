@@ -1,4 +1,6 @@
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import http from 'node:http'
 import express from 'express'
 import compression from 'compression'
 import favicon from 'serve-favicon'
@@ -12,9 +14,23 @@ import frontendRoutes from './routes/frontend'
 import backendRoutes from './routes/backend'
 import appRoutes from './routes/app'
 
+// catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//     const err = new Error('Not Found')
+//     err.status = 404
+//     next(err)
+// })
+
+// app.use(function(err, req, res) {
+//     res.status(err.status || 500)
+//     res.send(err.message)
+// })
+
 // 引入 mock 路由
 
 const app = express()
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const resolve = (file: string) => path.resolve(__dirname, file)
 const isProd = process.env.NODE_ENV === 'production'
@@ -64,16 +80,42 @@ app.get('*', (req, res) => {
     })
 })
 
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//     const err = new Error('Not Found')
-//     err.status = 404
-//     next(err)
-// })
+const port = process.env.PORT || '4000'
+app.set('port', port)
 
-// app.use(function(err, req, res) {
-//     res.status(err.status || 500)
-//     res.send(err.message)
-// })
+const server = http.createServer(app)
 
-export default app
+server.listen(port)
+server.on('error', onError)
+server.on('listening', onListening)
+
+interface Errors extends Error {
+    syscall: string
+    code: string
+}
+
+function onError(error: Errors) {
+    if (error.syscall !== 'listen')
+        throw error
+
+    const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(`${bind} requires elevated privileges`)
+            process.exit(1)
+            break
+        case 'EADDRINUSE':
+            console.error(`${bind} is already in use`)
+            process.exit(1)
+            break
+        default:
+            throw error
+    }
+}
+
+function onListening() {
+    const addr = server.address() as any
+    console.log(`Listening on: http://localhost:${addr.port}`)
+}

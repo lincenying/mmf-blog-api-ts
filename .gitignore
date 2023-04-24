@@ -11,3 +11,4 @@ src/config/tujidao.js
 uploads/
 
 *-port.txt
+dist/

@@ -1,4 +1,4 @@
-import ArticleM from '@/models/article'
+import ArticleM from '../models/article'
 import type { Article, Req, Res } from '@/types'
 
 /**

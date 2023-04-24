@@ -1,6 +1,6 @@
 import express from 'express'
 import Mock from 'mockjs'
-import cors from '@/middlewares/cors'
+import cors from '../middlewares/cors'
 
 const router = express.Router()
 

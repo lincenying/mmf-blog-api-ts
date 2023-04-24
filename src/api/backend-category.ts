@@ -1,7 +1,6 @@
 import moment from 'moment'
+import CategoryM from '../models/category'
 import type { Category, CategoryInsert, CategoryModify, Req, Res } from '@/types'
-
-import CategoryM from '@/models/category'
 
 /**
  * 管理时, 获取分类列表

@@ -1,6 +1,7 @@
 {
-  "name": "mmf-blog-api-v2",
-  "version": "2.0.6",
+  "name": "mmf-blog-api-ts",
+  "type": "module",
+  "version": "1.0.0",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -10,8 +11,13 @@
   },
   "scripts": {
     "postinstall": "husky install",
-    "serve": "nodemon bin/www",
-    "start": "node bin/www",
+    "tsc": "node src/init.js && tsc",
+    "watch-tsc": "node src/init.js && tsc -w",
+    "deploy": "node --experimental-specifier-resolution=node dist/app.js",
+    "watch-deploy": "nodemon --watch ./dist --experimental-specifier-resolution=node dist/app.js",
+    "serve": "concurrently \"nr watch-tsc\" \"nr watch-deploy\"",
+    "start": "nr deploy",
+
     "lint": "eslint --ext .js ./server",
     "lint:fix": "eslint --ext .js ./server --fix"
   },

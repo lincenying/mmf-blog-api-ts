@@ -1,6 +1,6 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
-import { tujidao } from '@/config'
+import { tujidao } from '../config'
 import type { Req, Res } from '@/types'
 
 const baseOptions = {

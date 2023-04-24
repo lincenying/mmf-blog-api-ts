@@ -3,10 +3,9 @@ import markdownIt from 'markdown-it'
 import markdownItTocAndAnchor from 'markdown-it-toc-and-anchor'
 import hljs from 'highlight.js'
 
+import ArticleM from '../models/article'
+import CategoryM from '../models/category'
 import type { Article, ArticleInsert, ArticleModify, Req, Res } from '@/types'
-
-import ArticleM from '@/models/article'
-import CategoryM from '@/models/category'
 
 function marked(content: string) {
     const $return = {

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { secretClient, secretServer } from '@/config'
+import { secretClient, secretServer } from '../config'
 
 export function checkJWT(token: string, userid: string, username: string, type: string) {
     return new Promise((resolve) => {

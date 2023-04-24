@@ -19,7 +19,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "build"
+    "outDir": "dist"
   },
-  "exclude": ["node_modules", "dist/**/*", "public/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"]
 }
