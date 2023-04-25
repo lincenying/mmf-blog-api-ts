@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import { fsExistsSync } from '../utils'
 import { md5Pre, secretServer as secret } from '../config'
 import AdminM from '../models/admin'
-import type { Req, Res, User, UserModify } from '@/types'
+import type { Req, Res, UserModify } from '@/types'
 
 /**
  * 获取管理员列表
@@ -21,7 +21,7 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
     const skip = (page - 1) * limit
     try {
         const result = await Promise.all([
-            AdminM.find<User[]>().sort(sort).skip(skip).limit(limit).exec(),
+            AdminM.find().sort(sort).skip(skip).limit(limit).exec(),
             AdminM.countDocuments(),
         ])
         const total = result[1]
@@ -54,7 +54,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = await AdminM.findOne<User>({ _id })
+        const result = (await AdminM.findOne({ _id }).exec())?.toObject()
         res.json({ code: 200, data: result })
     }
     catch (err: any) {
@@ -74,14 +74,14 @@ export async function login(req: Req<{ password: string; username: string }, { }
         return res.json({ code: -200, message: '请输入用户名和密码' })
 
     try {
-        const result = await AdminM.findOne<User>({
+        const result = (await AdminM.findOne({
             username,
             password: md5(md5Pre + password),
             is_delete: 0,
-        })
+        }).exec())?.toObject()
         if (result) {
             const _username = encodeURI(username)
-            const id = result?._id?.toString()
+            const id = result._id
             const remember_me = 2592000000
             const token = jwt.sign({ id, username: _username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             res.cookie('b_user', token, { maxAge: remember_me })
@@ -113,21 +113,23 @@ export async function insert(email: string, password: string, username: string) 
     }
     else {
         try {
-            const result = await AdminM.findOne<User>({ username })
-            if (result)
+            const result = await AdminM.findOne({ username }).exec()
+            if (result) {
                 message = `${username}: 已经存在`
-
-            await AdminM.create({
-                username,
-                password: md5(md5Pre + password),
-                email,
-                creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                is_delete: 0,
-                timestamp: moment().format('X'),
-            })
-            fs.writeFileSync('./admin.lock', username)
-            message = `添加用户成功: ${username}, 密码: ${password}`
+            }
+            else {
+                await AdminM.create({
+                    username,
+                    password: md5(md5Pre + password),
+                    email,
+                    creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    is_delete: 0,
+                    timestamp: moment().format('X'),
+                })
+                fs.writeFileSync('./admin.lock', username)
+                message = `添加用户成功: ${username}, 密码: ${password}`
+            }
         }
         catch (error: any) {
             message = error.toString()
@@ -153,7 +155,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
         data.password = md5(md5Pre + password)
 
     try {
-        const result = await AdminM.findOneAndUpdate<User>({ _id: id }, data, { new: true })
+        const result = await AdminM.findOneAndUpdate({ _id: id }, data, { new: true }).exec()
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {
@@ -170,7 +172,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
 export async function deletes(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        await AdminM.updateOne({ _id }, { is_delete: 1 })
+        await AdminM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '删除成功', data: 'success' })
     }
     catch (err: any) {
@@ -187,7 +189,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
 export async function recover(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        await AdminM.updateOne({ _id }, { is_delete: 0 })
+        await AdminM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '恢复成功', data: 'success' })
     }
     catch (err: any) {

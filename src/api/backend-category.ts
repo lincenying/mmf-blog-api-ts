@@ -1,6 +1,6 @@
 import moment from 'moment'
 import CategoryM from '../models/category'
-import type { Category, CategoryInsert, CategoryModify, Req, Res } from '@/types'
+import type { CategoryInsert, CategoryModify, Req, Res } from '@/types'
 
 /**
  * 管理时, 获取分类列表
@@ -10,7 +10,7 @@ import type { Category, CategoryInsert, CategoryModify, Req, Res } from '@/types
  */
 export async function getList(req: Req, res: Res) {
     try {
-        const result = await CategoryM.find<Category>().sort('-cate_order').exec()
+        const result = await CategoryM.find().sort('-cate_order').exec()
         const json = {
             code: 200,
             data: {
@@ -36,7 +36,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = await CategoryM.findOne<Category>({ _id })
+        const result = (await CategoryM.findOne({ _id }).exec())?.toObject()
         res.json({ code: 200, data: result })
     }
     catch (err: any) {
@@ -58,7 +58,7 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
     }
     else {
         try {
-            const result = await CategoryM.create({
+            const result = (await CategoryM.create({
                 cate_name,
                 cate_order,
                 cate_num: 0,
@@ -66,7 +66,7 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
                 update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
                 is_delete: 0,
                 timestamp: moment().format('X'),
-            })
+            })).toObject()
             res.json({ code: 200, message: '添加成功', data: result })
         }
         catch (err: any) {
@@ -120,7 +120,7 @@ export async function modify(req: Req<CategoryModify>, res: Res) {
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order
     try {
-        const result = await CategoryM.findOneAndUpdate<Category>(
+        const result = await CategoryM.findOneAndUpdate(
             { _id: id },
             {
                 cate_name,
@@ -129,7 +129,7 @@ export async function modify(req: Req<CategoryModify>, res: Res) {
             },
             { new: true },
         )
-        res.json({ code: 200, message: '更新成功', data: result })
+        res.json({ code: 200, message: '更新成功', data: result?.toObject() })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })

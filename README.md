@@ -1,4 +1,4 @@
-# mmf-blog-api-v2
+# mmf-blog-api-ts
 
 在 src/config 文件夹下 创建 mpapp.js 文件
 里面写入: (小程序登录用的)

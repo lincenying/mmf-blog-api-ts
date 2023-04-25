@@ -102,8 +102,8 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
 
     try {
         const xhr = await Promise.all([
-            ArticleM.findOne<Article>({ _id, is_delete: 0 }),
-            ArticleM.updateOne<Article>({ _id }, { $inc: { visit: 1 } }),
+            ArticleM.findOne({ _id, is_delete: 0 }).exec(),
+            ArticleM.updateOne({ _id }, { $inc: { visit: 1 } }).exec(),
         ])
         const result = xhr[0]
         let json

@@ -32,15 +32,15 @@ export async function insert(req: Req<{ id: string; content: string }>, res: Res
         timestamp,
     }
     try {
-        const result = await CommentM.create<Comment>(data)
-        await ArticleM.updateOne<Article>(
+        const result = await CommentM.create(data)
+        await ArticleM.updateOne(
             { _id: id },
             {
                 $inc: {
                     comment_count: 1,
                 },
             },
-        )
+        ).exec()
         res.json({ code: 200, data: result, message: '发布成功' })
     }
     catch (err: any) {
@@ -105,8 +105,8 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([
-            CommentM.updateOne<Comment>({ _id }, { is_delete: 1 }),
-            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: -1 } }),
+            CommentM.updateOne<Comment>({ _id }, { is_delete: 1 }).exec(),
+            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: -1 } }).exec(),
         ])
         res.json({ code: 200, message: '删除成功', data: 'success' })
     }
@@ -127,8 +127,8 @@ export async function recover(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([
-            CommentM.updateOne<Comment>({ _id }, { is_delete: 0 }),
-            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: 1 } }),
+            CommentM.updateOne<Comment>({ _id }, { is_delete: 0 }).exec(),
+            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: 1 } }).exec(),
         ])
         res.json({ code: 200, message: '恢复成功', data: 'success' })
     }

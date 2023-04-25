@@ -83,8 +83,8 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = await ArticleM.findOne({ _id })
-        res.json({ code: 200, data: result })
+        const result = await ArticleM.findOne({ _id }).exec()
+        res.json({ code: 200, data: result?.toObject() })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })
@@ -120,8 +120,8 @@ export async function insert(req: Req<ArticleInsert, {}>, res: Res) {
     }
     try {
         const result = await ArticleM.create(data)
-        await CategoryM.updateOne({ _id: arr_category[0] }, { $inc: { cate_num: 1 } })
-        res.json({ code: 200, message: '发布成功', data: result })
+        await CategoryM.updateOne({ _id: arr_category[0] }, { $inc: { cate_num: 1 } }).exec()
+        res.json({ code: 200, message: '发布成功', data: result.toObject() })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })
@@ -137,8 +137,8 @@ export async function insert(req: Req<ArticleInsert, {}>, res: Res) {
 export async function deletes(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        const result = await ArticleM.updateOne({ _id }, { is_delete: 1 })
-        await CategoryM.updateOne({ _id }, { $inc: { cate_num: -1 } })
+        const result = await ArticleM.updateOne({ _id }, { is_delete: 1 }).exec()
+        await CategoryM.updateOne({ _id }, { $inc: { cate_num: -1 } }).exec()
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {
@@ -155,8 +155,8 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
 export async function recover(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        const result = await ArticleM.updateOne({ _id }, { is_delete: 0 })
-        await CategoryM.updateOne({ _id }, { $inc: { cate_num: 1 } })
+        const result = await ArticleM.updateOne({ _id }, { is_delete: 0 }).exec()
+        await CategoryM.updateOne({ _id }, { $inc: { cate_num: 1 } }).exec()
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {
@@ -185,11 +185,11 @@ export async function modify(req: Req<ArticleModify, {}>, res: Res) {
         update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
     try {
-        const result = await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true })
-        if (category !== category_old) {
+        const result = (await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true }).exec())?.toObject()
+        if (result && category !== category_old) {
             await Promise.all([
-                CategoryM.updateOne({ _id: category }, { $inc: { cate_num: 1 } }),
-                CategoryM.updateOne({ _id: category_old }, { $inc: { cate_num: -1 } }),
+                CategoryM.updateOne({ _id: category }, { $inc: { cate_num: 1 } }).exec(),
+                CategoryM.updateOne({ _id: category_old }, { $inc: { cate_num: -1 } }).exec(),
             ])
         }
         res.json({ code: 200, message: '更新成功', data: result })
