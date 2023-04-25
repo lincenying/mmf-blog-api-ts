@@ -33,7 +33,7 @@ specifiers:
   md5: ^2.3.0
   mockjs: ^1.1.0
   moment: ^2.29.4
-  mongoose: ^7.0.4
+  mongoose: ^7.0.5
   mongoose-autopopulate: ^1.0.0
   morgan: ^1.10.0
   multer: ^1.4.5-lts.1
@@ -56,8 +56,8 @@ dependencies:
   md5: 2.3.0
   mockjs: 1.1.0
   moment: 2.29.4
-  mongoose: 7.0.4
-  mongoose-autopopulate: 1.0.0_mongoose@7.0.4
+  mongoose: 7.0.5
+  mongoose-autopopulate: 1.0.0_mongoose@7.0.5
   multer: 1.4.5-lts.1
   qiniu: 7.8.0
   twig: 1.16.0
@@ -340,6 +340,11 @@ packages:
 
   /@types/node/18.15.13:
     resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
+    dev: true
+
+  /@types/node/18.16.0:
+    resolution: {integrity: sha512-BsAaKhB+7X+H4GnSjGhJG9Qi8Tw+inU9nJDwmD5CgOmBLEI6ArdhikpLX7DjbjDRDTbqZzU2LSQNZg8WGPiSZQ==}
+    dev: false
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -381,7 +386,7 @@ packages:
   /@types/whatwg-url/8.2.2:
     resolution: {integrity: sha512-FtQu10RWgn3D9U4aazdwIE2yzphmTJREDqNdODHrbrZmmMqI0vMheC/6NE/J1Yveaj8H+ela+YwWTjq5PGmuhA==}
     dependencies:
-      '@types/node': 18.15.13
+      '@types/node': 18.16.0
       '@types/webidl-conversions': 7.0.0
     dev: false
 
@@ -3274,16 +3279,16 @@ packages:
       saslprep: 1.0.3
     dev: false
 
-  /mongoose-autopopulate/1.0.0_mongoose@7.0.4:
+  /mongoose-autopopulate/1.0.0_mongoose@7.0.5:
     resolution: {integrity: sha512-VWsGb4VqSFqWgS6a7zFTOuUr2+XArrThtX7fjUlzIMPowVxvuS1Zeiif7D0DgXIETLNc+B/0r84kV5A2B7w2UQ==}
     peerDependencies:
       mongoose: 6.x || 7.x
     dependencies:
-      mongoose: 7.0.4
+      mongoose: 7.0.5
     dev: false
 
-  /mongoose/7.0.4:
-    resolution: {integrity: sha512-MEmQOOqQUvW1PJcji64NtA2EFGHrEvk9o4g//isVYSJW2+8Y8u49C2qFBKzn1t6/l9onQn012o/PcFqR6ixQpQ==}
+  /mongoose/7.0.5:
+    resolution: {integrity: sha512-dkW+RSpMczsHGXCmmEzR6W8aanwTnTQlYJkImN3F4DwRQv1HVmmmCd/HopmSdVfrJldpiV3bPPK2zVXLjbd/mA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       bson: 5.2.0
