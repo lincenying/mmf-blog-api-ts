@@ -10,7 +10,7 @@ import type { CategoryInsert, CategoryModify, Req, Res } from '@/types'
  */
 export async function getList(req: Req, res: Res) {
     try {
-        const result = await CategoryM.find().sort('-cate_order').exec()
+        const result = await CategoryM.find().sort('-cate_order').exec().then(data => data.map(item => item.toObject()))
         const json = {
             code: 200,
             data: {
@@ -36,7 +36,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = (await CategoryM.findOne({ _id }).exec())?.toObject()
+        const result = await CategoryM.findOne({ _id }).exec().then(data => data?.toObject())
         res.json({ code: 200, data: result })
     }
     catch (err: any) {
@@ -58,7 +58,7 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
     }
     else {
         try {
-            const result = (await CategoryM.create({
+            const creatData = {
                 cate_name,
                 cate_order,
                 cate_num: 0,
@@ -66,7 +66,8 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
                 update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
                 is_delete: 0,
                 timestamp: moment().format('X'),
-            })).toObject()
+            }
+            const result = await CategoryM.create(creatData).then(data => data.toObject())
             res.json({ code: 200, message: '添加成功', data: result })
         }
         catch (err: any) {
@@ -84,7 +85,7 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
 export async function deletes(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        await CategoryM.updateOne({ _id }, { is_delete: 1 })
+        await CategoryM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: any) {
@@ -101,7 +102,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
 export async function recover(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
-        await CategoryM.updateOne({ _id }, { is_delete: 0 })
+        await CategoryM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: any) {
@@ -120,16 +121,15 @@ export async function modify(req: Req<CategoryModify>, res: Res) {
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order
     try {
-        const result = await CategoryM.findOneAndUpdate(
-            { _id: id },
+        const result = await CategoryM.findOneAndUpdate({ _id: id },
             {
                 cate_name,
                 cate_order,
                 update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
             },
             { new: true },
-        )
-        res.json({ code: 200, message: '更新成功', data: result?.toObject() })
+        ).exec().then(data => data?.toObject())
+        res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })

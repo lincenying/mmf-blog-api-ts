@@ -2,7 +2,7 @@ import moment from 'moment'
 
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
-import type { Article, Comment, Req, ReqQuery, Res } from '@/types'
+import type { Comment, ListConfig, Req, ReqQuery, Res } from '@/types'
 
 /**
  * 发布评论
@@ -32,7 +32,7 @@ export async function insert(req: Req<{ id: string; content: string }>, res: Res
         timestamp,
     }
     try {
-        const result = await CommentM.create(data)
+        const result = await CommentM.create(data).then(data => data.toObject())
         await ArticleM.updateOne(
             { _id: id },
             {
@@ -76,16 +76,17 @@ export async function getList(req: Req<{}, ReqQuery>, res: Res) {
 
         try {
             const [list, total] = await Promise.all([
-                CommentM.find<Comment>(data).sort('-_id').skip(skip).limit(limit).exec(),
+                CommentM.find(data).sort('-_id').skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
                 CommentM.countDocuments(data),
             ])
             const totalPage = Math.ceil(total / limit)
-            const json = {
+            const json: ListConfig<Comment[]> = {
                 code: 200,
                 data: {
                     list,
                     total,
                     hasNext: totalPage > page ? 1 : 0,
+                    hasPrev: page > 1 ? 1 : 0,
                 },
             }
             res.json(json)
@@ -105,8 +106,8 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([
-            CommentM.updateOne<Comment>({ _id }, { is_delete: 1 }).exec(),
-            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: -1 } }).exec(),
+            CommentM.updateOne({ _id }, { is_delete: 1 }).exec(),
+            ArticleM.updateOne({ _id }, { $inc: { comment_count: -1 } }).exec(),
         ])
         res.json({ code: 200, message: '删除成功', data: 'success' })
     }
@@ -127,8 +128,8 @@ export async function recover(req: Req<{}, { id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([
-            CommentM.updateOne<Comment>({ _id }, { is_delete: 0 }).exec(),
-            ArticleM.updateOne<Article>({ _id }, { $inc: { comment_count: 1 } }).exec(),
+            CommentM.updateOne({ _id }, { is_delete: 0 }).exec(),
+            ArticleM.updateOne({ _id }, { $inc: { comment_count: 1 } }).exec(),
         ])
         res.json({ code: 200, message: '恢复成功', data: 'success' })
     }

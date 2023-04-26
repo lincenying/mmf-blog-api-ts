@@ -6,7 +6,7 @@ import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../conf
 import { strLen } from '../utils'
 
 import UserM from '../models/user'
-import type { Req, Res, User, UserModify } from '@/types'
+import type { ListConfig, Req, Res, User, UserModify } from '@/types'
 
 /**
  * 用户列表
@@ -19,16 +19,15 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
     const limit = Number(req.query.limit) || 10
     const skip = (page - 1) * limit
     try {
-        const result = await Promise.all([
-            UserM.find<User>().sort(sort).skip(skip).limit(limit).exec(),
+        const [list, total] = await Promise.all([
+            UserM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             UserM.countDocuments(),
         ])
-        const total = result[1]
         const totalPage = Math.ceil(total / limit)
-        const json = {
+        const json: ListConfig<User[]> = {
             code: 200,
             data: {
-                list: result[0],
+                list,
                 total,
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1 ? 1 : 0,
@@ -54,14 +53,15 @@ export async function login(req: Req<{ username: string; password: string }>, re
 
     try {
         let json = {}
-        const result = (await UserM.findOne({
+        const findData = {
             username,
             password: md5(md5Pre + password),
             is_delete: 0,
-        }).exec())?.toObject()
+        }
+        const result = await UserM.findOne(findData).exec().then(data => data?.toObject())
         if (result) {
             username = encodeURI(username)
-            const id = result._id.toString()
+            const id = result._id
             const email = result.email
             const remember_me = 2592000000
             const token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
@@ -125,9 +125,9 @@ export async function wxLogin(req: Req<{ nickName: string; wxSignature: string; 
     else {
         try {
             let json = {}
-            const result = (await UserM.findOne({ username: nickName, wx_signature: wxSignature, is_delete: 0 }).exec())?.toObject()
+            const result = await UserM.findOne({ username: nickName, wx_signature: wxSignature, is_delete: 0 }).exec().then(data => data?.toObject())
             if (result) {
-                id = result._id.toString()
+                id = result._id
                 username = encodeURI(nickName)
                 token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
                 json = {
@@ -142,7 +142,7 @@ export async function wxLogin(req: Req<{ nickName: string; wxSignature: string; 
                 res.json(json)
             }
             else {
-                const _result = await UserM.create({
+                const creatData = {
                     username: nickName,
                     password: '',
                     email: '',
@@ -152,8 +152,9 @@ export async function wxLogin(req: Req<{ nickName: string; wxSignature: string; 
                     timestamp: moment().format('X'),
                     wx_avatar: avatar,
                     wx_signature: wxSignature,
-                })
-                id = _result._id.toString()
+                }
+                const _result = await UserM.create(creatData).then(data => data?.toObject())
+                id = _result._id
                 username = encodeURI(nickName)
                 token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
                 res.json({
@@ -204,7 +205,7 @@ export async function insert(req: Req<{ email: string; password: string; usernam
     }
     else {
         try {
-            const result = await UserM.findOne({ username }).exec()
+            const result = await UserM.findOne({ username }).exec().then(data => data?.toObject())
             if (result) {
                 res.json({ code: -200, message: '该用户名已经存在!' })
             }
@@ -236,7 +237,7 @@ export async function getItem(req: Req, res: Res) {
     const userid = req.query.id || req.cookies.userid || req.headers.userid
     try {
         let json
-        const result = await UserM.findOne({ _id: userid, is_delete: 0 }).exec()
+        const result = await UserM.findOne({ _id: userid, is_delete: 0 }).exec().then(data => data?.toObject())
         if (result)
             json = { code: 200, data: result }
         else
@@ -265,7 +266,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
         data.password = md5(md5Pre + password)
 
     try {
-        const result = await UserM.findOneAndUpdate<User>({ _id: id }, data, { new: true }).exec()
+        const result = await UserM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {
@@ -300,7 +301,7 @@ export async function password(req: Req<{ old_password: string; password: string
     const { old_password, password } = req.body
     const user_id = req.cookies.userid || req.headers.userid
     try {
-        const result = await UserM.findOne<User>({ _id: user_id, password: md5(md5Pre + old_password), is_delete: 0 }).exec()
+        const result = await UserM.findOne({ _id: user_id, password: md5(md5Pre + old_password), is_delete: 0 }).exec().then(data => data?.toObject())
         if (result) {
             await UserM.updateOne({ _id: user_id }, { $set: { password: md5(md5Pre + password) } })
             res.json({ code: 200, message: '更新成功', data: 'success' })

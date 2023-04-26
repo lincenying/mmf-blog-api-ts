@@ -1,5 +1,5 @@
 import ArticleM from '../models/article'
-import type { Article, Req, Res } from '@/types'
+import type { Req, Res } from '@/types'
 
 /**
  * 文章点赞
@@ -10,7 +10,7 @@ export async function like(req: Req<{}, { id: string }>, res: Res) {
     const article_id = req.query.id
     const user_id = req.cookies.userid || req.headers.userid
     try {
-        const result = await ArticleM.findOne<Article>({ _id: article_id, is_delete: 0 }).exec()
+        const result = await ArticleM.findOne({ _id: article_id, is_delete: 0 }).exec().then(data => data?.toObject())
         if (result && (!result.likes || result.likes.findIndex(item => item === user_id) === -1))
             await ArticleM.updateOne({ _id: article_id }, { $inc: { like: 1 }, $push: { likes: user_id } }).exec()
 

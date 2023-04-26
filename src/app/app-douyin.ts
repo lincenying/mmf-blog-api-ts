@@ -5,7 +5,7 @@ import crc32 from '../utils/crc32'
 import { douyinCache as lruCache } from '../utils/lru-cache'
 import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
-import type { DouYin, DouYinInsert, DouYinUser, DouYinUserInsert, Req, Res } from '@/types'
+import type { DouYin, DouYinInsert, DouYinUserInsert, ListConfig, Req, Res } from '@/types'
 
 export async function insertUser(req: Req<DouYinUserInsert>, res: Res) {
     const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body
@@ -20,12 +20,12 @@ export async function insertUser(req: Req<DouYinUserInsert>, res: Res) {
         timestamp: moment().format('X'),
     }
     try {
-        const checkRepeat = await DouYinUserM.findOne<DouYinUser>({ user_id })
+        const checkRepeat = await DouYinUserM.findOne({ user_id }).exec().then(data => data?.toObject())
         if (checkRepeat) {
             res.json({ code: 300, message: '该用户已经存在!' })
         }
         else {
-            const result = await DouYinUserM.create(data)
+            const result = await DouYinUserM.create(data).then(data => data.toObject())
             res.json({ code: 200, message: '添加成功', data: result })
         }
     }
@@ -48,12 +48,12 @@ export async function insert(req: Req<DouYinInsert>, res: Res) {
         timestamp: moment().format('X'),
     }
     try {
-        const checkRepeat = await DouYinM.findOne<DouYin>({ aweme_id })
+        const checkRepeat = await DouYinM.findOne({ aweme_id }).then(data => data?.toObject())
         if (checkRepeat) {
             res.json({ code: 300, message: '该视频已经存在!' })
         }
         else {
-            const result = await DouYinM.create(data)
+            const result = await DouYinM.create(data).then(data => data?.toObject())
             res.json({ code: 200, message: '发布成功', data: result })
         }
     }
@@ -84,18 +84,18 @@ export async function getList(req: Req<{}, { user_id: string; limit: number; pag
         payload.user_id = user_id
 
     try {
-        const [data, total] = await Promise.all([
-            DouYinM.find<DouYin>(payload, filds).sort(sort).skip(skip).limit(limit).exec(),
+        const [list, total] = await Promise.all([
+            DouYinM.find(payload, filds).sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             DouYinM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json = {
+        const json: ListConfig<DouYin[]> = {
             code: 200,
             data: {
-                list: data,
+                list,
                 total,
                 hasNext: totalPage > page ? 1 : 0,
-                hasPrev: page > 1,
+                hasPrev: page > 1 ? 1 : 0,
             },
         }
         res.json(json)

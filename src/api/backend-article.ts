@@ -5,7 +5,7 @@ import hljs from 'highlight.js'
 
 import ArticleM from '../models/article'
 import CategoryM from '../models/category'
-import type { Article, ArticleInsert, ArticleModify, Req, Res } from '@/types'
+import type { Article, ArticleInsert, ArticleModify, ListConfig, Req, Res } from '@/types'
 
 function marked(content: string) {
     const $return = {
@@ -49,16 +49,15 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
     const limit = Number(req.query.limit) || 10
     const skip = (page - 1) * limit
     try {
-        const result = await Promise.all([
-            ArticleM.find().sort(sort).skip(skip).limit(limit).exec(),
+        const [list, total] = await Promise.all([
+            ArticleM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             ArticleM.countDocuments(),
         ])
-        const total = result[1]
         const totalPage = Math.ceil(total / limit)
-        const json = {
+        const json: ListConfig<Article[]> = {
             code: 200,
             data: {
-                list: result[0],
+                list,
                 total,
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1 ? 1 : 0,
@@ -83,8 +82,8 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = await ArticleM.findOne({ _id }).exec()
-        res.json({ code: 200, data: result?.toObject() })
+        const result = await ArticleM.findOne({ _id }).exec().then(data => data?.toObject())
+        res.json({ code: 200, data: result })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })
@@ -119,9 +118,9 @@ export async function insert(req: Req<ArticleInsert, {}>, res: Res) {
         timestamp: moment().format('X'),
     }
     try {
-        const result = await ArticleM.create(data)
+        const result = await ArticleM.create(data).then(data => data.toObject())
         await CategoryM.updateOne({ _id: arr_category[0] }, { $inc: { cate_num: 1 } }).exec()
-        res.json({ code: 200, message: '发布成功', data: result.toObject() })
+        res.json({ code: 200, message: '发布成功', data: result })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })
@@ -185,7 +184,7 @@ export async function modify(req: Req<ArticleModify, {}>, res: Res) {
         update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
     try {
-        const result = (await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true }).exec())?.toObject()
+        const result = await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
         if (result && category !== category_old) {
             await Promise.all([
                 CategoryM.updateOne({ _id: category }, { $inc: { cate_num: 1 } }).exec(),

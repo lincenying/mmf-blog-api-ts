@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import { fsExistsSync } from '../utils'
 import { md5Pre, secretServer as secret } from '../config'
 import AdminM from '../models/admin'
-import type { Req, Res, UserModify } from '@/types'
+import type { ListConfig, Req, Res, User, UserModify } from '@/types'
 
 /**
  * 获取管理员列表
@@ -20,16 +20,15 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
     const limit = Number(req.query.limit) || 10
     const skip = (page - 1) * limit
     try {
-        const result = await Promise.all([
-            AdminM.find().sort(sort).skip(skip).limit(limit).exec(),
+        const [list, total] = await Promise.all([
+            AdminM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             AdminM.countDocuments(),
         ])
-        const total = result[1]
         const totalPage = Math.ceil(total / limit)
-        const json = {
+        const json: ListConfig<User[]> = {
             code: 200,
             data: {
-                list: result[0],
+                list,
                 total,
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1 ? 1 : 0,
@@ -54,7 +53,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
         res.json({ code: -200, message: '参数错误' })
 
     try {
-        const result = (await AdminM.findOne({ _id }).exec())?.toObject()
+        const result = await AdminM.findOne({ _id }).exec().then(data => data?.toObject())
         res.json({ code: 200, data: result })
     }
     catch (err: any) {
@@ -74,11 +73,11 @@ export async function login(req: Req<{ password: string; username: string }, { }
         return res.json({ code: -200, message: '请输入用户名和密码' })
 
     try {
-        const result = (await AdminM.findOne({
+        const result = await AdminM.findOne({
             username,
             password: md5(md5Pre + password),
             is_delete: 0,
-        }).exec())?.toObject()
+        }).exec().then(data => data?.toObject())
         if (result) {
             const _username = encodeURI(username)
             const id = result._id
@@ -113,7 +112,7 @@ export async function insert(email: string, password: string, username: string) 
     }
     else {
         try {
-            const result = await AdminM.findOne({ username }).exec()
+            const result = await AdminM.findOne({ username }).exec().then(data => data?.toObject())
             if (result) {
                 message = `${username}: 已经存在`
             }
@@ -155,7 +154,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
         data.password = md5(md5Pre + password)
 
     try {
-        const result = await AdminM.findOneAndUpdate({ _id: id }, data, { new: true }).exec()
+        const result = await AdminM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: any) {

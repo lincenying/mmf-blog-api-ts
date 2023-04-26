@@ -134,7 +134,7 @@ export async function shihua(req: Req<{}, { id: string; cdn: string }>, res: Res
     }
 
     try {
-        const result = await ShiHuaM.findOne<ShiHua>({ img_id })
+        const result = await ShiHuaM.findOne({ img_id }).then(data => data?.toObject())
         if (result) {
             res.json({
                 code: 200,
@@ -178,25 +178,23 @@ export async function getHistory(req: Req<{}, { page: string; limit: string }>, 
     const sort = '-creat_date'
 
     try {
-        let [data, total] = await Promise.all([
-            ShiHuaM.find<ShiHua>(payload).sort(sort).skip(skip).limit(limit).exec(),
+        const [data, total] = await Promise.all([
+            ShiHuaM.find(payload).sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             ShiHuaM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
         const json: ListConfig<ShiHua[]> = {
             code: 200,
             data: {
-                list: [],
+                list: data.map((item) => {
+                    item.result = ''
+                    return item
+                }),
                 total,
                 hasNext: totalPage > page ? 1 : 0,
-                hasPrev: page > 1,
+                hasPrev: page > 1 ? 1 : 0,
             },
         }
-        data = data.map((item) => {
-            item.result = ''
-            return item
-        })
-        json.data.list = data
         res.json(json)
     }
     catch (err: any) {
