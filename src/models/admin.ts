@@ -9,10 +9,11 @@ const AdminSchema = new Schema<User>({
     password: String,
     creat_date: String,
     update_date: String,
-    is_delete: Number,
+    is_delete: { type: Number, default: 0 },
     timestamp: Number,
+}, {
+    toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+    toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
-const Admin = mongoose.model<User>('Admin', AdminSchema)
-
-export default Admin
+export default mongoose.model<User>('Admin', AdminSchema)

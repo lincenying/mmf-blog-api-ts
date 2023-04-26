@@ -7,14 +7,14 @@ const Schema = mongoose.Schema
 
 const DouYinSchema = new Schema<DouYin>(
     {
-        user_id: { type: String, ref: 'DouYinUser' },
+        user_id: String,
         aweme_id: String,
         desc: String,
         vid: String,
         image: String,
         video: String,
         creat_date: String,
-        is_delete: Number,
+        is_delete: { type: Number, default: 0 },
         timestamp: Number,
     },
     {
