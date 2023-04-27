@@ -3,11 +3,11 @@ import { checkJWT } from '../utils/check-jwt'
 import type { Req, Res } from '@/types'
 
 export default async (req: Req, res: Res, next: NextFunction) => {
-    const token = req.cookies.user || req.headers.user
-    const userid = req.cookies.userid || req.headers.userid
-    const username = req.cookies.username || req.headers.username
-    if (token) {
-        const check = await checkJWT(token, userid, username, 'user')
+    const user: string = req.cookies.user || req.headers.user || ''
+    const userid: string = req.cookies.userid || req.headers.userid || ''
+    const username: string = req.cookies.username || req.headers.username || ''
+    if (user) {
+        const check = await checkJWT(user, userid, username, 'user')
         if (check) {
             next()
         }
