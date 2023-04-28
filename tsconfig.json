@@ -15,7 +15,7 @@
     "strictNullChecks": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [],
+    "types": ["node"],
     "paths": {
       "@/*": ["src/*"]
     },
