@@ -61,7 +61,7 @@ export async function getList(req: Req<{}, ReqQuery>, res: Res) {
             },
         }
         if (user_id) {
-            json.data.list = list.map(item => ({
+            json.data.list = list.map((item): Article => ({
                 ...item,
                 like_status: item.likes && item.likes.includes(user_id),
                 content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
@@ -69,7 +69,7 @@ export async function getList(req: Req<{}, ReqQuery>, res: Res) {
             }))
         }
         else {
-            json.data.list = list.map(item => ({
+            json.data.list = list.map((item): Article => ({
                 ...item,
                 like_status: false,
                 content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,

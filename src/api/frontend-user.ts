@@ -98,7 +98,7 @@ export async function login(req: Req<{ username: string; password: string }>, re
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function jscode2session(req: Req<{ js_code: string }>, res: Res) {
+export async function jscodeToSession(req: Req<{ js_code: string }>, res: Res) {
     const { js_code } = req.body
     const xhr = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
         params: {

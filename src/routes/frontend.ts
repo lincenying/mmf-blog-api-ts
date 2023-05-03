@@ -43,7 +43,7 @@ router.post('/user/insert', multipartMiddleware, frontendUser.insert)
 router.post('/user/login', multipartMiddleware, frontendUser.login)
 // 微信登录
 router.post('/user/wxLogin', multipartMiddleware, frontendUser.wxLogin)
-router.post('/user/jscode2session', multipartMiddleware, frontendUser.jscode2session)
+router.post('/user/jscode2session', multipartMiddleware, frontendUser.jscodeToSession)
 // 前台退出
 router.post('/user/logout', frontendUser.logout)
 // 前台账号读取
