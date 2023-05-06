@@ -6,7 +6,7 @@ import type { Req, Res } from '@/types'
  * @param {Request} req Request
  * @param {Response} res Response
  */
-export async function like(req: Req<{}, { id: string }>, res: Res) {
+export async function like(req: Req<{ id: string }>, res: Res) {
     const article_id = req.query.id
     const user_id = req.cookies.userid || req.headers.userid
     try {
@@ -26,7 +26,7 @@ export async function like(req: Req<{}, { id: string }>, res: Res) {
  * @param {Request} req Request
  * @param {Response} res Response
  */
-export async function unlike(req: Req<{}, { id: string }>, res: Res) {
+export async function unlike(req: Req<{ id: string }>, res: Res) {
     const article_id = req.query.id
     const user_id = req.cookies.userid || req.headers.userid
     try {
@@ -43,7 +43,7 @@ export async function unlike(req: Req<{}, { id: string }>, res: Res) {
  * @param {Request} req Request
  * @param {Response} res Response
  */
-export async function resetLike(req: Req<{}, { id: string }>, res: Res) {
+export async function resetLike(req: Req, res: Res) {
     try {
         const result = await ArticleM.find().exec()
         const length = result.length

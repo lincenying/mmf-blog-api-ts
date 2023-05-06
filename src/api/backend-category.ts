@@ -30,7 +30,7 @@ export async function getList(req: Req, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getItem(req: Req<{}, { id: string }>, res: Res) {
+export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
@@ -50,7 +50,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
+export async function insert(req: Req<{}, CategoryInsert>, res: Res) {
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order
     if (!cate_name || !cate_order) {
@@ -82,7 +82,7 @@ export async function insert(req: Req<CategoryInsert, {}>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function deletes(req: Req<{}, { id: string }>, res: Res) {
+export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await CategoryM.updateOne({ _id }, { is_delete: 1 }).exec()
@@ -99,7 +99,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function recover(req: Req<{}, { id: string }>, res: Res) {
+export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await CategoryM.updateOne({ _id }, { is_delete: 0 }).exec()
@@ -116,7 +116,7 @@ export async function recover(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<CategoryModify>, res: Res) {
+export async function modify(req: Req<{}, CategoryModify>, res: Res) {
     const id = req.body.id
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order

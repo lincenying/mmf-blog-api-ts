@@ -14,7 +14,7 @@ import type { ListConfig, Req, Res, User, UserModify } from '@/types'
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getList(req: Req<{}, { page: string; limit: string }>, res: Res) {
+export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -47,7 +47,7 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getItem(req: Req<{}, { id: string }>, res: Res) {
+export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
@@ -67,7 +67,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function login(req: Req<{ password: string; username: string }, { }>, res: Res) {
+export async function login(req: Req<{}, { password: string; username: string }>, res: Res) {
     const { password, username } = req.body
     if (username === '' || password === '')
         return res.json({ code: -200, message: '请输入用户名和密码' })
@@ -143,7 +143,7 @@ export async function insert(email: string, password: string, username: string) 
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<{ id: string; email: string; password: string; username: string }, { }>, res: Res) {
+export async function modify(req: Req<{}, { id: string; email: string; password: string; username: string }>, res: Res) {
     const { id, email, password, username } = req.body
     const data: UserModify = {
         email,
@@ -168,7 +168,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function deletes(req: Req<{}, { id: string }>, res: Res) {
+export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await AdminM.updateOne({ _id }, { is_delete: 1 }).exec()
@@ -185,7 +185,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function recover(req: Req<{}, { id: string }>, res: Res) {
+export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await AdminM.updateOne({ _id }, { is_delete: 0 }).exec()

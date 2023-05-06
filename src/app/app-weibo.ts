@@ -59,7 +59,7 @@ export async function list(req: Req, res: Res) {
 }
 
 // 热门微博
-export async function get(req: Req<{}, { page: number }>, res: Res) {
+export async function get(req: Req<{ page: number }>, res: Res) {
     const page = req.query.page || 0
     const options = {
         ...baseOptions,
@@ -110,7 +110,7 @@ export async function get(req: Req<{}, { page: number }>, res: Res) {
 }
 
 // 微博用户
-export async function user(req: Req<{}, { containerid: string; since_id: string }>, res: Res) {
+export async function user(req: Req<{ containerid: string; since_id: string }>, res: Res) {
     const containerid = req.query.containerid
     const since_id = req.query.since_id
     if (!containerid) {
@@ -172,7 +172,7 @@ export async function user(req: Req<{}, { containerid: string; since_id: string 
 }
 
 // 微博卡片
-export async function card(req: Req<{}, { card_id: string; block_id: string; page: number }>, res: Res) {
+export async function card(req: Req<{ card_id: string; block_id: string; page: number }>, res: Res) {
     const card_id = req.query.card_id
     const block_id = req.query.block_id
     const page = req.query.page || 1
@@ -228,7 +228,7 @@ export async function card(req: Req<{}, { card_id: string; block_id: string; pag
 // https://m.weibo.cn/p/100808f334edf14a66a4e3aa1a31dade762d19/super_index
 // 超话视频
 
-export async function video(req: Req<{}, { since_id: string }>, res: Res) {
+export async function video(req: Req<{ since_id: string }>, res: Res) {
     const since_id = req.query.since_id || ''
     const options = {
         ...baseOptions,
@@ -278,7 +278,7 @@ export async function video(req: Req<{}, { since_id: string }>, res: Res) {
 // 231522type=64&q=#尤物#&t=0 => 231522type%3D64%26q%3D%23%E5%B0%A4%E7%89%A9%23%26t%3D0
 // 100103type=64&q=#美女#&t=0 => 100103type%3D64%26q%3D%23%E7%BE%8E%E5%A5%B3%23%26t%3D0
 // 微博搜索视频
-export async function beautyVideo(req: Req<{}, { key: string; page: number }>, res: Res) {
+export async function beautyVideo(req: Req<{ key: string; page: number }>, res: Res) {
     const key = encodeURIComponent(req.query.key)
     const page = req.query.page || 1
     const options = {
@@ -329,7 +329,7 @@ export async function beautyVideo(req: Req<{}, { key: string; page: number }>, r
 }
 
 // 微博详情
-export async function detail(req: Req<{}, { id: string }>, res: Res) {
+export async function detail(req: Req<{ id: string }>, res: Res) {
     const id = req.query.id
     if (!id) {
         res.json({ code: 301, ok: 2, msg: '参数错误' })

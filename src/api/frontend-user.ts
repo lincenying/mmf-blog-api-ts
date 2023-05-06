@@ -13,7 +13,7 @@ import type { ListConfig, Req, Res, User, UserModify } from '@/types'
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getList(req: Req<{}, { page: string; limit: string }>, res: Res) {
+export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -45,7 +45,7 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function login(req: Req<{ username: string; password: string }>, res: Res) {
+export async function login(req: Req<{}, { username: string; password: string }>, res: Res) {
     let { username } = req.body
     const { password } = req.body
     if (username === '' || password === '')
@@ -98,7 +98,7 @@ export async function login(req: Req<{ username: string; password: string }>, re
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function jscodeToSession(req: Req<{ js_code: string }>, res: Res) {
+export async function jscodeToSession(req: Req<{}, { js_code: string }>, res: Res) {
     const { js_code } = req.body
     const xhr = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
         params: {
@@ -115,7 +115,7 @@ export async function jscodeToSession(req: Req<{ js_code: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function wxLogin(req: Req<{ nickName: string; wxSignature: string; avatar: string }>, res: Res) {
+export async function wxLogin(req: Req<{}, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
     const { nickName, wxSignature, avatar } = req.body
 
     let id, token, username
@@ -192,7 +192,7 @@ export function logout(req: Req, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<{ email: string; password: string; username: string }>, res: Res) {
+export async function insert(req: Req<{}, { email: string; password: string; username: string }>, res: Res) {
     const { email, password, username } = req.body
     if (!username || !password || !email) {
         res.json({ code: -200, message: '请将表单填写完整' })
@@ -255,7 +255,7 @@ export async function getItem(req: Req, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<{ id: string; email: string; password: string; username: string }>, res: Res) {
+export async function modify(req: Req<{}, { id: string; email: string; password: string; username: string }>, res: Res) {
     const { id, email, password, username } = req.body
     const data: UserModify = {
         email,
@@ -279,7 +279,7 @@ export async function modify(req: Req<{ id: string; email: string; password: str
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function account(req: Req<{ email: string }>, res: Res) {
+export async function account(req: Req<{}, { email: string }>, res: Res) {
     const { email } = req.body
     const user_id = req.cookies.userid || req.headers.userid
     try {
@@ -297,7 +297,7 @@ export async function account(req: Req<{ email: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function password(req: Req<{ old_password: string; password: string }>, res: Res) {
+export async function password(req: Req<{}, { old_password: string; password: string }>, res: Res) {
     const { old_password, password } = req.body
     const user_id = req.cookies.userid || req.headers.userid
     try {
@@ -320,7 +320,7 @@ export async function password(req: Req<{ old_password: string; password: string
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function deletes(req: Req<{}, { id: string }>, res: Res) {
+export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await UserM.updateOne({ _id }, { is_delete: 1 }).exec()
@@ -336,7 +336,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function recover(req: Req<{}, { id: string }>, res: Res) {
+export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await UserM.updateOne({ _id }, { is_delete: 0 }).exec()

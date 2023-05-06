@@ -7,7 +7,7 @@ import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
 import type { DouYin, DouYinInsert, DouYinUserInsert, ListConfig, Req, Res } from '@/types'
 
-export async function insertUser(req: Req<DouYinUserInsert>, res: Res) {
+export async function insertUser(req: Req<{}, DouYinUserInsert>, res: Res) {
     const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body
     const data = {
         user_id,
@@ -34,7 +34,7 @@ export async function insertUser(req: Req<DouYinUserInsert>, res: Res) {
     }
 }
 
-export async function insert(req: Req<DouYinInsert>, res: Res) {
+export async function insert(req: Req<{}, DouYinInsert>, res: Res) {
     const { user_id, aweme_id, desc, vid, image, video } = req.body
     const data = {
         author: user_id,
@@ -62,7 +62,7 @@ export async function insert(req: Req<DouYinInsert>, res: Res) {
     }
 }
 
-export async function getList(req: Req<{}, { user_id: string; limit: number; page: number }>, res: Res) {
+export async function getList(req: Req<{ user_id: string; limit: number; page: number }>, res: Res) {
     let { limit, page } = req.query
     const user_id = req.query.user_id
 
@@ -105,7 +105,7 @@ export async function getList(req: Req<{}, { user_id: string; limit: number; pag
     }
 }
 
-export async function getItem(req: Req<{}, { id: string }>, res: Res) {
+export async function getItem(req: Req<{ id: string }>, res: Res) {
     const vid = req.query.id
     if (!vid) {
         res.json({ ok: 2, msg: '参数错误' })

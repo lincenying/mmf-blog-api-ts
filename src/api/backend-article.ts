@@ -43,7 +43,7 @@ function marked(content: string) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getList(req: Req<{}, { page: string; limit: string }>, res: Res) {
+export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -76,7 +76,7 @@ export async function getList(req: Req<{}, { page: string; limit: string }>, res
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getItem(req: Req<{}, { id: string }>, res: Res) {
+export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
@@ -96,7 +96,7 @@ export async function getItem(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<ArticleInsert, {}>, res: Res) {
+export async function insert(req: Req<{}, ArticleInsert>, res: Res) {
     const { category, content, title } = req.body
     const md = marked(content)
     const html = md.html
@@ -133,7 +133,7 @@ export async function insert(req: Req<ArticleInsert, {}>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function deletes(req: Req<{}, { id: string }>, res: Res) {
+export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         const result = await ArticleM.updateOne({ _id }, { is_delete: 1 }).exec()
@@ -151,7 +151,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function recover(req: Req<{}, { id: string }>, res: Res) {
+export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         const result = await ArticleM.updateOne({ _id }, { is_delete: 0 }).exec()
@@ -169,7 +169,7 @@ export async function recover(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<ArticleModify, {}>, res: Res) {
+export async function modify(req: Req<{}, ArticleModify>, res: Res) {
     const { id, category, category_old, content, title, category_name } = req.body
     const md = marked(content)
     const html = md.html

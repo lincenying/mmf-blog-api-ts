@@ -2,7 +2,7 @@ import moment from 'moment'
 
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
-import type { Comment, ListConfig, Req, ReqQuery, Res } from '@/types'
+import type { Comment, ListConfig, Req, ReqListQuery, Res } from '@/types'
 
 /**
  * 发布评论
@@ -10,7 +10,7 @@ import type { Comment, ListConfig, Req, ReqQuery, Res } from '@/types'
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<{ id: string; content: string }>, res: Res) {
+export async function insert(req: Req<{}, { id: string; content: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
     const { id, content } = req.body
     const creat_date = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -54,7 +54,7 @@ export async function insert(req: Req<{ id: string; content: string }>, res: Res
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getList(req: Req<{}, ReqQuery>, res: Res) {
+export async function getList(req: Req<ReqListQuery>, res: Res) {
     const { all, id } = req.query
     let { limit, page } = req.query
     if (!id) {
@@ -102,7 +102,7 @@ export async function getList(req: Req<{}, ReqQuery>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function deletes(req: Req<{}, { id: string }>, res: Res) {
+export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([
@@ -124,7 +124,7 @@ export async function deletes(req: Req<{}, { id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function recover(req: Req<{}, { id: string }>, res: Res) {
+export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     try {
         await Promise.all([

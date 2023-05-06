@@ -1,5 +1,5 @@
 import ArticleM from '../models/article'
-import type { Article, ListConfig, Req, ReqQuery, Res } from '@/types'
+import type { Article, ListConfig, Req, ReqListQuery, Res } from '@/types'
 
 function replaceHtmlTag(html: string) {
     return html
@@ -23,7 +23,7 @@ interface ArticleSearch {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getList(req: Req<{}, ReqQuery>, res: Res) {
+export async function getList(req: Req<ReqListQuery>, res: Res) {
     const user_id = req.cookies.userid || req.headers.userid
     const { by, id, key } = req.query
     const page = Number(req.query.page) || 1
@@ -89,7 +89,7 @@ export async function getList(req: Req<{}, ReqQuery>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getItem(req: Req<{}, { id: string }>, res: Res) {
+export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
     const user_id = req.cookies.userid || req.headers.userid
     if (!_id)

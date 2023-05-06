@@ -55,7 +55,7 @@ function getBase64(img_id: string, cdn: string) {
     return fs.readFileSync(`./uploads/${img_id}`).toString('base64')
 }
 
-export async function shihua(req: Req<{}, { id: string; cdn: string }>, res: Res) {
+export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
     const img_id = req.query.id
     const cdn = req.query.cdn
     const token = req.cookies.user || req.headers.user
@@ -165,7 +165,7 @@ export async function shihua(req: Req<{}, { id: string; cdn: string }>, res: Res
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function getHistory(req: Req<{}, { page: string; limit: string }>, res: Res) {
+export async function getHistory(req: Req<{ page: string; limit: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -208,7 +208,7 @@ export async function getHistory(req: Req<{}, { page: string; limit: string }>, 
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function delHistory(req: Req<{}, { img_id: string }>, res: Res) {
+export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
     const { img_id } = req.query
 

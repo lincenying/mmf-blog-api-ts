@@ -1,14 +1,13 @@
 import type { Request, Response } from 'express'
 import type { Document } from 'mongoose'
 
-export type Req<ReqBody = any, ReqQuery = any> = Request<any, any, ReqBody, ReqQuery, any>
+export type Req<ReqQuery = any, ReqBody = any, ReqParams = any> = Request<ReqParams, any, ReqBody, ReqQuery, any>
 export type Res = Response
 
 /**
  * 文章详情
  */
 export interface Article {
-    _id?: string
     title: string
     content: string
     html: string
@@ -128,7 +127,7 @@ export interface UserCookies {
     [propName: string]: any
 }
 
-export interface ReqQuery {
+export interface ReqListQuery {
     all?: number
     by?: string
     from?: string

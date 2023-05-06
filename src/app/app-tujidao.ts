@@ -20,7 +20,7 @@ interface TujidaoList {
     total: string
 }
 
-export async function lists(req: Req<{}, { page: number }>, res: Res) {
+export async function lists(req: Req<{ page: number }>, res: Res) {
     const cookies = tujidao
     const page = req.query.page || 1
     const options = {
