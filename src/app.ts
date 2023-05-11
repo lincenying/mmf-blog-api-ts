@@ -80,7 +80,7 @@ app.get('*', (req, res) => {
     })
 })
 
-const port = process.env.PORT || '4000'
+const port = process.env.PORT || '4001'
 app.set('port', port)
 
 const server = http.createServer(app)

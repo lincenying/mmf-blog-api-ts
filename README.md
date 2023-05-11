@@ -29,6 +29,6 @@ yarn serve
 ```
 
 Add admin
-http://localhost:4000/backend
+http://localhost:4001/backend
 
 After the success of the administrator to add, will automatically generate the admin. Lock file locking, if you need to continue to add, please just delete the file
