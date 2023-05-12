@@ -143,12 +143,9 @@ export interface ArticleInsert {
     content: string
     title: string
 }
-export interface ArticleModify {
+export interface ArticleModify extends ArticleInsert {
     id: string
-    category: string
     category_old: string
-    content: string
-    title: string
     category_name: string
 }
 
@@ -157,10 +154,8 @@ export interface CategoryInsert {
     cate_order: string
 }
 
-export interface CategoryModify {
+export interface CategoryModify extends CategoryInsert {
     id: string
-    cate_name: string
-    cate_order: string
 }
 
 export interface UserModify {

@@ -166,14 +166,12 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 编辑文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param  {Req<{}, ArticleModify>} req Request
+ * @param  {Res} res Response
  */
 export async function modify(req: Req<{}, ArticleModify>, res: Res) {
     const { id, category, category_old, content, title, category_name } = req.body
-    const md = marked(content)
-    const html = md.html
-    const toc = md.toc
+    const { html, toc } = marked(content)
     const data = {
         title,
         category,
