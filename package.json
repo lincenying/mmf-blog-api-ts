@@ -13,6 +13,7 @@
     "postinstall": "husky install",
     "tsc": "tsc",
     "deploy": "node dist/server.js",
+    "deploy-watch": "nodemon --delay 500ms --watch ./dist dist/server.js",
     "serve": "nodemon --watch ./src --exec esno ./src/app.ts",
     "start": "nr deploy",
     "lint:ts": "tsc --noEmit",
