@@ -1,5 +1,4 @@
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import http from 'node:http'
 import express from 'express'
 import compression from 'compression'
@@ -30,9 +29,9 @@ import appRoutes from './routes/app'
 
 const app = express()
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+// const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const resolve = (file: string) => path.resolve(__dirname, file)
+const resolve = (file: string) => path.resolve(file)
 const isProd = process.env.NODE_ENV === 'production'
 function serve(path: string, cache: boolean) {
     return express.static(resolve(path), {
@@ -41,7 +40,7 @@ function serve(path: string, cache: boolean) {
 }
 
 // view engine setup
-app.set('views', path.join(__dirname, '../views'))// twig
+app.set('views', resolve('./views'))// twig
 app.set('twig options', {
     allow_async: true,
     strict_variables: false,
@@ -51,7 +50,7 @@ app.set('twig options', {
 // app.set('view engine', 'ejs')
 
 app.use(compression())
-app.use(favicon(`${path.join(__dirname, '../public')}/favicon.ico`))
+app.use(favicon(`${resolve('./public')}/favicon.ico`))
 app.use(
     logger('dev', {
         skip(req) {
@@ -66,7 +65,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 // app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/static', serve('../public', true))
+app.use('/static', serve('./public', true))
 app.use('/api/app', appRoutes)
 app.use('/api/frontend', frontendRoutes)
 app.use('/api/backend', backendRoutes)

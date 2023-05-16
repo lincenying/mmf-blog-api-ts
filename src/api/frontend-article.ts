@@ -100,27 +100,23 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             ArticleM.findOne({ _id, is_delete: 0 }).exec().then(data => data?.toObject()),
             ArticleM.updateOne({ _id }, { $inc: { visit: 1 } }).exec(),
         ])
-        let json
         if (!result) {
-            json = {
+            return res.json({
                 code: -200,
                 message: '没有找到该文章',
-            }
+            })
         }
-        else {
-            if (user_id)
-                result.like_status = result.likes && result.likes.includes(user_id)
-            else
-                result.like_status = false
-            result.likes = []
-            result.content = replaceHtmlTag(result.content)
-            result.html = replaceHtmlTag(result.html)
-            json = {
-                code: 200,
-                data: result,
-            }
-        }
-        res.json(json)
+        if (user_id)
+            result.like_status = result.likes && result.likes.includes(user_id)
+        else
+            result.like_status = false
+        result.likes = []
+        result.content = replaceHtmlTag(result.content)
+        result.html = replaceHtmlTag(result.html)
+        res.json({
+            code: 200,
+            data: result,
+        })
     }
     catch (err: any) {
         res.json({
