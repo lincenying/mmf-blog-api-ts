@@ -12,10 +12,11 @@
   "scripts": {
     "postinstall": "husky install",
     "tsc": "tsc",
+    "build": "esno src/init.ts && npm run tsc",
     "deploy": "node dist/app.js",
     "deploy-watch": "nodemon --delay 500ms --watch ./dist dist/app.js",
     "serve": "nodemon --watch ./src --exec esno ./src/app.ts",
-    "start": "nr deploy",
+    "start": "npm run deploy",
     "lint:ts": "tsc --noEmit",
     "lint": "eslint ./src --ext .ts,.js",
     "lint:fix": "eslint ./src --ext .ts,.js --fix"

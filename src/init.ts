@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 
-function fsExistsSync(path) {
+function fsExistsSync(path: string) {
     try {
         fs.accessSync(path, fs.constants.F_OK)
     }
