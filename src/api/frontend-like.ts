@@ -17,7 +17,7 @@ export async function like(req: Req<{ id: string }>, res: Res) {
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 
@@ -34,7 +34,7 @@ export async function unlike(req: Req<{ id: string }>, res: Res) {
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 
@@ -54,6 +54,6 @@ export async function resetLike(req: Req, res: Res) {
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }

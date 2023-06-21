@@ -62,6 +62,7 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1 ? 1 : 0,
             },
+            message: 'success',
         }
         res.json(json)
     }
@@ -83,7 +84,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 
     try {
         const result = await ArticleM.findOne({ _id }).exec().then(data => data?.toObject())
-        res.json({ code: 200, data: result })
+        res.json({ code: 200, message: 'success', data: result })
     }
     catch (err: any) {
         res.json({ code: -200, message: err.toString() })

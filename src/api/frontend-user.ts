@@ -62,13 +62,13 @@ export async function login(req: Req<{}, { username: string; password: string }>
         if (result) {
             username = encodeURI(username)
             const id = result._id
-            const email = result.email
+            const useremail = result.email
             const remember_me = 2592000000
             const token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             res.cookie('user', token, { maxAge: remember_me })
             res.cookie('userid', id, { maxAge: remember_me })
             res.cookie('username', username, { maxAge: remember_me })
-            res.cookie('useremail', email, { maxAge: remember_me })
+            res.cookie('useremail', useremail, { maxAge: remember_me })
             json = {
                 code: 200,
                 message: '登录成功',
@@ -76,7 +76,7 @@ export async function login(req: Req<{}, { username: string; password: string }>
                     user: token,
                     userid: id,
                     username,
-                    email,
+                    useremail,
                 },
             }
         }
@@ -184,7 +184,7 @@ export function logout(req: Req, res: Res) {
     res.cookie('userid', '', { maxAge: -1 })
     res.cookie('username', '', { maxAge: -1 })
     res.cookie('useremail', '', { maxAge: -1 })
-    res.json({ code: 200, message: '退出成功', data: '' })
+    res.json({ code: 200, message: '退出成功', data: 'success' })
 }
 
 /**
@@ -207,7 +207,7 @@ export async function insert(req: Req<{}, { email: string; password: string; use
         try {
             const result = await UserM.findOne({ username }).exec().then(data => data?.toObject())
             if (result) {
-                res.json({ code: -200, message: '该用户名已经存在!' })
+                res.json({ code: -200, message: '该用户名已经存在!', data: 'error' })
             }
             else {
                 await UserM.create({
@@ -223,7 +223,7 @@ export async function insert(req: Req<{}, { email: string; password: string; use
             }
         }
         catch (err: any) {
-            res.json({ code: -200, message: err.toString() })
+            res.json({ code: -200, message: err.toString(), data: 'error' })
         }
     }
 }
@@ -288,7 +288,7 @@ export async function account(req: Req<{}, { email: string }>, res: Res) {
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 
@@ -307,11 +307,11 @@ export async function password(req: Req<{}, { old_password: string; password: st
             res.json({ code: 200, message: '更新成功', data: 'success' })
         }
         else {
-            res.json({ code: -200, message: '原始密码错误' })
+            res.json({ code: -200, message: '原始密码错误', data: 'error' })
         }
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 

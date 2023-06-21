@@ -89,7 +89,7 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 
@@ -106,7 +106,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+        res.json({ code: -200, message: err.toString(), data: 'error' })
     }
 }
 

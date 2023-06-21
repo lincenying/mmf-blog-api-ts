@@ -59,6 +59,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
                 hasNext: totalPage > page ? 1 : 0,
                 hasPrev: page > 1 ? 1 : 0,
             },
+            message: 'success',
         }
         if (user_id) {
             json.data.list = list.map((item): Article => ({
@@ -116,6 +117,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         res.json({
             code: 200,
             data: result,
+            message: 'success',
         })
     }
     catch (err: any) {
@@ -143,6 +145,7 @@ export async function getTrending(req: Req, res: Res) {
             data: {
                 list: result,
             },
+            message: 'success',
         })
     }
     catch (err: any) {

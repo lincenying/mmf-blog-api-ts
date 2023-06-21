@@ -227,4 +227,5 @@ export interface ListConfig<T> {
         total: number
         list: T
     }
+    message?: string
 }
