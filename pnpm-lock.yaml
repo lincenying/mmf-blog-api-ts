@@ -42,11 +42,11 @@ dependencies:
     specifier: ^2.29.4
     version: 2.29.4
   mongoose:
-    specifier: ^7.3.0
-    version: 7.3.0
+    specifier: ^7.3.1
+    version: 7.3.1
   mongoose-autopopulate:
     specifier: ^1.0.1
-    version: 1.0.1(mongoose@7.3.0)
+    version: 1.0.1(mongoose@7.3.1)
   multer:
     specifier: ^1.4.5-lts.1
     version: 1.4.5-lts.1
@@ -3624,16 +3624,16 @@ packages:
       saslprep: 1.0.3
     dev: false
 
-  /mongoose-autopopulate@1.0.1(mongoose@7.3.0):
+  /mongoose-autopopulate@1.0.1(mongoose@7.3.1):
     resolution: {integrity: sha512-39rN0QQinA1iz/8JNVKM3MNq/zZrjStiWi8jA15diUC2nnJsvEgRXEir4L4D1azYxY+gBTuqEzLqd7Y+MC6pHQ==}
     peerDependencies:
       mongoose: 6.x || 7.x
     dependencies:
-      mongoose: 7.3.0
+      mongoose: 7.3.1
     dev: false
 
-  /mongoose@7.3.0:
-    resolution: {integrity: sha512-gvkV5qxmBkGohlk7VTeePMPM2OkQPeqVYZHvjoM4goOIK6G1eSfJMZwXV21asivXxlaz6OuP29TfGAKrKooDAg==}
+  /mongoose@7.3.1:
+    resolution: {integrity: sha512-6289bmSIhvR8xMHsYe2/CuzN7wHK+2RHcK7idDdzniCPC5zix5JH0Hc4k3CmXlr/9zQ2250gUQiUWtvDB0vF1Q==}
     engines: {node: '>=14.20.1'}
     dependencies:
       bson: 5.3.0
