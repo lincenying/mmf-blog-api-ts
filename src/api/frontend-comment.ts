@@ -10,7 +10,7 @@ import type { Comment, ListConfig, Req, ReqListQuery, Res } from '@/types'
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<{}, { id: string; content: string }>, res: Res) {
+export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
     const { id, content } = req.body
     const creat_date = moment().format('YYYY-MM-DD HH:mm:ss')

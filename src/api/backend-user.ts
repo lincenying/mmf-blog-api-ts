@@ -67,7 +67,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function login(req: Req<{}, { password: string; username: string }>, res: Res) {
+export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
     const { password, username } = req.body
     if (username === '' || password === '')
         return res.json({ code: -200, message: '请输入用户名和密码' })
@@ -143,7 +143,7 @@ export async function insert(email: string, password: string, username: string) 
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<{}, { id: string; email: string; password: string; username: string }>, res: Res) {
+export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     const { id, email, password, username } = req.body
     const data: UserModify = {
         email,

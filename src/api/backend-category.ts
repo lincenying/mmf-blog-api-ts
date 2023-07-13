@@ -50,7 +50,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<{}, CategoryInsert>, res: Res) {
+export async function insert(req: Req<object, CategoryInsert>, res: Res) {
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order
     if (!cate_name || !cate_order) {
@@ -116,7 +116,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function modify(req: Req<{}, CategoryModify>, res: Res) {
+export async function modify(req: Req<object, CategoryModify>, res: Res) {
     const id = req.body.id
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order

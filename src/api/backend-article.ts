@@ -97,7 +97,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param  {Request} req Request
  * @param  {Response} res Response
  */
-export async function insert(req: Req<{}, ArticleInsert>, res: Res) {
+export async function insert(req: Req<object, ArticleInsert>, res: Res) {
     const { category, content, title } = req.body
     const md = marked(content)
     const html = md.html
@@ -167,10 +167,10 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 编辑文章
  * @method
- * @param  {Req<{}, ArticleModify>} req Request
+ * @param  {Req<object, ArticleModify>} req Request
  * @param  {Res} res Response
  */
-export async function modify(req: Req<{}, ArticleModify>, res: Res) {
+export async function modify(req: Req<object, ArticleModify>, res: Res) {
     const { id, category, category_old, content, title, category_name } = req.body
     const { html, toc } = marked(content)
     const data = {
