@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -5,6 +6,7 @@ import crc32 from '../utils/crc32'
 import { douyinCache as lruCache } from '../utils/lru-cache'
 import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
+import type { DouYinVideo } from './app-douyin.types'
 import type { DouYin, DouYinInsert, DouYinUserInsert, Req, Res, ResLists } from '@/types'
 import { getErrorMessage } from '@/utils'
 
@@ -70,12 +72,7 @@ export async function getList(req: Req<{ user_id: string; limit: number; page: n
     page = Number(page) || 1
     limit = Number(limit) || 10
 
-    const payload: {
-        is_delete: number
-        user_id?: string
-    } = {
-        is_delete: 0,
-    }
+    const payload: { is_delete: number; user_id?: string } = { is_delete: 0 }
     const skip = (page - 1) * limit
     const sort = '-aweme_id'
 
@@ -112,7 +109,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         res.json({ ok: 2, msg: '参数错误' })
         return
     }
-    let main_url = lruCache.get(`douyin_${vid}`)
+    let main_url: string = lruCache.get(`douyin_${vid}`)
     if (main_url) {
         return res.json({
             code: 200,
@@ -136,7 +133,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         },
     }
     try {
-        const xhr = await axios(options)
+        const xhr = await axios<DouYinVideo, AxiosResponse<DouYinVideo>>(options)
         const video_list = xhr.data && xhr.data.data && xhr.data.data.video_list
         if (video_list) {
             main_url
@@ -145,7 +142,6 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
                 || (video_list.video_1 && video_list.video_1.main_url)
                 || ''
             if (main_url) {
-                // @ts-expect-error 1111
                 main_url = Buffer.from(main_url, 'base64').toString()
                 lruCache.set(`douyin_${vid}`, main_url)
             }
@@ -154,7 +150,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             code: 200,
             data: main_url,
             from: 'douyin',
-            msg: '',
+            msg: main_url ? 'success' : xhr.data.data.message,
         })
     }
     catch (err: unknown) {

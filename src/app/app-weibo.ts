@@ -71,7 +71,7 @@ export async function get(req: Req<{ page: number }>, res: Res) {
     if (page)
         options.url += `&since_id=${page}`
     try {
-        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
+        const xhr = await axios<WeiboObject, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         res.json({
             ...body,
@@ -126,7 +126,7 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
         url: `https://m.weibo.cn/api/container/getIndex?containerid=${containerid}&since_id=${since_id}`,
     }
     try {
-        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
+        const xhr = await axios<WeiboObject, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         const list: any[] = []
         body.data.cards.forEach((item) => {
@@ -240,7 +240,7 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
         url: `https://m.weibo.cn/api/container/getIndex?containerid=100808f334edf14a66a4e3aa1a31dade762d19_-_feed&extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&luicode=10000011&lfid=100103type%3D1%26q%3D%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&since_id=${since_id}`,
     }
     try {
-        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
+        const xhr = await axios<WeiboObject, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         const $list: any[] = []
         body.data.cards.forEach((item) => {
