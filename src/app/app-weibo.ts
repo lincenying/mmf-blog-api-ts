@@ -1,5 +1,8 @@
+import type { AxiosResponse } from 'axios'
 import axios from 'axios'
+import type { Pic, WeiboObject } from './app-weibo.types'
 import type { Req, Res } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 const baseOptions = {
     method: 'get',
@@ -68,25 +71,26 @@ export async function get(req: Req<{ page: number }>, res: Res) {
     if (page)
         options.url += `&since_id=${page}`
     try {
-        const xhr = await axios(options)
+        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         res.json({
             ...body,
             code: 200,
             total: body.data.cardlistInfo.total,
             data: body.data.cards
-                .filter((item: any) => item.card_type === 9)
-                .map((item: any) => {
+                .filter(item => item.card_type === 9)
+                .map((item) => {
                     let video = ''
                     let video_img = ''
-                    let pics = ''
+                    let pics: Pic[] = []
                     let text = ''
                     if (item.mblog) {
                         if (item.mblog.page_info && item.mblog.page_info.media_info) {
                             video
-                                = item.mblog.page_info.media_info.mp4_720p_mp4
-                                || item.mblog.page_info.media_info.mp4_hd_url
-                                || item.mblog.page_info.media_info.mp4_sd_url
+                                = item.mblog.page_info.urls.mp4_720p_mp4
+                                || item.mblog.page_info.urls.mp4_hd_mp4
+                                || item.mblog.page_info.urls.mp4_ld_mp4
+                                || item.mblog.page_info.media_info.stream_url_hd
                                 || item.mblog.page_info.media_info.stream_url
                             video_img = item.mblog.page_info.page_pic.url
                         }
@@ -101,11 +105,11 @@ export async function get(req: Req<{ page: number }>, res: Res) {
                         video_img,
                     }
                 })
-                .filter((item: any) => item.itemid !== ''),
+                .filter(item => item.itemid !== ''),
         })
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -122,27 +126,28 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
         url: `https://m.weibo.cn/api/container/getIndex?containerid=${containerid}&since_id=${since_id}`,
     }
     try {
-        const xhr = await axios(options)
+        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         const list: any[] = []
-        body.data.cards.forEach((item: any) => {
+        body.data.cards.forEach((item) => {
             if (item.mblog) {
                 const mblog = item.mblog.retweeted_status || item.mblog
                 let video = ''
                 let video_img = ''
                 if (mblog.page_info && mblog.page_info.urls) {
-                    video = mblog.page_info.urls
+                    video = mblog.page_info.urls.mp4_720p_mp4 || mblog.page_info.urls.mp4_hd_mp4 || mblog.page_info.urls.mp4_ld_mp4
                     video_img = mblog.page_info.page_pic.url
                 }
                 else if (mblog.page_info && mblog.page_info.media_info) {
                     video
-                        = mblog.page_info.media_info.mp4_720p_mp4
-                        || mblog.page_info.media_info.mp4_hd_url
-                        || mblog.page_info.media_info.mp4_sd_url
+                        = mblog.page_info.urls.mp4_720p_mp4
+                        || mblog.page_info.media_info.stream_url_hd
                         || mblog.page_info.media_info.stream_url
+                        || mblog.page_info.urls.mp4_hd_mp4
+                        || mblog.page_info.urls.mp4_ld_mp4
                     video_img = mblog.page_info.page_pic.url
                 }
-                const pics = (mblog.pics && mblog.pics.map((sub_item: any) => ({ url: sub_item.url, large: sub_item.large.url }))) || null
+                const pics = (mblog.pics && mblog.pics.map(sub_item => ({ url: sub_item.url, large: sub_item.large.url }))) || null
                 if (pics || video) {
                     list.push({
                         id: mblog.mid,
@@ -166,8 +171,8 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
             },
         })
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -220,8 +225,8 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
             },
         })
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -235,20 +240,21 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
         url: `https://m.weibo.cn/api/container/getIndex?containerid=100808f334edf14a66a4e3aa1a31dade762d19_-_feed&extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&luicode=10000011&lfid=100103type%3D1%26q%3D%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&since_id=${since_id}`,
     }
     try {
-        const xhr = await axios(options)
+        const xhr = await axios<any, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
         const $list: any[] = []
-        body.data.cards.forEach((item: any) => {
+        body.data.cards.forEach((item) => {
             if (item.card_group && Array.isArray(item.card_group)) {
-                item.card_group.forEach((sub_item: any) => {
+                item.card_group.forEach((sub_item) => {
                     let video = ''
                     let video_img = ''
                     if (sub_item.mblog && sub_item.mblog.page_info && sub_item.mblog.page_info.media_info) {
                         video
-                            = sub_item.mblog.page_info.media_info.mp4_720p_mp4
-                            || sub_item.mblog.page_info.media_info.mp4_hd_url
-                            || sub_item.mblog.page_info.media_info.mp4_sd_url
+                            = sub_item.mblog.page_info.urls.mp4_720p_mp4
+                            || sub_item.mblog.page_info.media_info.stream_url_hd
                             || sub_item.mblog.page_info.media_info.stream_url
+                            || sub_item.mblog.page_info.urls.mp4_hd_mp4
+                            || sub_item.mblog.page_info.urls.mp4_ld_mp4
                         video_img = sub_item.mblog.page_info.page_pic.url
                         $list.push({
                             itemid: sub_item.mblog.id,
@@ -270,8 +276,8 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
         }
         res.json($return)
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -299,9 +305,10 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
                     if (sub_item.mblog && sub_item.mblog.page_info && sub_item.mblog.page_info.media_info) {
                         video
                             = sub_item.mblog.page_info.media_info.mp4_720p_mp4
+                            || sub_item.mblog.page_info.media_info.stream_url_hd
+                            || sub_item.mblog.page_info.media_info.stream_url
                             || sub_item.mblog.page_info.media_info.mp4_hd_url
                             || sub_item.mblog.page_info.media_info.mp4_sd_url
-                            || sub_item.mblog.page_info.media_info.stream_url
                         video_img = sub_item.mblog.page_info.page_pic.url
                         $list.push({
                             itemid: sub_item.mblog.id,
@@ -323,8 +330,8 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
         }
         res.json($return)
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -356,7 +363,7 @@ export async function detail(req: Req<{ id: string }>, res: Res) {
         }
         res.json($return)
     }
-    catch (err: any) {
-        res.json({ code: 300, ok: 2, msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
     }
 }
