@@ -1,6 +1,7 @@
 import moment from 'moment'
 import CategoryM from '../models/category'
-import type { CategoryInsert, CategoryModify, Req, Res } from '@/types'
+import type { Category, CategoryInsert, CategoryModify, Req, Res, ResList } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 /**
  * 管理时, 获取分类列表
@@ -11,7 +12,7 @@ import type { CategoryInsert, CategoryModify, Req, Res } from '@/types'
 export async function getList(req: Req, res: Res) {
     try {
         const result = await CategoryM.find().sort('-cate_order').exec().then(data => data.map(item => item.toObject()))
-        const json = {
+        const json: ResList<Category[]> = {
             code: 200,
             data: {
                 list: result,
@@ -19,8 +20,8 @@ export async function getList(req: Req, res: Res) {
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -39,8 +40,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         const result = await CategoryM.findOne({ _id }).exec().then(data => data?.toObject())
         res.json({ code: 200, data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -70,8 +71,8 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
             const result = await CategoryM.create(creatData).then(data => data.toObject())
             res.json({ code: 200, message: '添加成功', data: result })
         }
-        catch (err: any) {
-            res.json({ code: -200, message: err.toString() })
+        catch (err: unknown) {
+            res.json({ code: -200, data: null, message: getErrorMessage(err) })
         }
     }
 }
@@ -88,8 +89,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         await CategoryM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -105,8 +106,8 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         await CategoryM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -131,7 +132,7 @@ export async function modify(req: Req<object, CategoryModify>, res: Res) {
         ).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

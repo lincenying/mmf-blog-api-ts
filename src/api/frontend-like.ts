@@ -1,4 +1,5 @@
 import ArticleM from '../models/article'
+import { getErrorMessage } from '@/utils'
 import type { Req, Res } from '@/types'
 
 /**
@@ -16,8 +17,8 @@ export async function like(req: Req<{ id: string }>, res: Res) {
 
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -33,8 +34,8 @@ export async function unlike(req: Req<{ id: string }>, res: Res) {
         await ArticleM.updateOne({ _id: article_id }, { $inc: { like: -1 }, $pullAll: { likes: [user_id] } }).exec()
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -53,7 +54,7 @@ export async function resetLike(req: Req, res: Res) {
         }
         res.json({ code: 200, message: '操作成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

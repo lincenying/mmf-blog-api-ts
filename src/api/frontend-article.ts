@@ -1,5 +1,6 @@
 import ArticleM from '../models/article'
-import type { Article, ListConfig, Req, ReqListQuery, Res } from '@/types'
+import { getErrorMessage } from '@/utils'
+import type { Article, Req, ReqListQuery, Res, ResLists } from '@/types'
 
 function replaceHtmlTag(html: string) {
     return html
@@ -51,7 +52,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             ArticleM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<Article[]> = {
+        const json: ResLists<Article[]> = {
             code: 200,
             data: {
                 list: [],
@@ -79,8 +80,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -120,11 +121,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             message: 'success',
         })
     }
-    catch (err: any) {
-        res.json({
-            code: -200,
-            message: err.toString(),
-        })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -148,7 +146,7 @@ export async function getTrending(req: Req, res: Res) {
             message: 'success',
         })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

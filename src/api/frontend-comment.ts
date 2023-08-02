@@ -2,7 +2,8 @@ import moment from 'moment'
 
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
-import type { Comment, ListConfig, Req, ReqListQuery, Res } from '@/types'
+import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 /**
  * 发布评论
@@ -43,8 +44,8 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
         ).exec()
         res.json({ code: 200, data: result, message: '发布成功' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -80,7 +81,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
                 CommentM.countDocuments(data),
             ])
             const totalPage = Math.ceil(total / limit)
-            const json: ListConfig<Comment[]> = {
+            const json: ResLists<Comment[]> = {
                 code: 200,
                 data: {
                     list,
@@ -91,8 +92,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             }
             res.json(json)
         }
-        catch (err: any) {
-            res.json({ code: -200, message: err.toString() })
+        catch (err: unknown) {
+            res.json({ code: -200, data: null, message: getErrorMessage(err) })
         }
     }
 }
@@ -111,8 +112,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         ])
         res.json({ code: 200, message: '删除成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -130,7 +131,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         ])
         res.json({ code: 200, message: '恢复成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

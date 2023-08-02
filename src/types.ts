@@ -175,26 +175,43 @@ export interface ReqListQuery {
     key?: string
 }
 
+/**
+ * 发布文章
+ */
 export interface ArticleInsert {
     category: string
     content: string
     title: string
 }
+
+/**
+ * 编辑文章
+ */
 export interface ArticleModify extends ArticleInsert {
     id: string
     category_old: string
     category_name: string
 }
 
+/**
+ * 添加分类
+ */
 export interface CategoryInsert {
     cate_name: string
     cate_order: string
 }
 
+/**
+ * 编辑分类
+ */
+
 export interface CategoryModify extends CategoryInsert {
     id: string
 }
 
+/**
+ * 编辑用户
+ */
 export interface UserModify {
     email: string
     username: string
@@ -202,6 +219,9 @@ export interface UserModify {
     password?: string
 }
 
+/**
+ * 添加抖音账号
+ */
 export interface DouYinUserInsert {
     user_id: string
     user_name: string
@@ -210,6 +230,9 @@ export interface DouYinUserInsert {
     share_url: string
 }
 
+/**
+ * 添加抖音视频
+ */
 export interface DouYinInsert {
     user_id: string
     aweme_id: string
@@ -219,7 +242,30 @@ export interface DouYinInsert {
     video: string
 }
 
-export interface ListConfig<T> {
+/**
+ * 返回列表结构
+ */
+export interface ResItem<T> {
+    code: number
+    data: T
+    message?: string
+}
+
+/**
+ * 返回列表结构
+ */
+export interface ResList<T> {
+    code: number
+    data: {
+        list: T
+    }
+    message?: string
+}
+
+/**
+ * 返回分页列表结构
+ */
+export interface ResLists<T> {
     code: number
     data: {
         hasNext?: number | boolean

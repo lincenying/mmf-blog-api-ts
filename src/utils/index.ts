@@ -22,3 +22,12 @@ export function strLen(str: string) {
     }
     return realLength
 }
+
+export function getErrorMessage(err: unknown) {
+    let message = ''
+    if (typeof err === 'string')
+        message = err.toUpperCase()
+    else if (err instanceof Error)
+        message = err.message
+    return message
+}

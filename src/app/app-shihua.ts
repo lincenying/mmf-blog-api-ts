@@ -7,7 +7,8 @@ import pkg from 'baidu-aip-sdk'
 import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
 import { checkJWT } from '../utils/check-jwt'
 import ShiHuaM from '../models/shihua'
-import type { ListConfig, Req, Res, ShiHua } from '@/types'
+import type { Req, Res, ResLists, ShiHua } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 const { imageClassify: AipImageClassifyClient } = pkg
 
@@ -124,12 +125,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
                 message: '图片读取失败',
             }
         }
-        catch (err: any) {
-            return {
-                success: false,
-                err: 'unknow',
-                message: err.message,
-            }
+        catch (err: unknown) {
+            return { success: false, err: 'unknow', message: getErrorMessage(err) }
         }
     }
 
@@ -155,8 +152,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
                 res.json({ code: -200, userid, message: data.message || '读取数据失败' })
         }
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -183,7 +180,7 @@ export async function getHistory(req: Req<{ page: string; limit: string }>, res:
             ShiHuaM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<ShiHua[]> = {
+        const json: ResLists<ShiHua[]> = {
             code: 200,
             data: {
                 list: data.map((item) => {
@@ -197,8 +194,8 @@ export async function getHistory(req: Req<{ page: string; limit: string }>, res:
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -217,7 +214,7 @@ export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
         fs.unlinkSync(`./uploads/${img_id}`)
         res.json({ code: 200, message: '删除成功' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

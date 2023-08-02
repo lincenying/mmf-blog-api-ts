@@ -3,10 +3,10 @@ import md5 from 'md5'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 
-import { fsExistsSync } from '../utils'
+import { fsExistsSync, getErrorMessage } from '../utils'
 import { md5Pre, secretServer as secret } from '../config'
 import AdminM from '../models/admin'
-import type { ListConfig, Req, Res, User, UserModify } from '@/types'
+import type { Req, Res, ResLists, User, UserModify } from '@/types'
 
 /**
  * 获取管理员列表
@@ -25,7 +25,7 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
             AdminM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<User[]> = {
+        const json: ResLists<User[]> = {
             code: 200,
             data: {
                 list,
@@ -36,8 +36,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -56,8 +56,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         const result = await AdminM.findOne({ _id }).exec().then(data => data?.toObject())
         res.json({ code: 200, data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -90,8 +90,8 @@ export async function login(req: Req<object, { password: string; username: strin
         }
         return res.json({ code: -200, message: '用户名或者密码错误' })
     }
-    catch (error: any) {
-        res.json({ code: -200, message: error.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -130,8 +130,8 @@ export async function insert(email: string, password: string, username: string) 
                 message = `添加用户成功: ${username}, 密码: ${password}`
             }
         }
-        catch (error: any) {
-            message = error.toString()
+        catch (err: unknown) {
+            message = getErrorMessage(err)
         }
     }
     return message
@@ -157,8 +157,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         const result = await AdminM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -174,8 +174,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         await AdminM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '删除成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -191,7 +191,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         await AdminM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '恢复成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

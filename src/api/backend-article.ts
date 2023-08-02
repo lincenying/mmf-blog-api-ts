@@ -5,7 +5,8 @@ import hljs from 'highlight.js'
 
 import ArticleM from '../models/article'
 import CategoryM from '../models/category'
-import type { Article, ArticleInsert, ArticleModify, ListConfig, Req, Res } from '@/types'
+import type { Article, ArticleInsert, ArticleModify, Req, Res, ResLists } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 function marked(content: string) {
     const $return = {
@@ -54,7 +55,7 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
             ArticleM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<Article[]> = {
+        const json: ResLists<Article[]> = {
             code: 200,
             data: {
                 list,
@@ -66,8 +67,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -86,8 +87,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         const result = await ArticleM.findOne({ _id }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: 'success', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -123,8 +124,8 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         await CategoryM.updateOne({ _id: arr_category[0] }, { $inc: { cate_num: 1 } }).exec()
         res.json({ code: 200, message: '发布成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -141,8 +142,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         await CategoryM.updateOne({ _id }, { $inc: { cate_num: -1 } }).exec()
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -159,8 +160,8 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         await CategoryM.updateOne({ _id }, { $inc: { cate_num: 1 } }).exec()
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -192,7 +193,7 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         }
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

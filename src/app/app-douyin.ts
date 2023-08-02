@@ -5,7 +5,8 @@ import crc32 from '../utils/crc32'
 import { douyinCache as lruCache } from '../utils/lru-cache'
 import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
-import type { DouYin, DouYinInsert, DouYinUserInsert, ListConfig, Req, Res } from '@/types'
+import type { DouYin, DouYinInsert, DouYinUserInsert, Req, Res, ResLists } from '@/types'
+import { getErrorMessage } from '@/utils'
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body
@@ -29,8 +30,8 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
             res.json({ code: 200, message: '添加成功', data: result })
         }
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -57,8 +58,8 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
             res.json({ code: 200, message: '发布成功', data: result })
         }
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -89,7 +90,7 @@ export async function getList(req: Req<{ user_id: string; limit: number; page: n
             DouYinM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<DouYin[]> = {
+        const json: ResLists<DouYin[]> = {
             code: 200,
             data: {
                 list,
@@ -100,8 +101,8 @@ export async function getList(req: Req<{ user_id: string; limit: number; page: n
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -156,7 +157,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             msg: '',
         })
     }
-    catch (err: any) {
-        res.json({ code: 300, data: '', msg: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }

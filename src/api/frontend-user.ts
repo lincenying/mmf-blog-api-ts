@@ -3,10 +3,10 @@ import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../config'
-import { strLen } from '../utils'
+import { getErrorMessage, strLen } from '../utils'
 
 import UserM from '../models/user'
-import type { ListConfig, Req, Res, User, UserModify } from '@/types'
+import type { Req, Res, ResLists, User, UserModify } from '@/types'
 
 /**
  * 用户列表
@@ -24,7 +24,7 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
             UserM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ListConfig<User[]> = {
+        const json: ResLists<User[]> = {
             code: 200,
             data: {
                 list,
@@ -35,8 +35,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -81,15 +81,12 @@ export async function login(req: Req<object, { username: string; password: strin
             }
         }
         else {
-            json = {
-                code: -200,
-                message: '用户名或者密码错误',
-            }
+            json = { code: -200, message: '用户名或者密码错误' }
         }
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -139,7 +136,6 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
                         username,
                     },
                 }
-                res.json(json)
             }
             else {
                 const creatData = {
@@ -157,7 +153,7 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
                 id = _result._id
                 username = encodeURI(nickName)
                 token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
-                res.json({
+                json = {
                     code: 200,
                     message: '注册成功!',
                     data: {
@@ -165,11 +161,12 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
                         userid: id,
                         username,
                     },
-                })
+                }
             }
+            res.json(json)
         }
-        catch (err: any) {
-            res.json({ code: -200, message: err.toString() })
+        catch (err: unknown) {
+            res.json({ code: -200, data: null, message: getErrorMessage(err) })
         }
     }
 }
@@ -222,8 +219,8 @@ export async function insert(req: Req<object, { email: string; password: string;
                 res.json({ code: 200, message: '注册成功!', data: 'success' })
             }
         }
-        catch (err: any) {
-            res.json({ code: -200, message: err.toString(), data: 'error' })
+        catch (err: unknown) {
+            res.json({ code: -200, data: null, message: getErrorMessage(err) })
         }
     }
 }
@@ -245,8 +242,8 @@ export async function getItem(req: Req, res: Res) {
 
         res.json(json)
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -269,8 +266,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         const result = await UserM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -287,8 +284,8 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
         res.cookie('useremail', email, { maxAge: 2592000000 })
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -310,8 +307,8 @@ export async function password(req: Req<object, { old_password: string; password
             res.json({ code: -200, message: '原始密码错误', data: 'error' })
         }
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString(), data: 'error' })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -326,8 +323,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
         await UserM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
 
@@ -342,7 +339,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
         await UserM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
-    catch (err: any) {
-        res.json({ code: -200, message: err.toString() })
+    catch (err: unknown) {
+        res.json({ code: -200, data: null, message: getErrorMessage(err) })
     }
 }
