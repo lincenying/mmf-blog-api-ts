@@ -45,9 +45,6 @@ app.set('twig options', {
     allow_async: true,
     strict_variables: false,
 })
-// app.set('views', path.join(__dirname, 'views'))
-// app.engine('.html', require('ejs').__express)
-// app.set('view engine', 'ejs')
 
 app.use(compression())
 app.use(favicon(`${resolve('./public')}/favicon.ico`))

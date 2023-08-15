@@ -23,10 +23,10 @@ const DouYinSchema = new Schema<DouYin>(
     },
 )
 
-DouYinSchema.virtual('user', {
-    ref: 'DouYinUser',
-    localField: 'user_id',
-    foreignField: 'user_id',
+DouYinSchema.virtual('user', { // 键名
+    ref: 'DouYinUser', // 目标表
+    localField: 'user_id', // 本地表键名
+    foreignField: 'user_id', // 目标表键名
     justOne: true,
     autopopulate: { path: 'user', select: '_id user_id user_name user_avatar' },
 })
