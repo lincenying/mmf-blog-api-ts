@@ -10,15 +10,15 @@
     "npm": ">= 8.0.0"
   },
   "scripts": {
-    "postinstall": "husky install",
+    "postinstall": "sh simple-git-hooks.sh",
     "tsc": "tsc",
     "build": "esno src/init.ts && npm run tsc",
     "deploy": "node dist/app.js",
     "deploy-watch": "nodemon --delay 500ms --watch ./dist dist/app.js",
     "serve": "nodemon --watch ./src --exec esno ./src/app.ts",
     "start": "npm run deploy",
-    "lint": "eslint ./src --ext .ts,.js",
-    "lint:fix": "eslint ./src --ext .ts,.js --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
@@ -61,11 +61,11 @@
     "eslint": "^8.47.0",
     "esno": "^0.17.0",
     "express": "^4.18.2",
-    "husky": "8.0.3",
     "lint-staged": "^14.0.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "simple-git-hooks": "^2.9.0"
   },
   "pnpm": {
     "peerDependencyRules": {
@@ -73,6 +73,9 @@
         "prettier"
       ]
     }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
     "*.{ts,js}": [
