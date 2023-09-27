@@ -21,8 +21,8 @@ interface ArticleSearch {
 /**
  * 前台浏览时, 获取文章列表
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     const user_id = req.cookies.userid || req.headers.userid
@@ -88,8 +88,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
 /**
  * 前台浏览时, 获取单篇文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -129,8 +129,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 前台浏览时, 获取文章推荐列表
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getTrending(req: Req, res: Res) {
     const limit = 5

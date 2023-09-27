@@ -8,8 +8,8 @@ import { getErrorMessage } from '@/utils'
 /**
  * 发布评论
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
@@ -52,8 +52,8 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
 /**
  * 前台浏览时, 读取评论列表
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     const { all, id } = req.query
@@ -100,8 +100,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
 
 /**
  * 评论删除
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -119,8 +119,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 评论恢复
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id

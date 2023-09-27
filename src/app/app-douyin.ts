@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer'
+
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import moment from 'moment'

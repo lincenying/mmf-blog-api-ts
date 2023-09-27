@@ -10,8 +10,8 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
 
 /**
  * 用户列表
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
@@ -42,8 +42,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
 
 /**
  * 用户登录
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
     let { username } = req.body
@@ -92,8 +92,8 @@ export async function login(req: Req<object, { username: string; password: strin
 
 /**
  * 微信登录
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function jscodeToSession(req: Req<object, { js_code: string }>, res: Res) {
     const { js_code } = req.body
@@ -109,8 +109,8 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
 }
 /**
  * 微信登录
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
     const { nickName, wxSignature, avatar } = req.body
@@ -173,8 +173,8 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
 
 /**
  * 用户退出
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export function logout(req: Req, res: Res) {
     res.cookie('user', '', { maxAge: -1 })
@@ -186,8 +186,8 @@ export function logout(req: Req, res: Res) {
 
 /**
  * 用户注册
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
     const { email, password, username } = req.body
@@ -227,8 +227,8 @@ export async function insert(req: Req<object, { email: string; password: string;
 
 /**
  * 获取用户信息
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getItem(req: Req, res: Res) {
     const userid = req.query.id || req.cookies.userid || req.headers.userid
@@ -249,8 +249,8 @@ export async function getItem(req: Req, res: Res) {
 
 /**
  * 用户编辑
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     const { id, email, password, username } = req.body
@@ -273,8 +273,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
 
 /**
  * 账号编辑
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function account(req: Req<object, { email: string }>, res: Res) {
     const { email } = req.body
@@ -291,8 +291,8 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
 
 /**
  * 密码编辑
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
     const { old_password, password } = req.body
@@ -314,8 +314,8 @@ export async function password(req: Req<object, { old_password: string; password
 
 /**
  * 用户删除
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -330,8 +330,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 用户恢复
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id

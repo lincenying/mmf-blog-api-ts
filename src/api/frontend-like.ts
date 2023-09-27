@@ -4,8 +4,8 @@ import type { Req, Res } from '@/types'
 
 /**
  * 文章点赞
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function like(req: Req<{ id: string }>, res: Res) {
     const article_id = req.query.id
@@ -24,8 +24,8 @@ export async function like(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 取消文章点赞
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function unlike(req: Req<{ id: string }>, res: Res) {
     const article_id = req.query.id
@@ -41,8 +41,8 @@ export async function unlike(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 重置文章点赞数量
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function resetLike(req: Req, res: Res) {
     try {

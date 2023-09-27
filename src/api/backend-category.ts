@@ -6,8 +6,8 @@ import { getErrorMessage } from '@/utils'
 /**
  * 管理时, 获取分类列表
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req, res: Res) {
     try {
@@ -28,8 +28,8 @@ export async function getList(req: Req, res: Res) {
 /**
  * 管理时, 获取分类详情
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -48,8 +48,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 新增分类
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function insert(req: Req<object, CategoryInsert>, res: Res) {
     const cate_name = req.body.cate_name
@@ -80,8 +80,8 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
 /**
  * 管理时, 删除分类
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -97,8 +97,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 恢复分类
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -114,22 +114,19 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 编辑分类
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function modify(req: Req<object, CategoryModify>, res: Res) {
     const id = req.body.id
     const cate_name = req.body.cate_name
     const cate_order = req.body.cate_order
     try {
-        const result = await CategoryM.findOneAndUpdate({ _id: id },
-            {
-                cate_name,
-                cate_order,
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-            },
-            { new: true },
-        ).exec().then(data => data?.toObject())
+        const result = await CategoryM.findOneAndUpdate({ _id: id }, {
+            cate_name,
+            cate_order,
+            update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        }, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: unknown) {

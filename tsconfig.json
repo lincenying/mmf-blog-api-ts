@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "module": "commonjs",
     "target": "ESNext",
     "lib": ["DOM", "ESNext"],
-    "strict": true,
-    "esModuleInterop": true,
     "jsx": "preserve",
-    "skipLibCheck": true,
-    "importHelpers": true,
+    "module": "commonjs",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "allowJs": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["node"],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "dist"
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"]

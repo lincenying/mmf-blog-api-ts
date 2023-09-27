@@ -159,8 +159,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
 
 /**
  * 获取识花历史列表
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getHistory(req: Req<{ page: string; limit: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
@@ -202,8 +202,8 @@ export async function getHistory(req: Req<{ page: string; limit: string }>, res:
 /**
  * 删除识花历史列表
  * @method delHistory
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid

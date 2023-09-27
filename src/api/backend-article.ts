@@ -41,8 +41,8 @@ function marked(content: string) {
 /**
  * 管理时, 获取文章列表
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
@@ -75,8 +75,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
 /**
  * 管理时, 获取单篇文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -95,8 +95,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 发布文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function insert(req: Req<object, ArticleInsert>, res: Res) {
     const { category, content, title } = req.body
@@ -132,8 +132,8 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
 /**
  * 管理时, 删除文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -150,8 +150,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 恢复文章
  * @method
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -168,8 +168,8 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 编辑文章
  * @method
- * @param  {Req<object, ArticleModify>} req Request
- * @param  {Res} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function modify(req: Req<object, ArticleModify>, res: Res) {
     const { id, category, category_old, content, title, category_name } = req.body

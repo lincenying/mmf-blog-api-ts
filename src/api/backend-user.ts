@@ -11,8 +11,8 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
 /**
  * 获取管理员列表
  * @method getList
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
     const sort = '-_id'
@@ -44,8 +44,8 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
 /**
  * 获取单个管理员
  * @method getItem
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -64,8 +64,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理员登录
  * @method loginAdmin
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
     const { password, username } = req.body
@@ -97,9 +97,9 @@ export async function login(req: Req<object, { password: string; username: strin
 
 /**
  * 初始化时添加管理员
- * @param {string} email 邮箱
- * @param {string} password 密码
- * @param {string} username 用户名
+ * @param email 邮箱
+ * @param password 密码
+ * @param username 用户名
  */
 export async function insert(email: string, password: string, username: string) {
     let message = ''
@@ -140,8 +140,8 @@ export async function insert(email: string, password: string, username: string) 
 /**
  * 管理员编辑
  * @method modifyAdmin
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     const { id, email, password, username } = req.body
@@ -165,8 +165,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
 /**
  * 管理员删除
  * @method deletes
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
@@ -182,8 +182,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理员恢复
  * @method recover
- * @param  {Request} req Request
- * @param  {Response} res Response
+ * @param req Request
+ * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const _id = req.query.id
