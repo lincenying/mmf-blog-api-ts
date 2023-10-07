@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
     "jsx": "preserve",
+    "lib": ["DOM", "ESNext"],
+    "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["node"],
     "resolveJsonModule": true,
+    "types": ["node"],
     "allowJs": true,
-    "outDir": "dist",
-    "importHelpers": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
+    "importHelpers": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
   "include": ["src/**/*"],
