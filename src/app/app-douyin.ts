@@ -2,7 +2,6 @@ import { Buffer } from 'node:buffer'
 
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
-import moment from 'moment'
 
 import crc32 from '../utils/crc32'
 import { douyinCache as lruCache } from '../utils/lru-cache'
@@ -10,7 +9,7 @@ import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
 import type { DouYinVideo } from './app-douyin.types'
 import type { DouYin, DouYinInsert, DouYinUserInsert, Req, Res, ResLists } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, getNowTime } from '@/utils'
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body
@@ -20,9 +19,9 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
         user_avatar,
         sec_uid,
         share_url,
-        creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        creat_date: getNowTime(),
         is_delete: 0,
-        timestamp: moment().format('X'),
+        timestamp: getNowTime('X'),
     }
     try {
         const checkRepeat = await DouYinUserM.findOne({ user_id }).exec().then(data => data?.toObject())
@@ -48,9 +47,9 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
         vid,
         image,
         video,
-        creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        creat_date: getNowTime(),
         is_delete: 0,
-        timestamp: moment().format('X'),
+        timestamp: getNowTime('X'),
     }
     try {
         const checkRepeat = await DouYinM.findOne({ aweme_id }).then(data => data?.toObject())

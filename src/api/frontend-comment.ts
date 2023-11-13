@@ -1,9 +1,7 @@
-import moment from 'moment'
-
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
 import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, getNowTime } from '@/utils'
 
 /**
  * 发布评论
@@ -14,8 +12,8 @@ import { getErrorMessage } from '@/utils'
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
     const { id, content } = req.body
-    const creat_date = moment().format('YYYY-MM-DD HH:mm:ss')
-    const timestamp = moment().format('X')
+    const creat_date = getNowTime()
+    const timestamp = getNowTime('X')
     if (!id) {
         res.json({ code: -200, message: '参数错误' })
         return

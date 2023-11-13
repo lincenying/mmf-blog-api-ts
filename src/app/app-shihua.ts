@@ -1,6 +1,5 @@
 import fs from 'node:fs'
 import multer from 'multer'
-import moment from 'moment'
 import base64Img from 'base64-img'
 import pkg from 'baidu-aip-sdk'
 
@@ -8,7 +7,7 @@ import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
 import { checkJWT } from '../utils/check-jwt'
 import ShiHuaM from '../models/shihua'
 import type { Req, Res, ResLists, ShiHua } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, getNowTime } from '@/utils'
 
 const { imageClassify: AipImageClassifyClient } = pkg
 
@@ -101,9 +100,9 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
                                 name,
                                 img,
                                 result: JSON.stringify(shihuaResult.result),
-                                creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                creat_date: getNowTime(),
                                 is_delete: 0,
-                                timestamp: moment().format('X'),
+                                timestamp: getNowTime('X'),
                             })
                             // fs.unlinkSync('./uploads/' + img_id)
                         }

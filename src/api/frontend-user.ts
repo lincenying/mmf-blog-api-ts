@@ -1,9 +1,8 @@
 import md5 from 'md5'
-import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../config'
-import { getErrorMessage, strLen } from '../utils'
+import { getErrorMessage, getNowTime, strLen } from '../utils'
 
 import UserM from '../models/user'
 import type { Req, Res, ResLists, User, UserModify } from '@/types'
@@ -63,7 +62,7 @@ export async function login(req: Req<object, { username: string; password: strin
             username = encodeURI(username)
             const id = result._id
             const useremail = result.email
-            const remember_me = 2592000000
+            const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
             const token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             res.cookie('user', token, { maxAge: remember_me })
             res.cookie('userid', id, { maxAge: remember_me })
@@ -142,10 +141,10 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
                     username: nickName,
                     password: '',
                     email: '',
-                    creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    creat_date: getNowTime(),
+                    update_date: getNowTime(),
                     is_delete: 0,
-                    timestamp: moment().format('X'),
+                    timestamp: getNowTime('X'),
                     wx_avatar: avatar,
                     wx_signature: wxSignature,
                 }
@@ -211,10 +210,10 @@ export async function insert(req: Req<object, { email: string; password: string;
                     username,
                     password: md5(md5Pre + password),
                     email,
-                    creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    creat_date: getNowTime(),
+                    update_date: getNowTime(),
                     is_delete: 0,
-                    timestamp: moment().format('X'),
+                    timestamp: getNowTime('X'),
                 })
                 res.json({ code: 200, message: '注册成功!', data: 'success' })
             }
@@ -257,7 +256,7 @@ export async function modify(req: Req<object, { id: string; email: string; passw
     const data: UserModify = {
         email,
         username,
-        update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        update_date: getNowTime(),
     }
     if (password)
         data.password = md5(md5Pre + password)

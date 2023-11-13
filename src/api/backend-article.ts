@@ -1,4 +1,3 @@
-import moment from 'moment'
 import markdownIt from 'markdown-it'
 import markdownItTocAndAnchor from 'markdown-it-toc-and-anchor'
 import hljs from 'highlight.js'
@@ -6,7 +5,7 @@ import hljs from 'highlight.js'
 import ArticleM from '../models/article'
 import CategoryM from '../models/category'
 import type { Article, ArticleInsert, ArticleModify, Req, Res, ResLists } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, getNowTime } from '@/utils'
 
 function marked(content: string) {
     const $return = {
@@ -114,10 +113,10 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         visit: 0,
         like: 0,
         comment_count: 0,
-        creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-        update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        creat_date: getNowTime(),
+        update_date: getNowTime(),
         is_delete: 0,
-        timestamp: moment().format('X'),
+        timestamp: getNowTime('X'),
     }
     try {
         const result = await ArticleM.create(data).then(data => data.toObject())
@@ -181,7 +180,7 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         content,
         html,
         toc,
-        update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        update_date: getNowTime(),
     }
     try {
         const result = await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())

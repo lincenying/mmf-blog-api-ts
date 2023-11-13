@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import dayjs from 'dayjs'
 
 export function fsExistsSync(path: string) {
     try {
@@ -30,4 +31,11 @@ export function getErrorMessage(err: unknown) {
     else if (err instanceof Error)
         message = err.message
     return message
+}
+
+export function getNowTime(format: string = 'YYYY-MM-DD HH:mm:ss') {
+    if (format === 'X' || format === 'unix')
+        return `${dayjs().unix()}`
+
+    return dayjs().format(format)
 }

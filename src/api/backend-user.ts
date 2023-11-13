@@ -1,9 +1,8 @@
 import fs from 'node:fs'
 import md5 from 'md5'
-import moment from 'moment'
 import jwt from 'jsonwebtoken'
 
-import { fsExistsSync, getErrorMessage } from '../utils'
+import { fsExistsSync, getErrorMessage, getNowTime } from '../utils'
 import { md5Pre, secretServer as secret } from '../config'
 import AdminM from '../models/admin'
 import type { Req, Res, ResLists, User, UserModify } from '@/types'
@@ -81,7 +80,7 @@ export async function login(req: Req<object, { password: string; username: strin
         if (result) {
             const _username = encodeURI(username)
             const id = result._id
-            const remember_me = 2592000000
+            const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
             const token = jwt.sign({ id, username: _username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             res.cookie('b_user', token, { maxAge: remember_me })
             res.cookie('b_userid', id, { maxAge: remember_me })
@@ -121,10 +120,10 @@ export async function insert(email: string, password: string, username: string) 
                     username,
                     password: md5(md5Pre + password),
                     email,
-                    creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    creat_date: getNowTime(),
+                    update_date: getNowTime(),
                     is_delete: 0,
-                    timestamp: moment().format('X'),
+                    timestamp: getNowTime('X'),
                 })
                 fs.writeFileSync('./admin.lock', username)
                 message = `添加用户成功: ${username}, 密码: ${password}`
@@ -148,7 +147,7 @@ export async function modify(req: Req<object, { id: string; email: string; passw
     const data: UserModify = {
         email,
         username,
-        update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+        update_date: getNowTime(),
     }
     if (password)
         data.password = md5(md5Pre + password)

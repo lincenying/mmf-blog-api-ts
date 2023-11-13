@@ -1,7 +1,6 @@
-import moment from 'moment'
 import CategoryM from '../models/category'
 import type { Category, CategoryInsert, CategoryModify, Req, Res, ResList } from '@/types'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage, getNowTime } from '@/utils'
 
 /**
  * 管理时, 获取分类列表
@@ -63,10 +62,10 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
                 cate_name,
                 cate_order,
                 cate_num: 0,
-                creat_date: moment().format('YYYY-MM-DD HH:mm:ss'),
-                update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+                creat_date: getNowTime(),
+                update_date: getNowTime(),
                 is_delete: 0,
-                timestamp: moment().format('X'),
+                timestamp: getNowTime('X'),
             }
             const result = await CategoryM.create(creatData).then(data => data.toObject())
             res.json({ code: 200, message: '添加成功', data: result })
@@ -125,7 +124,7 @@ export async function modify(req: Req<object, CategoryModify>, res: Res) {
         const result = await CategoryM.findOneAndUpdate({ _id: id }, {
             cate_name,
             cate_order,
-            update_date: moment().format('YYYY-MM-DD HH:mm:ss'),
+            update_date: getNowTime(),
         }, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
