@@ -7,9 +7,9 @@ import crc32 from '../utils/crc32'
 import { douyinCache as lruCache } from '../utils/lru-cache'
 import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
+import { getErrorMessage, getNowTime } from '../utils'
 import type { DouYinVideo } from './app-douyin.types'
 import type { DouYin, DouYinInsert, DouYinUserInsert, Req, Res, ResLists } from '@/types'
-import { getErrorMessage, getNowTime } from '@/utils'
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body

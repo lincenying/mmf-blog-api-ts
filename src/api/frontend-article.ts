@@ -1,5 +1,5 @@
 import ArticleM from '../models/article'
-import { getErrorMessage } from '@/utils'
+import { getErrorMessage } from '../utils'
 import type { Article, Req, ReqListQuery, Res, ResLists } from '@/types'
 
 function replaceHtmlTag(html: string) {

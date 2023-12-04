@@ -6,8 +6,8 @@ import pkg from 'baidu-aip-sdk'
 import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
 import { checkJWT } from '../utils/check-jwt'
 import ShiHuaM from '../models/shihua'
+import { getErrorMessage, getNowTime } from '../utils'
 import type { Req, Res, ResLists, ShiHua } from '@/types'
-import { getErrorMessage, getNowTime } from '@/utils'
 
 const { imageClassify: AipImageClassifyClient } = pkg
 

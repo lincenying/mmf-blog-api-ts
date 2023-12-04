@@ -1,6 +1,6 @@
 import ArticleM from '../models/article'
-import { getErrorMessage } from '@/utils'
-import type { Req, Res } from '@/types'
+import type { Req, Res } from '../types'
+import { getErrorMessage } from '../utils'
 
 /**
  * 文章点赞

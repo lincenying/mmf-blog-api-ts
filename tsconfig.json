@@ -22,5 +22,8 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"]
+  "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }

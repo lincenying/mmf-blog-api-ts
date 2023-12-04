@@ -4,8 +4,8 @@ import hljs from 'highlight.js'
 
 import ArticleM from '../models/article'
 import CategoryM from '../models/category'
+import { getErrorMessage, getNowTime } from '../utils'
 import type { Article, ArticleInsert, ArticleModify, Req, Res, ResLists } from '@/types'
-import { getErrorMessage, getNowTime } from '@/utils'
 
 function marked(content: string) {
     const $return = {

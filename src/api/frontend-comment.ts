@@ -1,7 +1,7 @@
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
+import { getErrorMessage, getNowTime } from '../utils'
 import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
-import { getErrorMessage, getNowTime } from '@/utils'
 
 /**
  * 发布评论

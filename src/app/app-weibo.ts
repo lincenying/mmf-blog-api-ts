@@ -1,8 +1,8 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
+import { getErrorMessage } from '../utils'
 import type { Pic, WeiboObject } from './app-weibo.types'
 import type { Req, Res } from '@/types'
-import { getErrorMessage } from '@/utils'
 
 const baseOptions = {
     method: 'get',

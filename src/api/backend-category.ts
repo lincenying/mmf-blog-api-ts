@@ -1,6 +1,6 @@
 import CategoryM from '../models/category'
+import { getErrorMessage, getNowTime } from '../utils'
 import type { Category, CategoryInsert, CategoryModify, Req, Res, ResList } from '@/types'
-import { getErrorMessage, getNowTime } from '@/utils'
 
 /**
  * 管理时, 获取分类列表

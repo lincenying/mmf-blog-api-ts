@@ -1,8 +1,8 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { tujidao } from '../config'
+import { getErrorMessage } from '../utils'
 import type { Req, Res } from '@/types'
-import { getErrorMessage } from '@/utils'
 
 const baseOptions = {
     method: 'GET',
