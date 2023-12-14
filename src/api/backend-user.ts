@@ -13,7 +13,7 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
  * @param req Request
  * @param res Response
  */
-export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
+export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -47,7 +47,10 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
 
@@ -67,7 +70,11 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
-    const { password, username } = req.body
+    const {
+        password,
+        username,
+    } = req.body
+
     if (username === '' || password === '')
         return res.json({ code: -200, message: '请输入用户名和密码' })
 
@@ -143,7 +150,13 @@ export async function insert(email: string, password: string, username: string) 
  * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
-    const { id, email, password, username } = req.body
+    const {
+        id: _id,
+        email,
+        password,
+        username,
+    } = req.body
+
     const data: UserModify = {
         email,
         username,
@@ -153,7 +166,7 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         data.password = md5(md5Pre + password)
 
     try {
-        const result = await AdminM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
+        const result = await AdminM.findOneAndUpdate({ _id }, data, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: unknown) {
@@ -168,7 +181,10 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await AdminM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '删除成功', data: 'success' })
@@ -185,7 +201,10 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await AdminM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '恢复成功', data: 'success' })

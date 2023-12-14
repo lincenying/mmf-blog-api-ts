@@ -11,10 +11,14 @@ import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
  */
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
-    const { id, content } = req.body
+    const {
+        id: _id,
+        content,
+    } = req.body
+
     const creat_date = getNowTime()
     const timestamp = getNowTime('X')
-    if (!id) {
+    if (!_id) {
         res.json({ code: -200, message: '参数错误' })
         return
     }
@@ -23,7 +27,7 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
         return
     }
     const data: Comment = {
-        article_id: id,
+        article_id: _id,
         userid,
         content,
         creat_date,
@@ -33,7 +37,7 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
     try {
         const result = await CommentM.create(data).then(data => data.toObject())
         await ArticleM.updateOne(
-            { _id: id },
+            { _id },
             {
                 $inc: {
                     comment_count: 1,
@@ -54,9 +58,14 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
  * @param res Response
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
-    const { all, id } = req.query
+    const {
+        all,
+        id: article_id,
+    } = req.query
+
     let { limit, page } = req.query
-    if (!id) {
+
+    if (!article_id) {
         res.json({ code: -200, message: '参数错误' })
     }
     else {
@@ -67,7 +76,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             article_id: string
             is_delete?: number
         } = {
-            article_id: id,
+            article_id,
         }
         const skip = (page - 1) * limit
         if (!all)
@@ -102,7 +111,10 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await Promise.all([
             CommentM.updateOne({ _id }, { is_delete: 1 }).exec(),
@@ -121,7 +133,10 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await Promise.all([
             CommentM.updateOne({ _id }, { is_delete: 0 }).exec(),

@@ -56,8 +56,11 @@ function getBase64(img_id: string, cdn: string) {
 }
 
 export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
-    const img_id = req.query.id
-    const cdn = req.query.cdn
+    const {
+        id: img_id,
+        cdn,
+    } = req.query
+
     const token = req.cookies.user || req.headers.user
     const userid = req.cookies.userid || req.headers.userid
     const username = req.cookies.username || req.headers.username
@@ -161,10 +164,13 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
  * @param req Request
  * @param res Response
  */
-export async function getHistory(req: Req<{ page: string; limit: string }>, res: Res) {
+export async function getHistory(req: Req<{ page?: number; limit?: number }>, res: Res) {
     const userid = req.cookies.userid || req.headers.userid
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+
+    const {
+        page = 1,
+        limit = 10,
+    } = req.query
 
     const payload = {
         is_delete: 0,

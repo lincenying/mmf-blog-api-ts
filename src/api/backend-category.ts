@@ -31,7 +31,10 @@ export async function getList(req: Req, res: Res) {
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
 
@@ -51,8 +54,11 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, CategoryInsert>, res: Res) {
-    const cate_name = req.body.cate_name
-    const cate_order = req.body.cate_order
+    const {
+        cate_name,
+        cate_order,
+    } = req.body
+
     if (!cate_name || !cate_order) {
         res.json({ code: -200, message: '请填写分类名称和排序' })
     }
@@ -83,7 +89,10 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await CategoryM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
@@ -100,7 +109,10 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await CategoryM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
@@ -117,11 +129,14 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, CategoryModify>, res: Res) {
-    const id = req.body.id
-    const cate_name = req.body.cate_name
-    const cate_order = req.body.cate_order
+    const {
+        id: _id,
+        cate_name,
+        cate_order,
+    } = req.body
+
     try {
-        const result = await CategoryM.findOneAndUpdate({ _id: id }, {
+        const result = await CategoryM.findOneAndUpdate({ _id }, {
             cate_name,
             cate_order,
             update_date: getNowTime(),

@@ -26,9 +26,15 @@ interface ArticleSearch {
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     const user_id = req.cookies.userid || req.headers.userid
-    const { by, id, key } = req.query
+    const {
+        by,
+        id,
+        key,
+    } = req.query
+
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
+
     const payload: ArticleSearch = {
         is_delete: 0,
     }
@@ -92,7 +98,10 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     const user_id = req.cookies.userid || req.headers.userid
     if (!_id)
         res.json({ code: -200, message: '参数错误' })

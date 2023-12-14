@@ -12,7 +12,14 @@ import type { DouYinVideo } from './app-douyin.types'
 import type { DouYin, DouYinInsert, DouYinUserInsert, Req, Res, ResLists } from '@/types'
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
-    const { user_id, user_name, user_avatar, sec_uid, share_url } = req.body
+    const {
+        user_id,
+        user_name,
+        user_avatar,
+        sec_uid,
+        share_url,
+    } = req.body
+
     const data = {
         user_id,
         user_name,
@@ -39,7 +46,15 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
 }
 
 export async function insert(req: Req<object, DouYinInsert>, res: Res) {
-    const { user_id, aweme_id, desc, vid, image, video } = req.body
+    const {
+        user_id,
+        aweme_id,
+        desc,
+        vid,
+        image,
+        video,
+    } = req.body
+
     const data = {
         author: user_id,
         aweme_id,
@@ -66,7 +81,7 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
     }
 }
 
-export async function getList(req: Req<{ user_id: string; limit: number; page: number }>, res: Res) {
+export async function getList(req: Req<{ user_id: string; limit?: number; page?: number }>, res: Res) {
     let { limit, page } = req.query
     const user_id = req.query.user_id
 

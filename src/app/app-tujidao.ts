@@ -24,7 +24,7 @@ interface TujidaoList {
 }
 
 export async function lists(req: Req<{ page: number }>, res: Res) {
-    const cookies = tujidao
+    const cookie = tujidao
     const page = req.query.page || 1
     const options = {
         ...baseOptions,
@@ -32,7 +32,7 @@ export async function lists(req: Req<{ page: number }>, res: Res) {
         url: `https://www.jimeilu.com/cat/?id=10&page=${page}`,
         headers: {
             ...baseOptions.headers,
-            cookie: cookies,
+            cookie,
         },
     }
     try {

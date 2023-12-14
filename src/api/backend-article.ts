@@ -78,7 +78,10 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     if (!_id)
         res.json({ code: -200, message: '参数错误' })
 
@@ -98,7 +101,12 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, ArticleInsert>, res: Res) {
-    const { category, content, title } = req.body
+    const {
+        category,
+        content,
+        title,
+    } = req.body
+
     const md = marked(content)
     const html = md.html
     const toc = md.toc
@@ -135,7 +143,10 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         const result = await ArticleM.updateOne({ _id }, { is_delete: 1 }).exec()
         await CategoryM.updateOne({ _id }, { $inc: { cate_num: -1 } }).exec()
@@ -153,7 +164,10 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         const result = await ArticleM.updateOne({ _id }, { is_delete: 0 }).exec()
         await CategoryM.updateOne({ _id }, { $inc: { cate_num: 1 } }).exec()
@@ -171,8 +185,20 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, ArticleModify>, res: Res) {
-    const { id, category, category_old, content, title, category_name } = req.body
-    const { html, toc } = marked(content)
+    const {
+        id: _id,
+        category,
+        category_old,
+        content,
+        title,
+        category_name,
+    } = req.body
+
+    const {
+        html,
+        toc,
+    } = marked(content)
+
     const data = {
         title,
         category,
@@ -183,7 +209,7 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         update_date: getNowTime(),
     }
     try {
-        const result = await ArticleM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
+        const result = await ArticleM.findOneAndUpdate({ _id }, data, { new: true }).exec().then(data => data?.toObject())
         if (result && category !== category_old) {
             await Promise.all([
                 CategoryM.updateOne({ _id: category }, { $inc: { cate_num: 1 } }).exec(),

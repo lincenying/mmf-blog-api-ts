@@ -8,7 +8,10 @@ import { getErrorMessage } from '../utils'
  * @param res Response
  */
 export async function like(req: Req<{ id: string }>, res: Res) {
-    const article_id = req.query.id
+    const {
+        id: article_id,
+    } = req.query
+
     const user_id = req.cookies.userid || req.headers.userid
     try {
         const result = await ArticleM.findOne({ _id: article_id, is_delete: 0 }).exec().then(data => data?.toObject())
@@ -28,7 +31,10 @@ export async function like(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function unlike(req: Req<{ id: string }>, res: Res) {
-    const article_id = req.query.id
+    const {
+        id: article_id,
+    } = req.query
+
     const user_id = req.cookies.userid || req.headers.userid
     try {
         await ArticleM.updateOne({ _id: article_id }, { $inc: { like: -1 }, $pullAll: { likes: [user_id] } }).exec()

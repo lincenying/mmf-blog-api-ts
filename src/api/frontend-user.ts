@@ -12,7 +12,7 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
  * @param req Request
  * @param res Response
  */
-export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
+export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -45,8 +45,14 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
  * @param res Response
  */
 export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
-    let { username } = req.body
-    const { password } = req.body
+    let {
+        username,
+    } = req.body
+
+    const {
+        password,
+    } = req.body
+
     if (username === '' || password === '')
         res.json({ code: -200, message: '请输入用户名和密码' })
 
@@ -60,8 +66,11 @@ export async function login(req: Req<object, { username: string; password: strin
         const result = await UserM.findOne(findData).exec().then(data => data?.toObject())
         if (result) {
             username = encodeURI(username)
-            const id = result._id
-            const useremail = result.email
+            const {
+                _id: id,
+                email: useremail,
+            } = result
+
             const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
             const token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             res.cookie('user', token, { maxAge: remember_me })
@@ -95,7 +104,10 @@ export async function login(req: Req<object, { username: string; password: strin
  * @param res Response
  */
 export async function jscodeToSession(req: Req<object, { js_code: string }>, res: Res) {
-    const { js_code } = req.body
+    const {
+        js_code,
+    } = req.body
+
     const xhr = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
         params: {
             appid: mpappApiId,
@@ -112,7 +124,11 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
  * @param res Response
  */
 export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
-    const { nickName, wxSignature, avatar } = req.body
+    const {
+        nickName,
+        wxSignature,
+        avatar,
+    } = req.body
 
     let id, token, username
     if (!nickName || !wxSignature) {
@@ -189,7 +205,12 @@ export function logout(req: Req, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
-    const { email, password, username } = req.body
+    const {
+        email,
+        password,
+        username,
+    } = req.body
+
     if (!username || !password || !email) {
         res.json({ code: -200, message: '请将表单填写完整' })
     }
@@ -231,6 +252,7 @@ export async function insert(req: Req<object, { email: string; password: string;
  */
 export async function getItem(req: Req, res: Res) {
     const userid = req.query.id || req.cookies.userid || req.headers.userid
+
     try {
         let json
         const result = await UserM.findOne({ _id: userid, is_delete: 0 }).exec().then(data => data?.toObject())
@@ -252,7 +274,13 @@ export async function getItem(req: Req, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
-    const { id, email, password, username } = req.body
+    const {
+        id,
+        email,
+        password,
+        username,
+    } = req.body
+
     const data: UserModify = {
         email,
         username,
@@ -276,7 +304,10 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  * @param res Response
  */
 export async function account(req: Req<object, { email: string }>, res: Res) {
-    const { email } = req.body
+    const {
+        email,
+    } = req.body
+
     const user_id = req.cookies.userid || req.headers.userid
     try {
         await UserM.updateOne<User>({ _id: user_id }, { $set: { email } }).exec()
@@ -294,7 +325,11 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
  * @param res Response
  */
 export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
-    const { old_password, password } = req.body
+    const {
+        old_password,
+        password,
+    } = req.body
+
     const user_id = req.cookies.userid || req.headers.userid
     try {
         const result = await UserM.findOne({ _id: user_id, password: md5(md5Pre + old_password), is_delete: 0 }).exec().then(data => data?.toObject())
@@ -317,7 +352,10 @@ export async function password(req: Req<object, { old_password: string; password
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await UserM.updateOne({ _id }, { is_delete: 1 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
@@ -333,7 +371,10 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
-    const _id = req.query.id
+    const {
+        id: _id,
+    } = req.query
+
     try {
         await UserM.updateOne({ _id }, { is_delete: 0 }).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
