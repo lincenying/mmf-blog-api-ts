@@ -23,10 +23,10 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "^1.6.2",
+    "axios": "^1.6.5",
     "baidu-aip-sdk": "^4.16.15",
     "base64-img": "^1.0.4",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.10",
     "highlight.js": "^11.9.0",
     "jsonwebtoken": "^9.0.2",
@@ -35,15 +35,15 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.0.3",
+    "mongoose": "^8.0.4",
     "mongoose-autopopulate": "^1.1.0",
-    "multer": "^1.4.5-lts.1",
-    "qiniu": "^7.10.1",
+    "multer": "1.4.5-lts.1",
+    "qiniu": "^7.11.0",
     "twig": "^1.17.1",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^4.2.3",
+    "@lincy/eslint-config": "^4.2.4",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
     "@types/express": "^4.17.21",
@@ -53,13 +53,13 @@
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.11",
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.11.0",
     "@types/serve-favicon": "^2.5.7",
     "compression": "^1.7.4",
     "concurrently": "^8.2.2",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "^1.4.6",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "express": "^4.18.2",
     "lint-staged": "^15.2.0",
     "morgan": "^1.10.0",
@@ -67,7 +67,7 @@
     "serve-favicon": "^2.5.0",
     "simple-git-hooks": "^2.9.0",
     "tsc-alias": "^1.8.8",
-    "tsx": "^4.6.2"
+    "tsx": "^4.7.0"
   },
   "pnpm": {
     "peerDependencyRules": {
