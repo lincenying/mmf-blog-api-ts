@@ -182,6 +182,7 @@ export interface ArticleInsert {
     category: string
     content: string
     title: string
+    html?: string
 }
 
 /**

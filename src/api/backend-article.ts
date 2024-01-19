@@ -105,19 +105,28 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         category,
         content,
         title,
+        html,
     } = req.body
 
-    const md = marked(content)
-    const html = md.html
-    const toc = md.toc
+    let mdHtml: string, mdToc: string
+    if (html) {
+        mdHtml = html
+        mdToc = ''
+    }
+    else {
+        const md = marked(content)
+        mdToc = md.toc
+        mdHtml = md.html
+    }
+
     const arr_category = category.split('|')
     const data: Article = {
         title,
         category: arr_category[0],
         category_name: arr_category[1],
         content,
-        html,
-        toc,
+        html: mdHtml,
+        toc: mdToc,
         visit: 0,
         like: 0,
         comment_count: 0,
@@ -191,21 +200,28 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         category_old,
         content,
         title,
+        html,
         category_name,
     } = req.body
 
-    const {
-        html,
-        toc,
-    } = marked(content)
+    let mdHtml: string, mdToc: string
+    if (html) {
+        mdHtml = html
+        mdToc = ''
+    }
+    else {
+        const md = marked(content)
+        mdHtml = md.html
+        mdToc = md.toc
+    }
 
     const data = {
         title,
         category,
         category_name,
         content,
-        html,
-        toc,
+        html: mdHtml,
+        toc: mdToc,
         update_date: getNowTime(),
     }
     try {
