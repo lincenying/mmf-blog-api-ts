@@ -1,5 +1,4 @@
 import markdownIt from 'markdown-it'
-import markdownItTocAndAnchor from 'markdown-it-toc-and-anchor'
 import hljs from 'highlight.js'
 
 import ArticleM from '../models/article'
@@ -26,13 +25,7 @@ function marked(content: string) {
             }
             return ''
         },
-    })
-        .use(markdownItTocAndAnchor, {
-            tocCallback(tocMarkdown: string, tocArray: string[], tocHtml: string) {
-                $return.toc = tocHtml
-            },
-        })
-        .render(content)
+    }).render(content)
     $return.html = html
     return $return
 }
