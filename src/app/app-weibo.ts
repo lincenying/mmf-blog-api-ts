@@ -1,8 +1,34 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { getErrorMessage } from '../utils'
-import type { Pic, WeiboObject } from './app-weibo.types'
-import type { Req, Res } from '@/types'
+import type { Card, CardReturn, Mblog, Pic, WeiboObject } from './app-weibo.types'
+import type { CardObject, Media_info, Url } from './app-weibo.card.types'
+import type { Req, Res, ResData } from '@/types'
+
+interface WeiBoBlogItem {
+    itemid: string
+    text: string
+    pics?: Pic[]
+    video: string
+    video_img: string
+}
+
+export interface WeiBoBlogItem2 {
+    id: string
+    pics?: any
+    text: string
+    video?: Url | Media_info
+    video_img: string
+}
+
+interface WeiBoBlogReturn {
+    ok: number
+    data: WeiBoBlogItem[]
+    code: number
+    next_page?: number
+    total: number
+    since_id?: number
+}
 
 const baseOptions = {
     method: 'get',
@@ -61,7 +87,11 @@ export async function list(req: Req, res: Res) {
     })
 }
 
-// 热门微博
+/**
+ * 热门微博
+ * @param req Request
+ * @param res Response
+ */
 export async function get(req: Req<{ page: number }>, res: Res) {
     const page = req.query.page || 0
     const options = {
@@ -113,7 +143,12 @@ export async function get(req: Req<{ page: number }>, res: Res) {
     }
 }
 
-// 微博用户
+/**
+ * 微博用户
+ * @param req Request
+ * @param res Response
+ * @returns void
+ */
 export async function user(req: Req<{ containerid: string; since_id: string }>, res: Res) {
     const containerid = req.query.containerid
     const since_id = req.query.since_id
@@ -176,8 +211,15 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
     }
 }
 
-// 微博卡片
+/**
+ * 微博卡片
+ * @param req Request
+ * @param res Response
+ * @returns void
+ */
 export async function card(req: Req<{ card_id: string; block_id: string; page: number }>, res: Res) {
+    let json: CardReturn | ResData<string | null>
+
     const card_id = req.query.card_id
     const block_id = req.query.block_id
     const page = req.query.page || 1
@@ -190,11 +232,11 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
         url: `https://m.weibo.cn/api/novelty/feed/getblock?card_id=${card_id}&block_id=${block_id}&page=${page}`,
     }
     try {
-        const xhr = await axios(options)
+        const xhr = await axios<CardObject>(options)
         const body = xhr.data
-        const list: any[] = []
-        body.data.content.forEach((item: any) => {
-            let video = ''
+        const list: WeiBoBlogItem2[] = []
+        body.data.content.forEach((item) => {
+            let video: Url | Media_info | undefined
             let video_img = ''
             if (item.data.page_info && item.data.page_info.urls) {
                 video = item.data.page_info.urls
@@ -204,7 +246,7 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
                 video = item.data.page_info.media_info
                 video_img = item.data.page_info.page_pic.url
             }
-            const pics = (item.data.pics && item.data.pics.map((sub_item: any) => ({ url: sub_item.url, large: sub_item.large.url }))) || null
+            const pics = (item.data.pics && item.data.pics.map(sub_item => ({ url: sub_item.url, large: sub_item.large.url }))) || null
             if (video || pics) {
                 list.push({
                     id: item.mid,
@@ -215,7 +257,7 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
                 })
             }
         })
-        res.json({
+        json = {
             ...body,
             code: 200,
             total: body.data.total,
@@ -223,17 +265,25 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
                 ...body.data,
                 content: list,
             },
-        })
+        }
     }
     catch (err: unknown) {
-        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
+        json = { code: 300, ok: 2, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 // https://m.weibo.cn/p/100808f334edf14a66a4e3aa1a31dade762d19/super_index
-// 超话视频
 
+/**
+ * 超话视频
+ * @param req Request
+ * @param res Response
+ * @see https://m.weibo.cn/p/100808f334edf14a66a4e3aa1a31dade762d19/super_index
+ */
 export async function video(req: Req<{ since_id: string }>, res: Res) {
+    let json: WeiBoBlogReturn | ResData<string | null>
+
     const since_id = req.query.since_id || ''
     const options = {
         ...baseOptions,
@@ -242,7 +292,7 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
     try {
         const xhr = await axios<WeiboObject, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
-        const $list: any[] = []
+        const $list: WeiBoBlogItem[] = []
         body.data.cards.forEach((item) => {
             if (item.card_group && Array.isArray(item.card_group)) {
                 item.card_group.forEach((sub_item) => {
@@ -267,24 +317,31 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
                 })
             }
         })
-        const $return = {
+        json = {
             ...body,
             code: 200,
             since_id: body.data.pageInfo.since_id,
             data: $list,
             total: body.data.pageInfo.total,
         }
-        res.json($return)
     }
     catch (err: unknown) {
-        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
+        json = { code: 300, ok: 2, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 // 231522type=64&q=#尤物#&t=0 => 231522type%3D64%26q%3D%23%E5%B0%A4%E7%89%A9%23%26t%3D0
 // 100103type=64&q=#美女#&t=0 => 100103type%3D64%26q%3D%23%E7%BE%8E%E5%A5%B3%23%26t%3D0
-// 微博搜索视频
+
+/**
+ * 微博搜索视频
+ * @param req Request
+ * @param res Response
+ */
 export async function beautyVideo(req: Req<{ key: string; page: number }>, res: Res) {
+    let json: WeiBoBlogReturn | ResData<string | null>
+
     const key = encodeURIComponent(req.query.key)
     const page = req.query.page || 1
     const options = {
@@ -294,26 +351,38 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
     try {
         const xhr = await axios(options)
         const body = xhr.data
-        const $list: any[] = []
-        const cardsLength = (body.data.cards && body.data.cards.length) || 0
+        const $list: WeiBoBlogItem[] = []
+        const cards_ = body.data.cards as Card[]
+        const cardsLength = (cards_ && cards_.length) || 0
         if (cardsLength > 0) {
-            const cards = body.data.cards[cardsLength - 1]
-            if (cards && cards.card_group && Array.isArray(cards.card_group)) {
-                cards.card_group.forEach((sub_item: any) => {
+            const cardArr: Mblog[] = []
+            cards_.forEach((item) => {
+                if (item.card_group) {
+                    item.card_group.forEach((i) => {
+                        if (i.card_type === '9')
+                            cardArr.push(i.mblog)
+                    })
+                }
+                else if (item.card_type === 9) {
+                    cardArr.push(item.mblog)
+                }
+            })
+            if (cardArr && Array.isArray(cardArr)) {
+                cardArr.forEach((sub_item: Mblog) => {
                     let video = ''
                     let video_img = ''
-                    if (sub_item.mblog && sub_item.mblog.page_info && sub_item.mblog.page_info.media_info) {
+                    if (sub_item && sub_item.page_info && sub_item.page_info.media_info) {
                         video
-                            = sub_item.mblog.page_info.media_info.mp4_720p_mp4
-                            || sub_item.mblog.page_info.media_info.stream_url_hd
-                            || sub_item.mblog.page_info.media_info.stream_url
-                            || sub_item.mblog.page_info.media_info.mp4_hd_url
-                            || sub_item.mblog.page_info.media_info.mp4_sd_url
-                        video_img = sub_item.mblog.page_info.page_pic.url
+                            = sub_item.page_info.media_info.mp4_720p_mp4
+                            || sub_item.page_info.media_info.stream_url_hd
+                            || sub_item.page_info.media_info.stream_url
+                            || sub_item.page_info.media_info.mp4_hd_url
+                            || sub_item.page_info.media_info.mp4_sd_url || ''
+                        video_img = sub_item.page_info.page_pic.url
                         $list.push({
-                            itemid: sub_item.mblog.id,
-                            pics: sub_item.mblog.pics,
-                            text: sub_item.mblog.text.replace(/"\/\//g, '"https://'),
+                            itemid: sub_item.id,
+                            pics: sub_item.pics,
+                            text: sub_item.text.replace(/"\/\//g, '"https://'),
                             video,
                             video_img,
                         })
@@ -321,49 +390,61 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
                 })
             }
         }
-        const $return = {
+        json = {
             ...body,
             code: 200,
             next_page: body.data.cardlistInfo.page,
             data: $list,
             total: body.data.cardlistInfo.total,
         }
-        res.json($return)
     }
     catch (err: unknown) {
-        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
+        json = { code: 300, ok: 2, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
-// 微博详情
+/**
+ * 微博详情
+ * @param req Request
+ * @param res Response
+ * @returns void
+ */
 export async function detail(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<{
+        itemid: string
+        text: string
+        pics: string[]
+    }>>
+
     const id = req.query.id
     if (!id) {
-        res.json({ code: 301, ok: 2, msg: '参数错误' })
-        return
+        json = { code: 301, ok: 2, data: null, msg: '参数错误' }
     }
-    try {
-        const options = {
-            ...baseOptions,
-            url: `https://m.weibo.cn/detail/${id}`,
+    else {
+        try {
+            const options = {
+                ...baseOptions,
+                url: `https://m.weibo.cn/detail/${id}`,
+            }
+            const xhr = await axios(options)
+            const body = xhr.data
+            const jsData = body.split('$render_data = [{')[1].split('}][0]')[0]
+            const jsonData = JSON.parse(`[{${jsData}}]`)
+            const data = jsonData[0].status
+            json = {
+                code: 200,
+                ok: 1,
+                data: {
+                    itemid: id,
+                    text: data.text.replace(/"\/\//g, '"https://'),
+                    pics: data.pics.map((item: any) => item.large.url),
+                },
+            }
         }
-        const xhr = await axios(options)
-        const body = xhr.data
-        const jsData = body.split('$render_data = [{')[1].split('}][0]')[0]
-        const json = JSON.parse(`[{${jsData}}]`)
-        const data = json[0].status
-        const $return = {
-            code: 200,
-            ok: 1,
-            data: {
-                itemid: id,
-                text: data.text.replace(/"\/\//g, '"https://'),
-                pics: data.pics.map((item: any) => item.large.url),
-            },
+        catch (err: unknown) {
+            json = { code: 300, ok: 2, data: null, message: getErrorMessage(err) }
         }
-        res.json($return)
     }
-    catch (err: unknown) {
-        res.json({ code: 300, ok: 2, data: null, message: getErrorMessage(err) })
-    }
+    res.json(json)
 }

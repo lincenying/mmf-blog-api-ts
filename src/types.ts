@@ -246,10 +246,21 @@ export interface DouYinInsert {
 /**
  * 返回列表结构
  */
-export interface ResItem<T> {
+export interface ResData<T> {
     code: number
     data: T
+    ok?: string | number
+    from?: string
     message?: string
+    msg?: string
+    url?: string
+}
+
+export interface Lists<T> {
+    hasNext?: number | boolean
+    hasPrev?: number | boolean
+    total: number
+    list: T
 }
 
 /**
@@ -268,11 +279,6 @@ export interface ResList<T> {
  */
 export interface ResLists<T> {
     code: number
-    data: {
-        hasNext?: number | boolean
-        hasPrev?: number | boolean
-        total: number
-        list: T
-    }
+    data: Lists<T>
     message?: string
 }

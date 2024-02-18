@@ -1,5 +1,5 @@
 import ArticleM from '../models/article'
-import type { Req, Res } from '../types'
+import type { Req, Res, ResData } from '../types'
 import { getErrorMessage } from '../utils'
 
 /**
@@ -8,21 +8,40 @@ import { getErrorMessage } from '../utils'
  * @param res Response
  */
 export async function like(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: article_id,
     } = req.query
 
     const user_id = req.cookies.userid || req.headers.userid
     try {
-        const result = await ArticleM.findOne({ _id: article_id, is_delete: 0 }).exec().then(data => data?.toObject())
-        if (result && (!result.likes || result.likes.findIndex(item => item === user_id) === -1))
-            await ArticleM.updateOne({ _id: article_id }, { $inc: { like: 1 }, $push: { likes: user_id } }).exec()
-
-        res.json({ code: 200, message: '操作成功', data: 'success' })
+        const filter = {
+            _id: article_id,
+            is_delete: 0,
+        }
+        const result = await ArticleM.findOne(filter).exec().then(data => data?.toObject())
+        if (result && (!result.likes || result.likes.findIndex(item => item === user_id) === -1)) {
+            const search = {
+                _id: article_id,
+            }
+            const body = {
+                $inc: {
+                    like: 1,
+                },
+                $push: {
+                    likes: user_id,
+                },
+            }
+            await ArticleM.updateOne(search, body).exec()
+        }
+        json = { code: 200, message: '操作成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -31,18 +50,33 @@ export async function like(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function unlike(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: article_id,
     } = req.query
 
     const user_id = req.cookies.userid || req.headers.userid
     try {
-        await ArticleM.updateOne({ _id: article_id }, { $inc: { like: -1 }, $pullAll: { likes: [user_id] } }).exec()
-        res.json({ code: 200, message: '操作成功', data: 'success' })
+        const filter = {
+            _id: article_id,
+        }
+        const body = {
+            $inc: {
+                like: -1,
+            },
+            $pullAll: {
+                likes: [user_id],
+            },
+        }
+        await ArticleM.updateOne(filter, body).exec()
+        json = { code: 200, message: '操作成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -51,16 +85,22 @@ export async function unlike(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function resetLike(req: Req, res: Res) {
+    let json: ResData<string | null>
+
     try {
         const result = await ArticleM.find().exec()
         const length = result.length
         for (let i = 0; i < length; i++) {
             const item = result[i]
-            await ArticleM.findOneAndUpdate({ _id: item._id }, { like: item.likes?.length }, { new: true }).exec()
+            const filter = { _id: item._id }
+            const body = { like: item.likes?.length }
+            await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec()
         }
-        res.json({ code: 200, message: '操作成功', data: 'success' })
+        json = { code: 200, message: '操作成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

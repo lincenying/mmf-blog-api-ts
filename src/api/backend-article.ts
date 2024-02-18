@@ -4,7 +4,7 @@ import hljs from 'highlight.js'
 import ArticleM from '../models/article'
 import CategoryM from '../models/category'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Article, ArticleInsert, ArticleModify, Req, Res, ResLists } from '@/types'
+import type { Article, ArticleInsert, ArticleModify, Lists, Req, Res, ResData } from '@/types'
 
 function marked(content: string) {
     const $return = {
@@ -37,6 +37,8 @@ function marked(content: string) {
  * @param res Response
  */
 export async function getList(req: Req<{ page: string; limit: string }>, res: Res) {
+    let json: ResData<Nullable<Lists<Article[]>>>
+
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -47,7 +49,7 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
             ArticleM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ResLists<Article[]> = {
+        json = {
             code: 200,
             data: {
                 list,
@@ -57,11 +59,12 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
             },
             message: 'success',
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -71,20 +74,27 @@ export async function getList(req: Req<{ page: string; limit: string }>, res: Re
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         id: _id,
     } = req.query
 
-    if (!_id)
-        res.json({ code: -200, message: '参数错误' })
+    if (!_id) {
+        json = { code: -200, data: null, message: '参数错误' }
+    }
+    else {
+        try {
+            const filter = { _id }
+            const result = await ArticleM.findOne(filter).exec().then(data => data?.toObject())
+            json = { code: 200, message: 'success', data: result }
+        }
+        catch (err: unknown) {
+            json = { code: -200, data: null, message: getErrorMessage(err) }
+        }
+    }
 
-    try {
-        const result = await ArticleM.findOne({ _id }).exec().then(data => data?.toObject())
-        res.json({ code: 200, message: 'success', data: result })
-    }
-    catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
-    }
+    res.json(json)
 }
 
 /**
@@ -94,6 +104,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, ArticleInsert>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         category,
         content,
@@ -130,12 +142,21 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
     }
     try {
         const result = await ArticleM.create(data).then(data => data.toObject())
-        await CategoryM.updateOne({ _id: arr_category[0] }, { $inc: { cate_num: 1 } }).exec()
-        res.json({ code: 200, message: '发布成功', data: result })
+
+        const filter = { _id: arr_category[0] }
+        const body = {
+            $inc: {
+                cate_num: 1,
+            },
+        }
+        await CategoryM.updateOne(filter, body).exec()
+        json = { code: 200, message: '发布成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -145,18 +166,30 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        const result = await ArticleM.updateOne({ _id }, { is_delete: 1 }).exec()
-        await CategoryM.updateOne({ _id }, { $inc: { cate_num: -1 } }).exec()
-        res.json({ code: 200, message: '更新成功', data: result })
+        const filter = { _id }
+        const body = { is_delete: 1 }
+        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec()
+
+        const categoryBody = {
+            $inc: {
+                cate_num: -1,
+            },
+        }
+        await CategoryM.updateOne(filter, categoryBody).exec()
+        json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -166,18 +199,30 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        const result = await ArticleM.updateOne({ _id }, { is_delete: 0 }).exec()
-        await CategoryM.updateOne({ _id }, { $inc: { cate_num: 1 } }).exec()
-        res.json({ code: 200, message: '更新成功', data: result })
+        const filter = { _id }
+        const body = { is_delete: 1 }
+        const result = await ArticleM.findOneAndUpdate(filter, body).exec()
+
+        const categoryBody = {
+            $inc: {
+                cate_num: 1,
+            },
+        }
+        await CategoryM.updateOne(filter, categoryBody).exec()
+        json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -187,6 +232,8 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, ArticleModify>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         id: _id,
         category,
@@ -208,26 +255,33 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         mdToc = md.toc
     }
 
-    const data = {
-        title,
-        category,
-        category_name,
-        content,
-        html: mdHtml,
-        toc: mdToc,
-        update_date: getNowTime(),
-    }
     try {
-        const result = await ArticleM.findOneAndUpdate({ _id }, data, { new: true }).exec().then(data => data?.toObject())
+        const filter = { _id }
+        const body = {
+            title,
+            category,
+            category_name,
+            content,
+            html: mdHtml,
+            toc: mdToc,
+            update_date: getNowTime(),
+        }
+        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
         if (result && category !== category_old) {
+            const newCategofyFilter = { _id: category }
+            const oldCategoryFilter = { _id: category_old }
+            const newCategoryBody = { $inc: { cate_num: 1 } }
+            const oldCategoryBody = { $inc: { cate_num: -1 } }
             await Promise.all([
-                CategoryM.updateOne({ _id: category }, { $inc: { cate_num: 1 } }).exec(),
-                CategoryM.updateOne({ _id: category_old }, { $inc: { cate_num: -1 } }).exec(),
+                CategoryM.updateOne(newCategofyFilter, newCategoryBody).exec(),
+                CategoryM.updateOne(oldCategoryFilter, oldCategoryBody).exec(),
             ])
         }
-        res.json({ code: 200, message: '更新成功', data: result })
+        json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

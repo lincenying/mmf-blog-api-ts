@@ -1,7 +1,7 @@
 import ArticleM from '../models/article'
 import CommentM from '../models/comment'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
+import type { Comment, Lists, Req, ReqListQuery, Res, ResData } from '@/types'
 
 /**
  * 发布评论
@@ -10,6 +10,8 @@ import type { Comment, Req, ReqListQuery, Res, ResLists } from '@/types'
  * @param res Response
  */
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
+    let json: ResData<Comment | null>
+
     const userid = req.cookies.userid || req.headers.userid
     const {
         id: _id,
@@ -19,36 +21,37 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
     const creat_date = getNowTime()
     const timestamp = getNowTime('X')
     if (!_id) {
-        res.json({ code: -200, message: '参数错误' })
-        return
+        json = { code: -200, data: null, message: '参数错误' }
     }
     else if (!content) {
-        res.json({ code: -200, message: '请输入评论内容' })
-        return
+        json = { code: -200, data: null, message: '请输入评论内容' }
     }
-    const data: Comment = {
-        article_id: _id,
-        userid,
-        content,
-        creat_date,
-        is_delete: 0,
-        timestamp,
-    }
-    try {
-        const result = await CommentM.create(data).then(data => data.toObject())
-        await ArticleM.updateOne(
-            { _id },
-            {
+    else {
+        const data: Comment = {
+            article_id: _id,
+            userid,
+            content,
+            creat_date,
+            is_delete: 0,
+            timestamp,
+        }
+        try {
+            const result = await CommentM.create(data).then(data => data.toObject())
+            const filter = { _id }
+            const body = {
                 $inc: {
                     comment_count: 1,
                 },
-            },
-        ).exec()
-        res.json({ code: 200, data: result, message: '发布成功' })
+            }
+            await ArticleM.updateOne(filter, body).exec()
+            json = { code: 200, data: result, message: '发布成功' }
+        }
+        catch (err: unknown) {
+            json = { code: -200, data: null, message: getErrorMessage(err) }
+        }
     }
-    catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
-    }
+
+    res.json(json)
 }
 
 /**
@@ -58,6 +61,8 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
  * @param res Response
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
+    let json: ResData<Nullable<Lists<Comment[]>>>
+
     const {
         all,
         id: article_id,
@@ -66,7 +71,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
     let { limit, page } = req.query
 
     if (!article_id) {
-        res.json({ code: -200, message: '参数错误' })
+        json = { code: -200, data: null, message: '参数错误' }
     }
     else {
         page = Number(page) || 1
@@ -88,7 +93,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
                 CommentM.countDocuments(data),
             ])
             const totalPage = Math.ceil(total / limit)
-            const json: ResLists<Comment[]> = {
+            json = {
                 code: 200,
                 data: {
                     list,
@@ -97,12 +102,13 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
                     hasPrev: page > 1 ? 1 : 0,
                 },
             }
-            res.json(json)
         }
         catch (err: unknown) {
-            res.json({ code: -200, data: null, message: getErrorMessage(err) })
+            json = { code: -200, data: null, message: getErrorMessage(err) }
         }
     }
+
+    res.json(json)
 }
 
 /**
@@ -111,20 +117,27 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
+        const filter = { _id }
+        const commentBody = { is_delete: 0 }
+        const ArticleBody = { $inc: { comment_count: -1 } }
         await Promise.all([
-            CommentM.updateOne({ _id }, { is_delete: 1 }).exec(),
-            ArticleM.updateOne({ _id }, { $inc: { comment_count: -1 } }).exec(),
+            CommentM.updateOne(filter, commentBody).exec(),
+            ArticleM.updateOne(filter, ArticleBody).exec(),
         ])
-        res.json({ code: 200, message: '删除成功', data: 'success' })
+        json = { code: 200, message: '删除成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -133,18 +146,25 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
+        const filter = { _id }
+        const commentBody = { is_delete: 0 }
+        const ArticleBody = { $inc: { comment_count: 1 } }
         await Promise.all([
-            CommentM.updateOne({ _id }, { is_delete: 0 }).exec(),
-            ArticleM.updateOne({ _id }, { $inc: { comment_count: 1 } }).exec(),
+            CommentM.updateOne(filter, commentBody).exec(),
+            ArticleM.updateOne(filter, ArticleBody).exec(),
         ])
-        res.json({ code: 200, message: '恢复成功', data: 'success' })
+        json = { code: 200, message: '恢复成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

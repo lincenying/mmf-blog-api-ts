@@ -1,6 +1,6 @@
 import CategoryM from '../models/category'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Category, CategoryInsert, CategoryModify, Req, Res, ResList } from '@/types'
+import type { Category, CategoryInsert, CategoryModify, Req, Res, ResData } from '@/types'
 
 /**
  * 管理时, 获取分类列表
@@ -9,19 +9,22 @@ import type { Category, CategoryInsert, CategoryModify, Req, Res, ResList } from
  * @param res Response
  */
 export async function getList(req: Req, res: Res) {
+    let json: ResData<Nullable<{ list: Category[] }>>
+
     try {
         const result = await CategoryM.find().sort('-cate_order').exec().then(data => data.map(item => item.toObject()))
-        const json: ResList<Category[]> = {
+        json = {
             code: 200,
             data: {
                 list: result,
             },
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -31,20 +34,25 @@ export async function getList(req: Req, res: Res) {
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<Category>>
+
     const {
         id: _id,
     } = req.query
 
     if (!_id)
-        res.json({ code: -200, message: '参数错误' })
+        json = { code: -200, data: null, message: '参数错误' }
 
     try {
-        const result = await CategoryM.findOne({ _id }).exec().then(data => data?.toObject())
-        res.json({ code: 200, data: result })
+        const filter = { _id }
+        const result = await CategoryM.findOne(filter).exec().then(data => data?.toObject())
+        json = { code: 200, data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -54,13 +62,15 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, CategoryInsert>, res: Res) {
+    let json: ResData<Nullable<Category>>
+
     const {
         cate_name,
         cate_order,
     } = req.body
 
     if (!cate_name || !cate_order) {
-        res.json({ code: -200, message: '请填写分类名称和排序' })
+        json = { code: -200, data: null, message: '请填写分类名称和排序' }
     }
     else {
         try {
@@ -74,12 +84,14 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
                 timestamp: getNowTime('X'),
             }
             const result = await CategoryM.create(creatData).then(data => data.toObject())
-            res.json({ code: 200, message: '添加成功', data: result })
+            json = { code: 200, message: '添加成功', data: result }
         }
         catch (err: unknown) {
-            res.json({ code: -200, data: null, message: getErrorMessage(err) })
+            json = { code: -200, data: null, message: getErrorMessage(err) }
         }
     }
+
+    res.json(json)
 }
 
 /**
@@ -94,7 +106,9 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
     } = req.query
 
     try {
-        await CategoryM.updateOne({ _id }, { is_delete: 1 }).exec()
+        const filter = { _id }
+        const body = { is_delete: 1 }
+        await CategoryM.updateOne(filter, body).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: unknown) {
@@ -114,7 +128,9 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
     } = req.query
 
     try {
-        await CategoryM.updateOne({ _id }, { is_delete: 0 }).exec()
+        const filter = { _id }
+        const body = { is_delete: 0 }
+        await CategoryM.updateOne(filter, body).exec()
         res.json({ code: 200, message: '更新成功', data: 'success' })
     }
     catch (err: unknown) {
@@ -136,11 +152,13 @@ export async function modify(req: Req<object, CategoryModify>, res: Res) {
     } = req.body
 
     try {
-        const result = await CategoryM.findOneAndUpdate({ _id }, {
+        const filter = { _id }
+        const body = {
             cate_name,
             cate_order,
             update_date: getNowTime(),
-        }, { new: true }).exec().then(data => data?.toObject())
+        }
+        const result = await CategoryM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
         res.json({ code: 200, message: '更新成功', data: result })
     }
     catch (err: unknown) {

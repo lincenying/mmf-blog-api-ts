@@ -1,6 +1,6 @@
 import ArticleM from '../models/article'
 import { getErrorMessage } from '../utils'
-import type { Article, Req, ReqListQuery, Res, ResLists } from '@/types'
+import type { Article, Lists, Req, ReqListQuery, Res, ResData } from '@/types'
 
 function replaceHtmlTag(html: string) {
     return html
@@ -25,6 +25,8 @@ interface ArticleSearch {
  * @param res Response
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
+    let json: ResData<Nullable<Lists<Article[]>>>
+
     const user_id = req.cookies.userid || req.headers.userid
     const {
         by,
@@ -58,7 +60,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             ArticleM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ResLists<Article[]> = {
+        json = {
             code: 200,
             data: {
                 list: [],
@@ -69,7 +71,7 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             message: 'success',
         }
         if (user_id) {
-            json.data.list = list.map((item): Article => ({
+            json.data!.list = list.map((item): Article => ({
                 ...item,
                 like_status: item.likes && item.likes.includes(user_id),
                 content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
@@ -77,18 +79,19 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             }))
         }
         else {
-            json.data.list = list.map((item): Article => ({
+            json.data!.list = list.map((item): Article => ({
                 ...item,
                 like_status: false,
                 content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
                 likes: [],
             }))
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -98,41 +101,50 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<Article>>
+
     const {
         id: _id,
     } = req.query
 
     const user_id = req.cookies.userid || req.headers.userid
     if (!_id)
-        res.json({ code: -200, message: '参数错误' })
+        json = { code: -200, data: null, message: '参数错误' }
 
     try {
+        const filter = { _id, is_delete: 0 }
+        const body = { $inc: { visit: 1 } }
         const [result, _] = await Promise.all([
-            ArticleM.findOne({ _id, is_delete: 0 }).exec().then(data => data?.toObject()),
-            ArticleM.updateOne({ _id }, { $inc: { visit: 1 } }).exec(),
+            ArticleM.findOne(filter).exec().then(data => data?.toObject()),
+            ArticleM.updateOne(filter, body).exec(),
         ])
         if (!result) {
-            return res.json({
+            json = {
                 code: -200,
+                data: null,
                 message: '没有找到该文章',
-            })
+            }
         }
-        if (user_id)
-            result.like_status = result.likes && result.likes.includes(user_id)
-        else
-            result.like_status = false
-        result.likes = []
-        result.content = replaceHtmlTag(result.content)
-        result.html = replaceHtmlTag(result.html)
-        res.json({
-            code: 200,
-            data: result,
-            message: 'success',
-        })
+        else {
+            if (user_id)
+                result.like_status = result.likes && result.likes.includes(user_id)
+            else
+                result.like_status = false
+            result.likes = []
+            result.content = replaceHtmlTag(result.content)
+            result.html = replaceHtmlTag(result.html)
+            json = {
+                code: 200,
+                data: result,
+                message: 'success',
+            }
+        }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -142,20 +154,24 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function getTrending(req: Req, res: Res) {
+    let json: ResData<Nullable<{ list: Article[] }>>
+
     const limit = 5
     const data = { is_delete: 0 }
     const filds = 'title visit like comment_count'
     try {
         const result = await ArticleM.find(data, filds).sort('-visit').limit(limit).exec().then(data => data.map(item => item.toObject()))
-        res.json({
+        json = {
             code: 200,
             data: {
                 list: result,
             },
             message: 'success',
-        })
+        }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

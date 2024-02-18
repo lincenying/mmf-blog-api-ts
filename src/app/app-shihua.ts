@@ -7,7 +7,7 @@ import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
 import { checkJWT } from '../utils/check-jwt'
 import ShiHuaM from '../models/shihua'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Req, Res, ResLists, ShiHua } from '@/types'
+import type { Lists, Req, Res, ResData, ShiHua } from '@/types'
 
 const { imageClassify: AipImageClassifyClient } = pkg
 
@@ -23,21 +23,25 @@ const storage = multer.diskStorage({
 const Upload = multer({ storage }).single('file')
 
 export async function upload(req: Req, res: Res) {
+    let json: ResData<string | null>
+
     Upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
-            res.json({ code: '-200', msg: err.toString() })
+            json = { code: -200, data: null, msg: err.toString() }
         }
         else if (err) {
-            res.json({ code: '-200', msg: err.toString() })
+            json = { code: -200, data: null, msg: err.toString() }
         }
         else {
             const file = req.file
-            res.json({ code: '200', url: file?.path })
+            json = { code: 200, data: null, url: file?.path }
         }
+
+        res.json(json)
     })
 }
 
-function getBase64(img_id: string, cdn: string) {
+function getBase64(img_id: string, cdn: string): Promise<string> {
     if (cdn === 'qiniu') {
         return new Promise((resolve) => {
             const url = `${cdnDomain}app/${img_id}/800x800`
@@ -52,7 +56,7 @@ function getBase64(img_id: string, cdn: string) {
             })
         })
     }
-    return fs.readFileSync(`./uploads/${img_id}`).toString('base64')
+    return Promise.resolve(fs.readFileSync(`./uploads/${img_id}`).toString('base64'))
 }
 
 export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
@@ -133,7 +137,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
     }
 
     try {
-        const result = await ShiHuaM.findOne({ img_id }).then(data => data?.toObject())
+        const filter = { img_id }
+        const result = await ShiHuaM.findOne(filter).then(data => data?.toObject())
         if (result) {
             res.json({
                 code: 200,
@@ -165,6 +170,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
  * @param res Response
  */
 export async function getHistory(req: Req<{ page?: number; limit?: number }>, res: Res) {
+    let json: ResData<Nullable<Lists<ShiHua[]>>>
+
     const userid = req.cookies.userid || req.headers.userid
 
     const {
@@ -185,7 +192,7 @@ export async function getHistory(req: Req<{ page?: number; limit?: number }>, re
             ShiHuaM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ResLists<ShiHua[]> = {
+        json = {
             code: 200,
             data: {
                 list: data.map((item) => {
@@ -197,11 +204,12 @@ export async function getHistory(req: Req<{ page?: number; limit?: number }>, re
                 hasPrev: page > 1 ? 1 : 0,
             },
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -211,15 +219,19 @@ export async function getHistory(req: Req<{ page?: number; limit?: number }>, re
  * @param res Response
  */
 export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const userid = req.cookies.userid || req.headers.userid
     const { img_id } = req.query
 
     try {
         await ShiHuaM.deleteOne({ img_id, user_id: userid })
         fs.unlinkSync(`./uploads/${img_id}`)
-        res.json({ code: 200, message: '删除成功' })
+        json = { code: 200, data: null, message: '删除成功' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

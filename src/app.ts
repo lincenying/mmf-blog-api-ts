@@ -7,6 +7,8 @@ import compression from 'compression'
 import favicon from 'serve-favicon'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
+import requestIp from 'request-ip'
+import { UTC2Date } from '@lincy/utils'
 
 // 引入 api  路由
 import mockjs from './mockjs/index'
@@ -50,10 +52,21 @@ app.set('twig options', {
 
 app.use(compression())
 app.use(favicon(`${resolve('./public')}/favicon.ico`))
+
+logger.token('remote-addr', (req) => {
+    return requestIp.getClientIp(req) || ''
+})
+logger.token('date', () => {
+    return UTC2Date(undefined, 'yyyy-mm-dd hh:ii:ss.SSS')
+})
+
 app.use(
-    logger('dev', {
+    logger('[:remote-addr] [:date] ":method :url" :status :res[content-length] ":referrer"', {
         skip(req) {
-            return req.url.includes('.map')
+            const skipExt = ['.webmanifes', '.php', '.txt', '.map', '.js', '.css', '.png', 'jpg', '.jpeg', '.gif', '.ttf', '.woff2', '.ico']
+            return skipExt.some((ext) => {
+                return req.url.includes(ext)
+            })
         },
     }),
 )

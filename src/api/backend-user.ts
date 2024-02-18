@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { fsExistsSync, getErrorMessage, getNowTime } from '../utils'
 import { md5Pre, secretServer as secret } from '../config'
 import AdminM from '../models/admin'
-import type { Req, Res, ResLists, User, UserModify } from '@/types'
+import type { Lists, Req, Res, ResData, User, UserModify } from '@/types'
 
 /**
  * 获取管理员列表
@@ -14,6 +14,8 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
  * @param res Response
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
+    let json: ResData<Nullable<Lists<User[]>>>
+
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
@@ -24,7 +26,7 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
             AdminM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ResLists<User[]> = {
+        json = {
             code: 200,
             data: {
                 list,
@@ -33,11 +35,12 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
                 hasPrev: page > 1 ? 1 : 0,
             },
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -47,20 +50,27 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
  * @param res Response
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<Nullable<User>>
+
     const {
         id: _id,
     } = req.query
 
-    if (!_id)
-        res.json({ code: -200, message: '参数错误' })
+    if (!_id) {
+        json = { code: -200, data: null, message: '参数错误' }
+    }
+    else {
+        try {
+            const filter = { _id }
+            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
+            json = { code: 200, data: result, message: 'success' }
+        }
+        catch (err: unknown) {
+            json = { code: -200, data: null, message: getErrorMessage(err) }
+        }
+    }
 
-    try {
-        const result = await AdminM.findOne({ _id }).exec().then(data => data?.toObject())
-        res.json({ code: 200, data: result })
-    }
-    catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
-    }
+    res.json(json)
 }
 
 /**
@@ -70,35 +80,44 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         password,
         username,
     } = req.body
 
-    if (username === '' || password === '')
-        return res.json({ code: -200, message: '请输入用户名和密码' })
-
-    try {
-        const result = await AdminM.findOne({
-            username,
-            password: md5(md5Pre + password),
-            is_delete: 0,
-        }).exec().then(data => data?.toObject())
-        if (result) {
-            const _username = encodeURI(username)
-            const id = result._id
-            const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
-            const token = jwt.sign({ id, username: _username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
-            res.cookie('b_user', token, { maxAge: remember_me })
-            res.cookie('b_userid', id, { maxAge: remember_me })
-            res.cookie('b_username', _username, { maxAge: remember_me })
-            return res.json({ code: 200, message: '登录成功', data: token })
+    if (username === '' || password === '') {
+        json = { code: -200, data: null, message: '请输入用户名和密码' }
+    }
+    else {
+        try {
+            const filter = {
+                username,
+                password: md5(md5Pre + password),
+                is_delete: 0,
+            }
+            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
+            if (result) {
+                const _username = encodeURI(username)
+                const id = result._id
+                const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
+                const token = jwt.sign({ id, username: _username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
+                res.cookie('b_user', token, { maxAge: remember_me })
+                res.cookie('b_userid', id, { maxAge: remember_me })
+                res.cookie('b_username', _username, { maxAge: remember_me })
+                json = { code: 200, message: '登录成功', data: token }
+            }
+            else {
+                json = { code: -200, data: null, message: '用户名或者密码错误' }
+            }
         }
-        return res.json({ code: -200, message: '用户名或者密码错误' })
+        catch (err: unknown) {
+            json = { code: -200, data: null, message: getErrorMessage(err) }
+        }
     }
-    catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
-    }
+
+    res.json(json)
 }
 
 /**
@@ -118,12 +137,13 @@ export async function insert(email: string, password: string, username: string) 
     }
     else {
         try {
-            const result = await AdminM.findOne({ username }).exec().then(data => data?.toObject())
+            const filter = { username }
+            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
             if (result) {
                 message = `${username}: 已经存在`
             }
             else {
-                await AdminM.create({
+                const body = {
                     username,
                     password: md5(md5Pre + password),
                     email,
@@ -131,7 +151,8 @@ export async function insert(email: string, password: string, username: string) 
                     update_date: getNowTime(),
                     is_delete: 0,
                     timestamp: getNowTime('X'),
-                })
+                }
+                await AdminM.create(body)
                 fs.writeFileSync('./admin.lock', username)
                 message = `添加用户成功: ${username}, 密码: ${password}`
             }
@@ -150,6 +171,8 @@ export async function insert(email: string, password: string, username: string) 
  * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
+    let json: ResData<Nullable<User>>
+
     const {
         id: _id,
         email,
@@ -157,21 +180,24 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         username,
     } = req.body
 
-    const data: UserModify = {
+    const body: UserModify = {
         email,
         username,
         update_date: getNowTime(),
     }
     if (password)
-        data.password = md5(md5Pre + password)
+        body.password = md5(md5Pre + password)
 
     try {
-        const result = await AdminM.findOneAndUpdate({ _id }, data, { new: true }).exec().then(data => data?.toObject())
-        res.json({ code: 200, message: '更新成功', data: result })
+        const filter = { _id }
+        const result = await AdminM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -181,17 +207,23 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        await AdminM.updateOne({ _id }, { is_delete: 1 }).exec()
-        res.json({ code: 200, message: '删除成功', data: 'success' })
+        const filter = { _id }
+        const body = { is_delete: 1 }
+        await AdminM.updateOne(filter, body).exec()
+        json = { code: 200, message: '删除成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -201,15 +233,21 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        await AdminM.updateOne({ _id }, { is_delete: 0 }).exec()
-        res.json({ code: 200, message: '恢复成功', data: 'success' })
+        const filter = { _id }
+        const body = { is_delete: 0 }
+        await AdminM.updateOne(filter, body).exec()
+        json = { code: 200, message: '恢复成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }

@@ -1,3 +1,5 @@
+import type { WeiBoBlogItem2 } from './app-weibo'
+
 export interface Visible {
     type: number
     list_id: number
@@ -273,7 +275,7 @@ export interface Card {
     hot_request_id: string
 }
 
-export interface Data {
+export interface Data1 {
     cardlistInfo: CardlistInfo
     cards: Card[]
     scheme: string
@@ -284,5 +286,34 @@ export interface Data {
 
 export interface WeiboObject {
     ok: number
-    data: Data
+    data: Data1
+}
+
+export interface Video {
+    mp4_hd_mp4: string
+    mp4_ld_mp4: string
+    mp4_720p_mp4: string
+}
+
+export interface Content2 {
+    id: string
+    pics?: Pic[]
+    text: string
+    video: Video
+    video_img: string
+}
+
+export interface Data2 {
+    id: number
+    card_id: number
+    content: WeiBoBlogItem2[]
+    total: number
+}
+
+export interface CardReturn {
+    data: Data2
+    ok: number
+    http_code: number
+    code: number
+    total: number
 }

@@ -19,7 +19,7 @@ export const secretClient = '${secretClient1}'`
         console.log('./src/config/secret.js: 生成成功')
     }
     else {
-        console.log('./src/config/secret.js: 已存在')
+        console.log('./src/config/secret.js: 已存在, 自动跳过')
     }
 }
 
@@ -31,7 +31,7 @@ export const secret = ''`
         console.log('./src/config/mpapp.js: 生成成功')
     }
     else {
-        console.log('./src/config/mpapp.js: 已存在')
+        console.log('./src/config/mpapp.js: 已存在, 自动跳过')
     }
 }
 
@@ -44,7 +44,7 @@ export const SECRET_KEY = ''`
         console.log('./src/config/shihua.js: 生成成功')
     }
     else {
-        console.log('./src/config/shihua.js: 已存在')
+        console.log('./src/config/shihua.js: 已存在, 自动跳过')
     }
 }
 
@@ -57,7 +57,7 @@ export const bucket = ''`
         console.log('./src/config/qiniu.js: 生成成功')
     }
     else {
-        console.log('./src/config/qiniu.js: 已存在')
+        console.log('./src/config/qiniu.js: 已存在, 自动跳过')
     }
 }
 
@@ -68,7 +68,7 @@ function creatTuJiDao() {
         console.log('./src/config/tujidao.js: 生成成功')
     }
     else {
-        console.log('./src/config/tujidao.js: 已存在')
+        console.log('./src/config/tujidao.js: 已存在, 自动跳过')
     }
 }
 

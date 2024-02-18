@@ -5,7 +5,7 @@ import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../conf
 import { getErrorMessage, getNowTime, strLen } from '../utils'
 
 import UserM from '../models/user'
-import type { Req, Res, ResLists, User, UserModify } from '@/types'
+import type { Lists, Req, Res, ResData, User, UserCookies, UserModify } from '@/types'
 
 /**
  * 用户列表
@@ -13,17 +13,20 @@ import type { Req, Res, ResLists, User, UserModify } from '@/types'
  * @param res Response
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
+    let json: ResData<Nullable<Lists<User[]>>>
+
     const sort = '-_id'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 10
     const skip = (page - 1) * limit
+
     try {
         const [list, total] = await Promise.all([
             UserM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             UserM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
-        const json: ResLists<User[]> = {
+        json = {
             code: 200,
             data: {
                 list,
@@ -32,11 +35,11 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
                 hasPrev: page > 1 ? 1 : 0,
             },
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 /**
@@ -45,6 +48,8 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
  * @param res Response
  */
 export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
+    let json: ResData<Nullable<UserCookies>>
+
     let {
         username,
     } = req.body
@@ -54,16 +59,15 @@ export async function login(req: Req<object, { username: string; password: strin
     } = req.body
 
     if (username === '' || password === '')
-        res.json({ code: -200, message: '请输入用户名和密码' })
+        json = { code: -200, data: null, message: '请输入用户名和密码' }
 
     try {
-        let json = {}
-        const findData = {
+        const filter = {
             username,
             password: md5(md5Pre + password),
             is_delete: 0,
         }
-        const result = await UserM.findOne(findData).exec().then(data => data?.toObject())
+        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
         if (result) {
             username = encodeURI(username)
             const {
@@ -89,13 +93,13 @@ export async function login(req: Req<object, { username: string; password: strin
             }
         }
         else {
-            json = { code: -200, message: '用户名或者密码错误' }
+            json = { code: -200, data: null, message: '用户名或者密码错误' }
         }
-        res.json(json)
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 /**
@@ -116,7 +120,10 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
             grant_type: 'authorization_code',
         },
     })
-    res.json({ code: 200, message: '登录成功', data: xhr.data })
+
+    const json: ResData<any> = { code: 200, message: '登录成功', data: xhr.data }
+
+    res.json(json)
 }
 /**
  * 微信登录
@@ -124,6 +131,8 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
  * @param res Response
  */
 export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
+    let json: ResData<Nullable<UserCookies>>
+
     const {
         nickName,
         wxSignature,
@@ -132,12 +141,16 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
 
     let id, token, username
     if (!nickName || !wxSignature) {
-        res.json({ code: -200, message: '参数有误, 微信登录失败' })
+        json = { code: -200, data: null, message: '参数有误, 微信登录失败' }
     }
     else {
         try {
-            let json = {}
-            const result = await UserM.findOne({ username: nickName, wx_signature: wxSignature, is_delete: 0 }).exec().then(data => data?.toObject())
+            const filter = {
+                username: nickName,
+                wx_signature: wxSignature,
+                is_delete: 0,
+            }
+            const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
             if (result) {
                 id = result._id
                 username = encodeURI(nickName)
@@ -178,12 +191,12 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
                     },
                 }
             }
-            res.json(json)
         }
         catch (err: unknown) {
-            res.json({ code: -200, data: null, message: getErrorMessage(err) })
+            json = { code: -200, data: null, message: getErrorMessage(err) }
         }
     }
+    res.json(json)
 }
 
 /**
@@ -196,7 +209,10 @@ export function logout(req: Req, res: Res) {
     res.cookie('userid', '', { maxAge: -1 })
     res.cookie('username', '', { maxAge: -1 })
     res.cookie('useremail', '', { maxAge: -1 })
-    res.json({ code: 200, message: '退出成功', data: 'success' })
+
+    const json: ResData<string> = { code: 200, message: '退出成功', data: 'success' }
+
+    res.json(json)
 }
 
 /**
@@ -205,6 +221,8 @@ export function logout(req: Req, res: Res) {
  * @param res Response
  */
 export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         email,
         password,
@@ -212,19 +230,19 @@ export async function insert(req: Req<object, { email: string; password: string;
     } = req.body
 
     if (!username || !password || !email) {
-        res.json({ code: -200, message: '请将表单填写完整' })
+        json = { code: -200, data: null, message: '请将表单填写完整' }
     }
     else if (strLen(username) < 4) {
-        res.json({ code: -200, message: '用户长度至少 2 个中文或 4 个英文' })
+        json = { code: -200, data: null, message: '用户长度至少 2 个中文或 4 个英文' }
     }
     else if (strLen(password) < 8) {
-        res.json({ code: -200, message: '密码长度至少 8 位' })
+        json = { code: -200, data: null, message: '密码长度至少 8 位' }
     }
     else {
         try {
             const result = await UserM.findOne({ username }).exec().then(data => data?.toObject())
             if (result) {
-                res.json({ code: -200, message: '该用户名已经存在!', data: 'error' })
+                json = { code: -200, message: '该用户名已经存在!', data: 'error' }
             }
             else {
                 await UserM.create({
@@ -236,13 +254,14 @@ export async function insert(req: Req<object, { email: string; password: string;
                     is_delete: 0,
                     timestamp: getNowTime('X'),
                 })
-                res.json({ code: 200, message: '注册成功!', data: 'success' })
+                json = { code: 200, message: '注册成功!', data: 'success' }
             }
         }
         catch (err: unknown) {
-            res.json({ code: -200, data: null, message: getErrorMessage(err) })
+            json = { code: -200, data: null, message: getErrorMessage(err) }
         }
     }
+    res.json(json)
 }
 
 /**
@@ -251,21 +270,23 @@ export async function insert(req: Req<object, { email: string; password: string;
  * @param res Response
  */
 export async function getItem(req: Req, res: Res) {
+    let json: ResData<Nullable<User>>
+
     const userid = req.query.id || req.cookies.userid || req.headers.userid
 
     try {
-        let json
-        const result = await UserM.findOne({ _id: userid, is_delete: 0 }).exec().then(data => data?.toObject())
+        const filter = { _id: userid, is_delete: 0 }
+        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
         if (result)
-            json = { code: 200, data: result }
+            json = { code: 200, data: result, message: 'success' }
         else
-            json = { code: -200, message: '请先登录, 或者数据错误' }
-
-        res.json(json)
+            json = { code: -200, data: null, message: '请先登录, 或者数据错误' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -274,6 +295,8 @@ export async function getItem(req: Req, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
+    let json: ResData<Nullable<User>>
+
     const {
         id,
         email,
@@ -281,21 +304,23 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         username,
     } = req.body
 
-    const data: UserModify = {
+    const body: UserModify = {
         email,
         username,
         update_date: getNowTime(),
     }
     if (password)
-        data.password = md5(md5Pre + password)
+        body.password = md5(md5Pre + password)
 
     try {
-        const result = await UserM.findOneAndUpdate({ _id: id }, data, { new: true }).exec().then(data => data?.toObject())
-        res.json({ code: 200, message: '更新成功', data: result })
+        const filter = { _id: id }
+        const result = await UserM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 /**
@@ -304,6 +329,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  * @param res Response
  */
 export async function account(req: Req<object, { email: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         email,
     } = req.body
@@ -312,11 +339,12 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
     try {
         await UserM.updateOne<User>({ _id: user_id }, { $set: { email } }).exec()
         res.cookie('useremail', email, { maxAge: 2592000000 })
-        res.json({ code: 200, message: '更新成功', data: 'success' })
+        json = { code: 200, message: '更新成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 /**
@@ -325,6 +353,8 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
  * @param res Response
  */
 export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         old_password,
         password,
@@ -332,18 +362,33 @@ export async function password(req: Req<object, { old_password: string; password
 
     const user_id = req.cookies.userid || req.headers.userid
     try {
-        const result = await UserM.findOne({ _id: user_id, password: md5(md5Pre + old_password), is_delete: 0 }).exec().then(data => data?.toObject())
+        const filter = {
+            _id: user_id,
+            password: md5(md5Pre + old_password),
+            is_delete: 0,
+        }
+
+        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
         if (result) {
-            await UserM.updateOne({ _id: user_id }, { $set: { password: md5(md5Pre + password) } })
-            res.json({ code: 200, message: '更新成功', data: 'success' })
+            const filter = {
+                _id: user_id,
+            }
+            const body = {
+                $set: {
+                    password: md5(md5Pre + password),
+                },
+            }
+            await UserM.updateOne(filter, body)
+            json = { code: 200, message: '更新成功', data: 'success' }
         }
         else {
-            res.json({ code: -200, message: '原始密码错误', data: 'error' })
+            json = { code: -200, message: '原始密码错误', data: 'error' }
         }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+    res.json(json)
 }
 
 /**
@@ -352,17 +397,25 @@ export async function password(req: Req<object, { old_password: string; password
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        await UserM.updateOne({ _id }, { is_delete: 1 }).exec()
-        res.json({ code: 200, message: '更新成功', data: 'success' })
+        const filter = { _id }
+        const body = {
+            is_delete: 1,
+        }
+        await UserM.updateOne(filter, body).exec()
+        json = { code: 200, message: '更新成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
 
 /**
@@ -371,15 +424,23 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
+    let json: ResData<string | null>
+
     const {
         id: _id,
     } = req.query
 
     try {
-        await UserM.updateOne({ _id }, { is_delete: 0 }).exec()
-        res.json({ code: 200, message: '更新成功', data: 'success' })
+        const filter = { _id }
+        const body = {
+            is_delete: 0,
+        }
+        await UserM.updateOne(filter, body).exec()
+        json = { code: 200, message: '更新成功', data: 'success' }
     }
     catch (err: unknown) {
-        res.json({ code: -200, data: null, message: getErrorMessage(err) })
+        json = { code: -200, data: null, message: getErrorMessage(err) }
     }
+
+    res.json(json)
 }
