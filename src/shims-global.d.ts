@@ -11,13 +11,9 @@ declare type NonNullable<T> = T extends null | undefined ? never : T
  */
 declare type Arrayable<T> = T | T[]
 /**
- * 键为字符串, 值为 Any 的对象
+ * 键为字符串, 值为 T | Any 的对象
  */
-declare type Obj = Record<string, any>
-/**
- * 键为字符串, 值为 T 的对象
- */
-declare type ObjT<T> = Record<string, T>
+declare type Obj<T = any> = Record<string, T>
 /**
  * Function
  */

@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import type { Document } from 'mongoose'
 
 export type Req<ReqQuery = any, ReqBody = any, ReqParams = any> = Request<ReqParams, any, ReqBody, ReqQuery, any>
+
 export type Res = Response
 
 /**
