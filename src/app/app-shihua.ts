@@ -76,7 +76,7 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
             const image = await getBase64(img_id, cdn)
             console.log(`七牛图片结束时间:${new Date().getTime()}`)
             if (image) {
-                const options: Obj = {}
+                const options: Objable = {}
                 options.baike_num = '5'
                 // 带参数调用植物识别
                 console.log(`识图开始时间:${new Date().getTime()}`)

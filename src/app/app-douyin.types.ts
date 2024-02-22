@@ -53,7 +53,7 @@ export interface DouYinVideoData {
     video_id: string
     video_duration: number
     media_type: string
-    video_list: Obj<VideoItem>
+    video_list: Objable<VideoItem>
     volume: Volume
     popularity_level: number
     has_embedded_subtitle: boolean

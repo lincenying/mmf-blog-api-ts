@@ -107,7 +107,7 @@ export interface User extends Document {
     timestamp: number | string
     wx_avatar?: string
     wx_signature?: string
-    userid?: Obj
+    userid?: Objable
 }
 
 /**
@@ -129,7 +129,7 @@ export interface DouYinUser {
  * 抖音视频详情
  */
 export interface DouYin {
-    user_id: Obj
+    user_id: Objable
     aweme_id: string
     desc: string
     vid: string
