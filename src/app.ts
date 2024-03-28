@@ -70,10 +70,10 @@ app.use(
         },
     }),
 )
-// parse application/json
-app.use(express.json())
-// parse application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }))
+// 解析 application/json 中间件
+app.use(express.json({ limit: '50mb' }))
+// 解析 application/x-www-form-urlencoded 中间件
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
 // app.use(express.static(path.join(__dirname, 'public')))
 
