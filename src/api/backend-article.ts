@@ -41,7 +41,7 @@ export async function getList(req: Req<{ page: string; limit: string; sort: stri
 
     const sort = req.query.sort || '-update_date'
     const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+    const limit = Number(req.query.limit) || 15
     const skip = (page - 1) * limit
     try {
         const [list, total] = await Promise.all([
