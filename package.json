@@ -35,7 +35,7 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.2.3",
+    "mongoose": "^8.2.4",
     "mongoose-autopopulate": "^1.1.0",
     "multer": "1.4.5-lts.1",
     "qiniu": "^7.11.1",
@@ -43,7 +43,7 @@
     "typescript": "^5.4.3"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^4.2.6",
+    "@lincy/eslint-config": "^4.3.1",
     "@lincy/utils": "^0.5.5",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
@@ -54,7 +54,7 @@
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.11",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
     "@types/request-ip": "^0.0.41",
     "@types/serve-favicon": "^2.5.7",
     "compression": "^1.7.4",
