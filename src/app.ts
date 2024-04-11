@@ -54,7 +54,7 @@ app.use(compression())
 app.use(favicon(`${resolve('./public')}/favicon.ico`))
 
 logger.token('remote-addr', (req) => {
-    return requestIp.getClientIp(req) || ''
+    return requestIp.getClientIp(req) || 'unknown'
 })
 logger.token('date', () => {
     return UTC2Date(undefined, 'yyyy-mm-dd hh:ii:ss.SSS')
