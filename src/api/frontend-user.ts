@@ -58,8 +58,9 @@ export async function login(req: Req<object, { username: string; password: strin
         password,
     } = req.body
 
-    if (username === '' || password === '')
+    if (username === '' || password === '') {
         json = { code: -200, data: null, message: '请输入用户名和密码' }
+    }
 
     try {
         const filter = {
@@ -277,10 +278,10 @@ export async function getItem(req: Req, res: Res) {
     try {
         const filter = { _id: userid, is_delete: 0 }
         const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
-        if (result)
+        if (result) {
             json = { code: 200, data: result, message: 'success' }
-        else
-            json = { code: -200, data: null, message: '请先登录, 或者数据错误' }
+        }
+        else { json = { code: -200, data: null, message: '请先登录, 或者数据错误' } }
     }
     catch (err: unknown) {
         json = { code: -200, data: null, message: getErrorMessage(err) }
@@ -309,8 +310,9 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         username,
         update_date: getNowTime(),
     }
-    if (password)
+    if (password) {
         body.password = md5(md5Pre + password)
+    }
 
     try {
         const filter = { _id: id }

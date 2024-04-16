@@ -106,8 +106,9 @@ interface Errors extends Error {
 }
 
 function onError(error: Errors) {
-    if (error.syscall !== 'listen')
+    if (error.syscall !== 'listen') {
         throw error
+    }
 
     const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`
 

@@ -84,8 +84,9 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
             article_id,
         }
         const skip = (page - 1) * limit
-        if (!all)
+        if (!all) {
             data.is_delete = 0
+        }
 
         try {
             const [list, total] = await Promise.all([

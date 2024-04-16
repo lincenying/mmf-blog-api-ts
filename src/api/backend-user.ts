@@ -185,8 +185,9 @@ export async function modify(req: Req<object, { id: string; email: string; passw
         username,
         update_date: getNowTime(),
     }
-    if (password)
+    if (password) {
         body.password = md5(md5Pre + password)
+    }
 
     try {
         const filter = { _id }

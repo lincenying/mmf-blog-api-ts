@@ -269,8 +269,9 @@ const crc32 = function (string: string) {
     }
     crc = crc ^ (-1)
     // Turns the signed integer into an unsigned integer
-    if (crc < 0)
+    if (crc < 0) {
         crc += 4294967296
+    }
 
     return crc
 }

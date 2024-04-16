@@ -40,8 +40,9 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
         id: _id,
     } = req.query
 
-    if (!_id)
+    if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
+    }
 
     try {
         const filter = { _id }

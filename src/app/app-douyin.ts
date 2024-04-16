@@ -106,8 +106,9 @@ export async function getList(req: Req<{ user_id: string; limit?: number; page?:
 
     const filds = 'user user_id aweme_id desc vid image video creat_date is_delete timestamp'
 
-    if (user_id)
+    if (user_id) {
         payload.user_id = user_id
+    }
 
     try {
         const [list, total] = await Promise.all([

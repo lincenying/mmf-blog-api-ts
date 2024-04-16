@@ -17,25 +17,29 @@ export function strLen(str: string) {
     const len = str.length
     for (let i = 0; i < len; i++) {
         charCode = str.charCodeAt(i)
-        if (charCode >= 0 && charCode <= 128)
+        if (charCode >= 0 && charCode <= 128) {
             realLength += 1
-        else realLength += 2
+        }
+        else { realLength += 2 }
     }
     return realLength
 }
 
 export function getErrorMessage(err: unknown) {
     let message = ''
-    if (typeof err === 'string')
+    if (typeof err === 'string') {
         message = err.toUpperCase()
-    else if (err instanceof Error)
+    }
+    else if (err instanceof Error) {
         message = err.message
+    }
     return message
 }
 
 export function getNowTime(format: string = 'YYYY-MM-DD HH:mm:ss') {
-    if (format === 'X' || format === 'unix')
+    if (format === 'X' || format === 'unix') {
         return `${dayjs().unix()}`
+    }
 
     return dayjs().format(format)
 }

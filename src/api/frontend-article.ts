@@ -41,16 +41,18 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
         is_delete: 0,
     }
     const skip = (page - 1) * limit
-    if (id)
+    if (id) {
         payload.category = id
+    }
 
     if (key) {
         const reg = new RegExp(key, 'i')
         payload.title = { $regex: reg }
     }
     let sort = '-update_date'
-    if (by)
+    if (by) {
         sort = `-${by}`
+    }
 
     const filds = 'title content category category_name visit like likes comment_count creat_date update_date is_delete timestamp'
 
@@ -108,8 +110,9 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
     } = req.query
 
     const user_id = req.cookies.userid || req.headers.userid
-    if (!_id)
+    if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
+    }
 
     try {
         const filter = { _id, is_delete: 0 }
@@ -126,10 +129,10 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             }
         }
         else {
-            if (user_id)
+            if (user_id) {
                 result.like_status = result.likes && result.likes.includes(user_id)
-            else
-                result.like_status = false
+            }
+            else { result.like_status = false }
             result.likes = []
             result.content = replaceHtmlTag(result.content)
             result.html = replaceHtmlTag(result.html)

@@ -98,8 +98,9 @@ export async function get(req: Req<{ page: number }>, res: Res) {
         ...baseOptions,
         url: 'https://m.weibo.cn/api/container/getIndex?containerid=102803_ctg1_4388_-_ctg1_4388&openApp=0',
     }
-    if (page)
+    if (page) {
         options.url += `&since_id=${page}`
+    }
     try {
         const xhr = await axios<WeiboObject, AxiosResponse<WeiboObject>>(options)
         const body = xhr.data
@@ -359,8 +360,9 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
             cards_.forEach((item) => {
                 if (item.card_group) {
                     item.card_group.forEach((i) => {
-                        if (i.card_type === '9')
+                        if (i.card_type === '9') {
                             cardArr.push(i.mblog)
+                        }
                     })
                 }
                 else if (item.card_type === 9) {
