@@ -1,8 +1,9 @@
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
+import { strLen } from '@lincy/utils'
 import { md5Pre, mpappApiId, mpappSecret, secretClient as secret } from '../config'
-import { getErrorMessage, getNowTime, strLen } from '../utils'
+import { getErrorMessage, getNowTime } from '../utils'
 
 import UserM from '../models/user'
 import type { Lists, Req, Res, ResData, User, UserCookies, UserModify } from '@/types'

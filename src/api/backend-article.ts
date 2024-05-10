@@ -6,49 +6,66 @@ import CategoryM from '../models/category'
 import { getErrorMessage, getNowTime } from '../utils'
 import type { Article, ArticleInsert, ArticleModify, Lists, Req, Res, ResData } from '@/types'
 
+/**
+ * 将 Markdown 格式的内容转换成 HTML 格式，并生成目录（TOC）。
+ * @param content Markdown格式的字符串。
+ * @returns 返回一个对象，包含生成的 HTML 和 TOC。
+ */
 function marked(content: string) {
+    // 初始化返回对象，包含 html 和 toc 两个属性
     const $return = {
         html: '',
         toc: '',
     }
+
+    // 使用 markdownIt 库将 Markdown 内容渲染为 HTML
     const html = markdownIt({
-        breaks: true,
-        html: true,
-        linkify: true,
-        typographer: true,
+        breaks: true, // 启用换行符转换
+        html: true, // 允许 HTML 标签
+        linkify: true, // 自动转换 URL 为链接
+        typographer: true, // 启用更美观的排版
         highlight(str, lang) {
+            // 高亮代码块
             if (lang && hljs.getLanguage(lang)) {
                 try {
                     return hljs.highlight(lang, str).value
                 }
-                catch (error) {}
+                catch (error) {} // 捕获并忽略高亮过程中的错误
             }
             return ''
         },
     }).render(content)
+
+    // 将渲染后的 HTML 存储到返回对象中
     $return.html = html
+
+    // 返回包含 HTML 和 TOC 的对象
     return $return
 }
 
 /**
- * 管理时, 获取文章列表
- * @method
- * @param req Request
- * @param res Response
+ * 获取文章列表的异步函数。
+ * @param req 请求对象，包含页码、每页数量和排序方式等查询参数。
+ * @param res 响应对象，用于返回数据或错误信息。
+ * @returns 返回一个Promise，解析为一个包含响应数据或错误信息的对象。
  */
 export async function getList(req: Req<{ page: string; limit: string; sort: string }>, res: Res) {
     let json: ResData<Nullable<Lists<Article[]>>>
 
+    // 处理查询参数，设定默认值
     const sort = req.query.sort || '-update_date'
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 15
     const skip = (page - 1) * limit
+
     try {
+        // 同时查询文章列表和总数，计算总页数
         const [list, total] = await Promise.all([
             ArticleM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
             ArticleM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
+        // 构建响应数据对象
         json = {
             code: 200,
             data: {
@@ -61,51 +78,61 @@ export async function getList(req: Req<{ page: string; limit: string; sort: stri
         }
     }
     catch (err: unknown) {
+        // 捕获异常，返回错误信息
         json = { code: -200, data: null, message: getErrorMessage(err) }
     }
 
+    // 发送响应
     res.json(json)
 }
 
 /**
- * 管理时, 获取单篇文章
- * @method
- * @param req Request
- * @param res Response
+ * 获取指定ID的文章项。
+ * @param req 请求对象，包含文章的ID。
+ * @param res 响应对象，用于返回查询结果。
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
 
+    // 从请求中提取文章ID
     const {
         id: _id,
     } = req.query
 
+    // 检查ID是否提供
     if (!_id) {
+        // 如果没有提供ID，返回错误信息
         json = { code: -200, data: null, message: '参数错误' }
     }
     else {
         try {
+            // 构建查询过滤条件
             const filter = { _id }
+            // 尝试从数据库中查找文章
             const result = await ArticleM.findOne(filter).exec().then(data => data?.toObject())
+            // 查询成功，返回文章详情
             json = { code: 200, message: 'success', data: result }
         }
         catch (err: unknown) {
+            // 查询失败，返回错误信息
             json = { code: -200, data: null, message: getErrorMessage(err) }
         }
     }
 
+    // 使用响应对象返回处理结果
     res.json(json)
 }
 
 /**
- * 发布文章
- * @method
- * @param req Request
- * @param res Response
+ * 异步插入文章。
+ * @param req 包含文章插入信息的请求对象。
+ * @param res 用于返回响应数据的对象。
+ * @returns 返回一个Promise，解析为响应数据对象。
  */
 export async function insert(req: Req<object, ArticleInsert>, res: Res) {
     let json: ResData<Nullable<Article>>
 
+    // 从请求体中解构文章信息
     const {
         category,
         content,
@@ -113,17 +140,20 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         html,
     } = req.body
 
+    // 根据是否提供html，处理markdown内容
     let mdHtml: string, mdToc: string
     if (html) {
         mdHtml = html
         mdToc = ''
     }
     else {
+        // 如果没有提供html，则使用marked库处理markdown内容生成html和toc
         const md = marked(content)
         mdToc = md.toc
         mdHtml = md.html
     }
 
+    // 处理文章分类，将其拆分为id和名称
     const arr_category = category.split('|')
     const data: Article = {
         title,
@@ -141,6 +171,7 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         timestamp: getNowTime('X'),
     }
     try {
+        // 创建文章，并在创建成功后更新分类数量
         const result = await ArticleM.create(data).then(data => data.toObject())
 
         const filter = { _id: arr_category[0] }
@@ -150,9 +181,11 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
             },
         }
         await CategoryM.updateOne(filter, body).exec()
+        // 返回成功响应
         json = { code: 200, message: '发布成功', data: result }
     }
     catch (err: unknown) {
+        // 捕获错误，返回错误响应
         json = { code: -200, data: null, message: getErrorMessage(err) }
     }
 
@@ -160,80 +193,98 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
 }
 
 /**
- * 管理时, 删除文章
- * @method
- * @param req Request
- * @param res Response
+ * 删除文章记录及其对应分类的数量减一。
+ * @param req 请求对象，包含要删除的文章ID。
+ * @param res 响应对象，用于返回操作结果。
+ * @returns 返回一个Promise，解析为操作结果的JSON对象。
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
 
+    // 从请求中提取文章ID
     const {
         id: _id,
     } = req.query
 
     try {
+        // 准备过滤条件和更新内容
         const filter = { _id }
         const body = { is_delete: 1 }
+        // 执行查找并更新操作，将文章标记为删除
         const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec()
 
+        // 更新对应分类的文档数量
         const categoryBody = {
             $inc: {
                 cate_num: -1,
             },
         }
         await CategoryM.updateOne(filter, categoryBody).exec()
+        // 准备并返回成功响应
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
+        // 捕获并处理错误，返回错误响应
         json = { code: -200, data: null, message: getErrorMessage(err) }
     }
 
+    // 使用响应对象返回处理结果
     res.json(json)
 }
 
 /**
- * 管理时, 恢复文章
- * @method
- * @param req Request
- * @param res Response
+ * 恢复文章功能的异步函数。
+ * 该函数接收一个请求和一个响应对象，通过文章ID将文章的状态标记为非删除状态，并更新对应分类的计数。
+ *
+ * @param req - 请求对象，包含文章的ID。
+ * @param res - 响应对象，用于返回操作结果。
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
 
+    // 从请求中提取文章ID
     const {
         id: _id,
     } = req.query
 
     try {
+        // 构建用于查找和更新的过滤条件和更新内容
         const filter = { _id }
         const body = { is_delete: 1 }
+
+        // 找到并更新文章的删除状态
         const result = await ArticleM.findOneAndUpdate(filter, body).exec()
 
+        // 更新对应分类的文档数量
         const categoryBody = {
             $inc: {
                 cate_num: 1,
             },
         }
         await CategoryM.updateOne(filter, categoryBody).exec()
+
+        // 构建并返回成功的响应数据
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
+        // 捕获并处理错误，构建并返回失败的响应数据
         json = { code: -200, data: null, message: getErrorMessage(err) }
     }
 
+    // 将响应数据发送回客户端
     res.json(json)
 }
 
 /**
- * 管理时, 编辑文章
- * @method
- * @param req Request
- * @param res Response
+ * 修改文章信息
+ * @param req 包含文章修改数据的请求对象
+ * @param res 用于返回处理结果的响应对象
+ * @returns 返回一个Promise，解析为响应数据
  */
 export async function modify(req: Req<object, ArticleModify>, res: Res) {
     let json: ResData<Nullable<Article>>
 
+    // 从请求体中解构需要的字段
     const {
         id: _id,
         category,
@@ -245,17 +296,20 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
     } = req.body
 
     let mdHtml: string, mdToc: string
+    // 根据是否有html字段来处理markdown内容
     if (html) {
         mdHtml = html
         mdToc = ''
     }
     else {
+        // 使用marked库将markdown内容转换为html和toc
         const md = marked(content)
         mdHtml = md.html
         mdToc = md.toc
     }
 
     try {
+        // 准备过滤条件和更新内容
         const filter = { _id }
         const body = {
             title,
@@ -266,20 +320,25 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
             toc: mdToc,
             update_date: getNowTime(),
         }
+        // 使用findOneAndUpdate更新文章信息，并获取更新后的文档对象
         const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
         if (result && category !== category_old) {
+            // 如果分类发生变化，则更新分类计数
             const newCategofyFilter = { _id: category }
             const oldCategoryFilter = { _id: category_old }
             const newCategoryBody = { $inc: { cate_num: 1 } }
             const oldCategoryBody = { $inc: { cate_num: -1 } }
+            // 执行分类计数的更新
             await Promise.all([
                 CategoryM.updateOne(newCategofyFilter, newCategoryBody).exec(),
                 CategoryM.updateOne(oldCategoryFilter, oldCategoryBody).exec(),
             ])
         }
+        // 返回成功响应
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
+        // 返回错误响应
         json = { code: -200, data: null, message: getErrorMessage(err) }
     }
 
