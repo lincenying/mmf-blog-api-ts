@@ -1,6 +1,6 @@
 import ArticleM from '../models/article'
 import { getErrorMessage } from '../utils'
-import type { Article, Lists, Req, ReqListQuery, Res, ResData } from '@/types'
+import type { Article, Lists, Req, ReqListQuery, Res, ResData, TrendingData } from '@/types'
 
 function replaceHtmlTag(html: string) {
     return html
@@ -156,13 +156,20 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  * @param req Request
  * @param res Response
  */
-export async function getTrending(req: Req, res: Res) {
+export async function getTrending(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<{ list: Article[] }>>
 
-    const limit = 5
-    const data = { is_delete: 0 }
-    const filds = 'title visit like comment_count'
+    const id = req.query.id
+
     try {
+        const category = await ArticleM.findOne({ _id: id, is_delete: 0 }, 'category').exec().then(data => data?.category)
+
+        const limit = 5
+        const data: TrendingData = { is_delete: 0 }
+        if (category) {
+            data.category = category
+        }
+        const filds = 'title visit like comment_count'
         const result = await ArticleM.find(data, filds).sort('-visit').limit(limit).exec().then(data => data.map(item => item.toObject()))
         json = {
             code: 200,

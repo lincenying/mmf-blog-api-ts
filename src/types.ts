@@ -283,3 +283,8 @@ export interface ResLists<T> {
     data: Lists<T>
     message?: string
 }
+
+export interface TrendingData {
+    category?: string
+    is_delete: number
+}
