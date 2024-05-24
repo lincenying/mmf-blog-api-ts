@@ -15,10 +15,11 @@ import type { Lists, Req, Res, ResData, User, UserCookies, UserModify } from '@/
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<User[]>>>
+    const reqQuery = req.query
 
     const sort = '-_id'
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+    const page = Number(reqQuery.page) || 1
+    const limit = Number(reqQuery.limit) || 10
     const skip = (page - 1) * limit
 
     try {
@@ -50,14 +51,15 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
  */
 export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
     let json: ResData<Nullable<UserCookies>>
+    const reqBody = req.body
 
     let {
         username,
-    } = req.body
+    } = reqBody
 
     const {
         password,
-    } = req.body
+    } = reqBody
 
     if (username === '' || password === '') {
         json = { code: -200, data: null, message: '请输入用户名和密码' }
@@ -110,9 +112,11 @@ export async function login(req: Req<object, { username: string; password: strin
  * @param res Response
  */
 export async function jscodeToSession(req: Req<object, { js_code: string }>, res: Res) {
+    const reqBody = req.body
+
     const {
         js_code,
-    } = req.body
+    } = reqBody
 
     const xhr = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
         params: {
@@ -134,12 +138,13 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
  */
 export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
     let json: ResData<Nullable<UserCookies>>
+    const reqBody = req.body
 
     const {
         nickName,
         wxSignature,
         avatar,
-    } = req.body
+    } = reqBody
 
     let id, token, username
     if (!nickName || !wxSignature) {
@@ -224,12 +229,13 @@ export function logout(req: Req, res: Res) {
  */
 export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqBody = req.body
 
     const {
         email,
         password,
         username,
-    } = req.body
+    } = reqBody
 
     if (!username || !password || !email) {
         json = { code: -200, data: null, message: '请将表单填写完整' }
@@ -273,8 +279,9 @@ export async function insert(req: Req<object, { email: string; password: string;
  */
 export async function getItem(req: Req, res: Res) {
     let json: ResData<Nullable<User>>
+    const reqQuery = req.query
 
-    const userid = req.query.id || req.cookies.userid || req.headers.userid
+    const userid = (reqQuery.id || req.cookies.userid || req.headers.userid) as string
 
     try {
         const filter = { _id: userid, is_delete: 0 }
@@ -298,13 +305,14 @@ export async function getItem(req: Req, res: Res) {
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     let json: ResData<Nullable<User>>
+    const reqBody = req.body
 
     const {
         id,
         email,
         password,
         username,
-    } = req.body
+    } = reqBody
 
     const body: UserModify = {
         email,
@@ -333,12 +341,13 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  */
 export async function account(req: Req<object, { email: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqBody = req.body
 
     const {
         email,
-    } = req.body
+    } = reqBody
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as string
     try {
         await UserM.updateOne<User>({ _id: user_id }, { $set: { email } }).exec()
         res.cookie('useremail', email, { maxAge: 2592000000 })
@@ -357,13 +366,14 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
  */
 export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqBody = req.body
 
     const {
         old_password,
         password,
-    } = req.body
+    } = reqBody
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as string
     try {
         const filter = {
             _id: user_id,
@@ -401,10 +411,11 @@ export async function password(req: Req<object, { old_password: string; password
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }
@@ -428,10 +439,11 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }

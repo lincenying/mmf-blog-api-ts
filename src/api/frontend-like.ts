@@ -9,12 +9,13 @@ import { getErrorMessage } from '../utils'
  */
 export async function like(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: article_id,
-    } = req.query
+    } = reqQuery
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as string
     try {
         const filter = {
             _id: article_id,
@@ -51,12 +52,13 @@ export async function like(req: Req<{ id: string }>, res: Res) {
  */
 export async function unlike(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: article_id,
-    } = req.query
+    } = reqQuery
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as string
     try {
         const filter = {
             _id: article_id,

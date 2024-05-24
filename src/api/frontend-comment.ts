@@ -11,12 +11,14 @@ import type { Comment, Lists, Req, ReqListQuery, Res, ResData } from '@/types'
  */
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     let json: ResData<Comment | null>
+    const reqBody = req.body
 
-    const userid = req.cookies.userid || req.headers.userid
+    const userid = (req.cookies.userid || req.headers.userid) as Nullable<string>
+
     const {
         id: _id,
         content,
-    } = req.body
+    } = reqBody
 
     const creat_date = getNowTime()
     const timestamp = getNowTime('X')
@@ -25,6 +27,9 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
     }
     else if (!content) {
         json = { code: -200, data: null, message: '请输入评论内容' }
+    }
+    else if (!userid) {
+        json = { code: -200, data: null, message: '请先登录' }
     }
     else {
         const data: Comment = {
@@ -62,13 +67,14 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     let json: ResData<Nullable<Lists<Comment[]>>>
+    const reqQuery = req.query
 
     const {
         all,
         id: article_id,
-    } = req.query
+    } = reqQuery
 
-    let { limit, page } = req.query
+    let { limit, page } = reqQuery
 
     if (!article_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -119,10 +125,11 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }
@@ -148,10 +155,11 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }

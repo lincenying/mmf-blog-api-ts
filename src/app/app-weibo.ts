@@ -93,7 +93,9 @@ export async function list(req: Req, res: Res) {
  * @param res Response
  */
 export async function get(req: Req<{ page: number }>, res: Res) {
-    const page = req.query.page || 0
+    const reqQuery = req.query
+
+    const page = reqQuery.page || 0
     const options = {
         ...baseOptions,
         url: 'https://m.weibo.cn/api/container/getIndex?containerid=102803_ctg1_4388_-_ctg1_4388&openApp=0',
@@ -151,8 +153,10 @@ export async function get(req: Req<{ page: number }>, res: Res) {
  * @returns void
  */
 export async function user(req: Req<{ containerid: string; since_id: string }>, res: Res) {
-    const containerid = req.query.containerid
-    const since_id = req.query.since_id
+    const reqQuery = req.query
+
+    const containerid = reqQuery.containerid
+    const since_id = reqQuery.since_id
     if (!containerid) {
         res.json({ ok: 2, msg: '参数错误' })
         return
@@ -220,10 +224,11 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
  */
 export async function card(req: Req<{ card_id: string; block_id: string; page: number }>, res: Res) {
     let json: CardReturn | ResData<string | null>
+    const reqQuery = req.query
 
-    const card_id = req.query.card_id
-    const block_id = req.query.block_id
-    const page = req.query.page || 1
+    const card_id = reqQuery.card_id
+    const block_id = reqQuery.block_id
+    const page = reqQuery.page || 1
     if (!card_id || !block_id) {
         res.json({ ok: 2, msg: '参数错误' })
         return
@@ -284,8 +289,9 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
  */
 export async function video(req: Req<{ since_id: string }>, res: Res) {
     let json: WeiBoBlogReturn | ResData<string | null>
+    const reqQuery = req.query
 
-    const since_id = req.query.since_id || ''
+    const since_id = reqQuery.since_id || ''
     const options = {
         ...baseOptions,
         url: `https://m.weibo.cn/api/container/getIndex?containerid=100808f334edf14a66a4e3aa1a31dade762d19_-_feed&extparam=%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&luicode=10000011&lfid=100103type%3D1%26q%3D%E6%90%9E%E7%AC%91%E8%A7%86%E9%A2%91&since_id=${since_id}`,
@@ -342,9 +348,10 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
  */
 export async function beautyVideo(req: Req<{ key: string; page: number }>, res: Res) {
     let json: WeiBoBlogReturn | ResData<string | null>
+    const reqQuery = req.query
 
-    const key = encodeURIComponent(req.query.key)
-    const page = req.query.page || 1
+    const key = encodeURIComponent(reqQuery.key)
+    const page = reqQuery.page || 1
     const options = {
         ...baseOptions,
         url: `https://m.weibo.cn/api/container/getIndex?containerid=${key}&page_type=searchall&page=${page}`,
@@ -418,8 +425,9 @@ export async function detail(req: Req<{ id: string }>, res: Res) {
         text: string
         pics: string[]
     }>>
+    const reqQuery = req.query
 
-    const id = req.query.id
+    const id = reqQuery.id
     if (!id) {
         json = { code: 301, ok: 2, data: null, msg: '参数错误' }
     }

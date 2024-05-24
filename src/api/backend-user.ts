@@ -15,10 +15,11 @@ import type { Lists, Req, Res, ResData, User, UserModify } from '@/types'
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<User[]>>>
+    const reqQuery = req.query
 
     const sort = '-_id'
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+    const page = Number(reqQuery.page) || 1
+    const limit = Number(reqQuery.limit) || 10
     const skip = (page - 1) * limit
     try {
         const [list, total] = await Promise.all([
@@ -51,10 +52,11 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<User>>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -81,11 +83,12 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  */
 export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqBody = req.body
 
     const {
         password,
         username,
-    } = req.body
+    } = reqBody
 
     if (username === '' || password === '') {
         json = { code: -200, data: null, message: '请输入用户名和密码' }
@@ -172,13 +175,14 @@ export async function insert(email: string, password: string, username: string) 
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     let json: ResData<Nullable<User>>
+    const reqBody = req.body
 
     const {
         id: _id,
         email,
         password,
         username,
-    } = req.body
+    } = reqBody
 
     const body: UserModify = {
         email,
@@ -209,10 +213,11 @@ export async function modify(req: Req<object, { id: string; email: string; passw
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }
@@ -235,10 +240,11 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }

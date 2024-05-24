@@ -24,8 +24,10 @@ interface TujidaoList {
 }
 
 export async function lists(req: Req<{ page: number }>, res: Res) {
+    const reqQuery = req.query
+
     const cookie = tujidao
-    const page = req.query.page || 1
+    const page = reqQuery.page || 1
     const options = {
         ...baseOptions,
         method: 'GET',

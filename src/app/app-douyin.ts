@@ -13,6 +13,7 @@ import type { DouYin, DouYinInsert, DouYinUser, DouYinUserInsert, Lists, Req, Re
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     let json: ResData<Nullable<DouYinUser>>
+    const reqBody = req.body
 
     const {
         user_id,
@@ -20,7 +21,7 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
         user_avatar,
         sec_uid,
         share_url,
-    } = req.body
+    } = reqBody
 
     const data = {
         user_id,
@@ -52,6 +53,7 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
 
 export async function insert(req: Req<object, DouYinInsert>, res: Res) {
     let json: ResData<Nullable<DouYin>>
+    const reqBody = req.body
 
     const {
         user_id,
@@ -60,7 +62,7 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
         vid,
         image,
         video,
-    } = req.body
+    } = reqBody
 
     const data = {
         author: user_id,
@@ -93,9 +95,10 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
 
 export async function getList(req: Req<{ user_id: string; limit?: number; page?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<DouYin[]>>>
+    const reqQuery = req.query
 
-    let { limit, page } = req.query
-    const user_id = req.query.user_id
+    let { limit, page } = reqQuery
+    const user_id = reqQuery.user_id
 
     page = Number(page) || 1
     limit = Number(limit) || 10
@@ -135,8 +138,9 @@ export async function getList(req: Req<{ user_id: string; limit?: number; page?:
 
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
-    const vid = req.query.id
+    const vid = reqQuery.id
     let main_url: string = lruCache.get(`douyin_${vid}`)
     if (!vid) {
         json = { code: -200, data: null, msg: '参数错误' }

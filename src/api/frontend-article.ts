@@ -26,16 +26,18 @@ interface ArticleSearch {
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     let json: ResData<Nullable<Lists<Article[]>>>
+    const reqQuery = req.query
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as Nullable<string>
+
     const {
         by,
         id,
         key,
-    } = req.query
+    } = reqQuery
 
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+    const page = Number(reqQuery.page) || 1
+    const limit = Number(reqQuery.limit) || 10
 
     const payload: ArticleSearch = {
         is_delete: 0,
@@ -104,12 +106,13 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
-    const user_id = req.cookies.userid || req.headers.userid
+    const user_id = (req.cookies.userid || req.headers.userid) as Nullable<string>
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
     }
@@ -158,11 +161,16 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  */
 export async function getTrending(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<{ list: Article[] }>>
+    const reqQuery = req.query
 
-    const id = req.query.id
+    const id = reqQuery.id
 
     try {
-        const category = await ArticleM.findOne({ _id: id, is_delete: 0 }, 'category').exec().then(data => data?.category)
+        const filter: { _id?: string; is_delete: number } = { is_delete: 0 }
+        if (id) {
+            filter._id = id
+        }
+        const category = await ArticleM.findOne(filter, 'category').exec().then(data => data?.category)
 
         const limit = 5
         const data: TrendingData = { is_delete: 0 }

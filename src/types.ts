@@ -71,7 +71,7 @@ export interface Comment {
     /** * 评论所属文章ID */
     article_id: string
     /** * 发布评论的用户 */
-    userid: Record<string, any>
+    userid: string | User
     /** * 评论内容 */
     content: string
     /** * 创建时间 */

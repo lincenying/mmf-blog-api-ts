@@ -35,10 +35,11 @@ export async function getList(req: Req, res: Res) {
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Category>>
+    const reqQuery = req.query
 
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -64,11 +65,12 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  */
 export async function insert(req: Req<object, CategoryInsert>, res: Res) {
     let json: ResData<Nullable<Category>>
+    const reqBody = req.body
 
     const {
         cate_name,
         cate_order,
-    } = req.body
+    } = reqBody
 
     if (!cate_name || !cate_order) {
         json = { code: -200, data: null, message: '请填写分类名称和排序' }
@@ -102,9 +104,11 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
  * @param res Response
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
+    const reqQuery = req.query
+
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }
@@ -124,9 +128,11 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
+    const reqQuery = req.query
+
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         const filter = { _id }
@@ -146,11 +152,13 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  * @param res Response
  */
 export async function modify(req: Req<object, CategoryModify>, res: Res) {
+    const reqBody = req.body
+
     const {
         id: _id,
         cate_name,
         cate_order,
-    } = req.body
+    } = reqBody
 
     try {
         const filter = { _id }

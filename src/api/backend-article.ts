@@ -52,10 +52,12 @@ function marked(content: string) {
 export async function getList(req: Req<{ page: string; limit: string; sort: string }>, res: Res) {
     let json: ResData<Nullable<Lists<Article[]>>>
 
+    const reqQuery = req.query
+
     // 处理查询参数，设定默认值
-    const sort = req.query.sort || '-update_date'
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 15
+    const sort = reqQuery.sort || '-update_date'
+    const page = Number(reqQuery.page) || 1
+    const limit = Number(reqQuery.limit) || 15
     const skip = (page - 1) * limit
 
     try {
@@ -93,11 +95,12 @@ export async function getList(req: Req<{ page: string; limit: string; sort: stri
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqQuery = req.query
 
     // 从请求中提取文章ID
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     // 检查ID是否提供
     if (!_id) {
@@ -131,6 +134,7 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
  */
 export async function insert(req: Req<object, ArticleInsert>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqBody = req.body
 
     // 从请求体中解构文章信息
     const {
@@ -138,7 +142,7 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
         content,
         title,
         html,
-    } = req.body
+    } = reqBody
 
     // 根据是否提供html，处理markdown内容
     let mdHtml: string, mdToc: string
@@ -200,11 +204,12 @@ export async function insert(req: Req<object, ArticleInsert>, res: Res) {
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqQuery = req.query
 
     // 从请求中提取文章ID
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         // 准备过滤条件和更新内容
@@ -241,11 +246,12 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqQuery = req.query
 
     // 从请求中提取文章ID
     const {
         id: _id,
-    } = req.query
+    } = reqQuery
 
     try {
         // 构建用于查找和更新的过滤条件和更新内容
@@ -283,6 +289,7 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
  */
 export async function modify(req: Req<object, ArticleModify>, res: Res) {
     let json: ResData<Nullable<Article>>
+    const reqBody = req.body
 
     // 从请求体中解构需要的字段
     const {
@@ -293,7 +300,7 @@ export async function modify(req: Req<object, ArticleModify>, res: Res) {
         title,
         html,
         category_name,
-    } = req.body
+    } = reqBody
 
     let mdHtml: string, mdToc: string
     // 根据是否有html字段来处理markdown内容

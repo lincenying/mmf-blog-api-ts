@@ -19,13 +19,13 @@ exports.SECRET_KEY = ''
 install nodejs, MongoDB, And start the
 ```bash
 # Install dependencies
-yarn
+pnpm
 
 # or
 npm install
 
 # Start the API server
-yarn serve
+pnpm serve
 ```
 
 Add admin

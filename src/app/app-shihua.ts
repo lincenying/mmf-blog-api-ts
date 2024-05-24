@@ -60,10 +60,12 @@ function getBase64(img_id: string, cdn: string): Promise<string> {
 }
 
 export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
+    const reqQuery = req.query
+
     const {
         id: img_id,
         cdn,
-    } = req.query
+    } = reqQuery
 
     const token = req.cookies.user || req.headers.user
     const userid = req.cookies.userid || req.headers.userid
@@ -173,13 +175,14 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
  */
 export async function getHistory(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<ShiHua[]>>>
+    const reqQuery = req.query
 
     const userid = req.cookies.userid || req.headers.userid
 
     const {
         page = 1,
         limit = 10,
-    } = req.query
+    } = reqQuery
 
     const payload = {
         is_delete: 0,
@@ -222,9 +225,10 @@ export async function getHistory(req: Req<{ page?: number; limit?: number }>, re
  */
 export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
     let json: ResData<string | null>
+    const reqQuery = req.query
 
     const userid = req.cookies.userid || req.headers.userid
-    const { img_id } = req.query
+    const { img_id } = reqQuery
 
     try {
         await ShiHuaM.deleteOne({ img_id, user_id: userid })
