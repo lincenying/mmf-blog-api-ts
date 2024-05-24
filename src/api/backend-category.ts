@@ -5,8 +5,8 @@ import type { Category, CategoryInsert, CategoryModify, Req, Res, ResData } from
 /**
  * 管理时, 获取分类列表
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getList(req: Req, res: Res) {
     let json: ResData<Nullable<{ list: Category[] }>>
@@ -30,8 +30,8 @@ export async function getList(req: Req, res: Res) {
 /**
  * 管理时, 获取分类详情
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Category>>
@@ -60,8 +60,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 新增分类
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function insert(req: Req<object, CategoryInsert>, res: Res) {
     let json: ResData<Nullable<Category>>
@@ -100,8 +100,8 @@ export async function insert(req: Req<object, CategoryInsert>, res: Res) {
 /**
  * 管理时, 删除分类
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     const reqQuery = req.query
@@ -124,8 +124,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 恢复分类
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     const reqQuery = req.query
@@ -148,8 +148,8 @@ export async function recover(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理时, 编辑分类
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function modify(req: Req<object, CategoryModify>, res: Res) {
     const reqBody = req.body

@@ -10,8 +10,8 @@ import type { Lists, Req, Res, ResData, User, UserCookies, UserModify } from '@/
 
 /**
  * 用户列表
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<User[]>>>
@@ -46,8 +46,8 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
 
 /**
  * 用户登录
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
     let json: ResData<Nullable<UserCookies>>
@@ -108,8 +108,8 @@ export async function login(req: Req<object, { username: string; password: strin
 
 /**
  * 微信登录
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function jscodeToSession(req: Req<object, { js_code: string }>, res: Res) {
     const reqBody = req.body
@@ -133,8 +133,8 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
 }
 /**
  * 微信登录
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
     let json: ResData<Nullable<UserCookies>>
@@ -208,8 +208,8 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
 
 /**
  * 用户退出
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export function logout(req: Req, res: Res) {
     res.cookie('user', '', { maxAge: -1 })
@@ -224,8 +224,8 @@ export function logout(req: Req, res: Res) {
 
 /**
  * 用户注册
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
     let json: ResData<string | null>
@@ -274,8 +274,8 @@ export async function insert(req: Req<object, { email: string; password: string;
 
 /**
  * 获取用户信息
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getItem(req: Req, res: Res) {
     let json: ResData<Nullable<User>>
@@ -289,7 +289,9 @@ export async function getItem(req: Req, res: Res) {
         if (result) {
             json = { code: 200, data: result, message: 'success' }
         }
-        else { json = { code: -200, data: null, message: '请先登录, 或者数据错误' } }
+        else {
+            json = { code: -200, data: null, message: '请先登录, 或者数据错误' }
+        }
     }
     catch (err: unknown) {
         json = { code: -200, data: null, message: getErrorMessage(err) }
@@ -300,8 +302,8 @@ export async function getItem(req: Req, res: Res) {
 
 /**
  * 用户编辑
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     let json: ResData<Nullable<User>>
@@ -336,8 +338,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
 
 /**
  * 账号编辑
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function account(req: Req<object, { email: string }>, res: Res) {
     let json: ResData<string | null>
@@ -361,8 +363,8 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
 
 /**
  * 密码编辑
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
     let json: ResData<string | null>
@@ -406,8 +408,8 @@ export async function password(req: Req<object, { old_password: string; password
 
 /**
  * 用户删除
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
@@ -434,8 +436,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 用户恢复
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>

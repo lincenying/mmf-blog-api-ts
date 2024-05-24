@@ -10,8 +10,8 @@ import type { Lists, Req, Res, ResData, User, UserModify } from '@/types'
 /**
  * 获取管理员列表
  * @method getList
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<User[]>>>
@@ -47,8 +47,8 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
 /**
  * 获取单个管理员
  * @method getItem
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<User>>
@@ -78,8 +78,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理员登录
  * @method loginAdmin
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function login(req: Req<object, { password: string; username: string }>, res: Res) {
     let json: ResData<string | null>
@@ -170,8 +170,8 @@ export async function insert(email: string, password: string, username: string) 
 /**
  * 管理员编辑
  * @method modifyAdmin
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
     let json: ResData<Nullable<User>>
@@ -208,8 +208,8 @@ export async function modify(req: Req<object, { id: string; email: string; passw
 /**
  * 管理员删除
  * @method deletes
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
@@ -235,8 +235,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 /**
  * 管理员恢复
  * @method recover
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>

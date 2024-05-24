@@ -5,17 +5,21 @@ import type { DouYin } from '@/types'
 
 const Schema = mongoose.Schema
 
+/**
+ * DouYinSchema 定义了抖音视频数据的模式。
+ * 包含了用户ID、视频ID、视频描述、视频ID、图片URL、视频URL、创建日期、是否删除标记和时间戳等字段。
+ */
 const DouYinSchema = new Schema<DouYin>(
     {
-        user_id: String,
-        aweme_id: String,
-        desc: String,
-        vid: String,
-        image: String,
-        video: String,
-        creat_date: String,
-        is_delete: { type: Number, default: 0 },
-        timestamp: Number,
+        user_id: String, // 用户ID
+        aweme_id: String, // 视频ID
+        desc: String, // 视频描述
+        vid: String, // 视频ID
+        image: String, // 图片URL
+        video: String, // 视频URL
+        creat_date: String, // 创建日期
+        is_delete: { type: Number, default: 0 }, // 是否删除标记，默认为0
+        timestamp: Number, // 时间戳
     },
     {
         toJSON: { virtuals: true },

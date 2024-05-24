@@ -21,8 +21,8 @@ interface ArticleSearch {
 /**
  * 前台浏览时, 获取文章列表
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     let json: ResData<Nullable<Lists<Article[]>>>
@@ -101,8 +101,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
 /**
  * 前台浏览时, 获取单篇文章
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getItem(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<Article>>
@@ -135,7 +135,9 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             if (user_id) {
                 result.like_status = result.likes && result.likes.includes(user_id)
             }
-            else { result.like_status = false }
+            else {
+                result.like_status = false
+            }
             result.likes = []
             result.content = replaceHtmlTag(result.content)
             result.html = replaceHtmlTag(result.html)
@@ -156,8 +158,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
 /**
  * 前台浏览时, 获取文章推荐列表
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getTrending(req: Req<{ id: string }>, res: Res) {
     let json: ResData<Nullable<{ list: Article[] }>>

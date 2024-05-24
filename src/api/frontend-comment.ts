@@ -6,8 +6,8 @@ import type { Comment, Lists, Req, ReqListQuery, Res, ResData } from '@/types'
 /**
  * 发布评论
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
     let json: ResData<Comment | null>
@@ -62,8 +62,8 @@ export async function insert(req: Req<object, { id: string; content: string }>, 
 /**
  * 前台浏览时, 读取评论列表
  * @method
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getList(req: Req<ReqListQuery>, res: Res) {
     let json: ResData<Nullable<Lists<Comment[]>>>
@@ -120,8 +120,8 @@ export async function getList(req: Req<ReqListQuery>, res: Res) {
 
 /**
  * 评论删除
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function deletes(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
@@ -150,8 +150,8 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 评论恢复
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>

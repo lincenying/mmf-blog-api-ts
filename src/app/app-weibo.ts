@@ -89,8 +89,8 @@ export async function list(req: Req, res: Res) {
 
 /**
  * 热门微博
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function get(req: Req<{ page: number }>, res: Res) {
     const reqQuery = req.query
@@ -148,8 +148,8 @@ export async function get(req: Req<{ page: number }>, res: Res) {
 
 /**
  * 微博用户
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  * @returns void
  */
 export async function user(req: Req<{ containerid: string; since_id: string }>, res: Res) {
@@ -218,8 +218,8 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
 
 /**
  * 微博卡片
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  * @returns void
  */
 export async function card(req: Req<{ card_id: string; block_id: string; page: number }>, res: Res) {
@@ -283,8 +283,8 @@ export async function card(req: Req<{ card_id: string; block_id: string; page: n
 
 /**
  * 超话视频
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  * @see https://m.weibo.cn/p/100808f334edf14a66a4e3aa1a31dade762d19/super_index
  */
 export async function video(req: Req<{ since_id: string }>, res: Res) {
@@ -343,8 +343,8 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
 
 /**
  * 微博搜索视频
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function beautyVideo(req: Req<{ key: string; page: number }>, res: Res) {
     let json: WeiBoBlogReturn | ResData<string | null>
@@ -415,8 +415,8 @@ export async function beautyVideo(req: Req<{ key: string; page: number }>, res: 
 
 /**
  * 微博详情
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  * @returns void
  */
 export async function detail(req: Req<{ id: string }>, res: Res) {

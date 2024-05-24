@@ -4,8 +4,8 @@ import { getErrorMessage } from '../utils'
 
 /**
  * 文章点赞
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function like(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
@@ -47,8 +47,8 @@ export async function like(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 取消文章点赞
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function unlike(req: Req<{ id: string }>, res: Res) {
     let json: ResData<string | null>
@@ -83,8 +83,8 @@ export async function unlike(req: Req<{ id: string }>, res: Res) {
 
 /**
  * 重置文章点赞数量
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function resetLike(req: Req, res: Res) {
     let json: ResData<string | null>

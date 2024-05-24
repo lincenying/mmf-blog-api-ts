@@ -59,6 +59,12 @@ function getBase64(img_id: string, cdn: string): Promise<string> {
     return Promise.resolve(fs.readFileSync(`./uploads/${img_id}`).toString('base64'))
 }
 
+/**
+ * 识图功能的主要函数，用于处理图片识别请求。
+ *
+ * @param {Req<{ id: string; cdn: string }>} req 请求对象，包含图片ID和CDN信息。
+ * @param {Res} res 响应对象，用于返回识别结果。
+ */
 export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
     const reqQuery = req.query
 
@@ -100,7 +106,9 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
                         if (cdn === 'qiniu') {
                             img = `${cdnDomain}app/${img_id}`
                         }
-                        else { img = `${domain}uploads/${img_id}` }
+                        else {
+                            img = `${domain}uploads/${img_id}`
+                        }
 
                         if (img && name) {
                             await ShiHuaM.create({
@@ -160,7 +168,9 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
             if (data.success) {
                 res.json({ code: 200, from: 'api', userid, ...data.data })
             }
-            else { res.json({ code: -200, userid, message: data.message || '读取数据失败' }) }
+            else {
+                res.json({ code: -200, userid, message: data.message || '读取数据失败' })
+            }
         }
     }
     catch (err: unknown) {
@@ -170,8 +180,8 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
 
 /**
  * 获取识花历史列表
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function getHistory(req: Req<{ page?: number; limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<ShiHua[]>>>
@@ -220,8 +230,8 @@ export async function getHistory(req: Req<{ page?: number; limit?: number }>, re
 /**
  * 删除识花历史列表
  * @method delHistory
- * @param req Request
- * @param res Response
+ * @param req - 请求对象，包含查询参数和请求头
+ * @param res - 响应对象，用于返回操作结果
  */
 export async function delHistory(req: Req<{ img_id: string }>, res: Res) {
     let json: ResData<string | null>

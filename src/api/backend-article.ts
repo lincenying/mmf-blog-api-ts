@@ -241,7 +241,7 @@ export async function deletes(req: Req<{ id: string }>, res: Res) {
  * 恢复文章功能的异步函数。
  * 该函数接收一个请求和一个响应对象，通过文章ID将文章的状态标记为非删除状态，并更新对应分类的计数。
  *
- * @param req - 请求对象，包含文章的ID。
+ * @param req - 请求对象，包含查询参数和请求头，包含文章的ID。
  * @param res - 响应对象，用于返回操作结果。
  */
 export async function recover(req: Req<{ id: string }>, res: Res) {
