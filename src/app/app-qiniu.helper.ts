@@ -1,15 +1,14 @@
 // const qiniu = require('qiniu')
 // const config = require('../config')
 
-import * as helper from './app-qiniu.helper'
-import type { Req, Res } from '@/types'
+import type { ResData } from '@/types'
 
 // const accessKey = config.qiniu.accessKey
 // const secretKey = config.qiniu.secretKey
 // const bucket = config.qiniu.bucket
 
-export function token(req: Req, res: Res) {
-    const json = helper.token()
+export function token() {
+    const json: ResData<string | null> = { code: -200, data: '', message: '' }
 
     // const options = {
     //     scope: bucket,
@@ -23,5 +22,5 @@ export function token(req: Req, res: Res) {
     // } catch (error) {
     //     res.json({ code: -200, data: '', uptoken: '', message: error.message })
     // }
-    res.json(json)
+    return json
 }
