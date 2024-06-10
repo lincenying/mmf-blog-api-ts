@@ -27,4 +27,8 @@ const CategorySchema = new Schema<Category>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+CategorySchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 export default mongoose.model<Category>('Category', CategorySchema)

@@ -70,7 +70,7 @@ export async function login(reqBody: { username: string; password: string }) {
         if (result) {
             username = encodeURI(username)
             const {
-                _id: id,
+                id,
                 email: useremail,
             } = result
 

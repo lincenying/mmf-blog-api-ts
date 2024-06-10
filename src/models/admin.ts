@@ -27,4 +27,8 @@ const AdminSchema = new Schema<User>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+AdminSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 export default mongoose.model<User>('Admin', AdminSchema)

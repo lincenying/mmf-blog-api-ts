@@ -20,7 +20,7 @@ export async function login(req: Req<object, { username: string; password: strin
 
     const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
     res.cookie('user', json.data?.user, { maxAge: remember_me })
-    res.cookie('userid', json.data?.id, { maxAge: remember_me })
+    res.cookie('userid', json.data?.userid, { maxAge: remember_me })
     res.cookie('username', json.data?.username, { maxAge: remember_me })
     res.cookie('useremail', json.data?.useremail, { maxAge: remember_me })
 

@@ -35,6 +35,10 @@ DouYinSchema.virtual('user', { // 键名
     autopopulate: { path: 'user', select: '_id user_id user_name user_avatar' },
 })
 
+DouYinSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 DouYinSchema.plugin(mongooseAutopopulate)
 
 export default mongoose.model<DouYin>('DouYin', DouYinSchema)

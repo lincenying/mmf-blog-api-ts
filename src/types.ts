@@ -9,6 +9,7 @@ export type Res = Response
  * 文章详情
  */
 export interface Article {
+    id?: string
     /** * 文章标题 */
     title: string
     /** * 文章内容: markdown */
@@ -47,6 +48,7 @@ export interface Article {
  */
 export interface Category {
     _id?: string
+    id?: string
     /** * 分类名称 */
     cate_name: string
     /** * 分类排序 */
@@ -68,6 +70,7 @@ export interface Category {
  */
 export interface Comment {
     _id?: string
+    id?: string
     /** * 评论所属文章ID */
     article_id: string
     /** * 发布评论的用户 */
@@ -91,6 +94,7 @@ export interface Comment {
  */
 export interface User extends Document {
     _id?: string
+    id?: string
     /** * 用户名 */
     username: string
     /** * 邮箱 */
@@ -115,6 +119,7 @@ export interface User extends Document {
  */
 export interface DouYinUser {
     _id?: string
+    id?: string
     user_id: string
     user_name: string
     user_avatar: string
@@ -129,7 +134,9 @@ export interface DouYinUser {
  * 抖音视频详情
  */
 export interface DouYin {
+    id?: string
     user_id: Objable
+    user: User
     aweme_id: string
     desc: string
     vid: string
@@ -144,6 +151,7 @@ export interface DouYin {
  * 识花详情
  */
 export interface ShiHua {
+    id?: string
     user_id: string
     img_id: string
     name: string

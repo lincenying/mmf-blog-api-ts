@@ -27,6 +27,10 @@ const CommentSchema = new Schema<Comment>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+CommentSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 // 字段别名
 // CommentSchema.alias('userid', 'user')
 

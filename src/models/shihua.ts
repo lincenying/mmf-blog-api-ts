@@ -21,4 +21,8 @@ const ShihuaSchema = new Schema<ShiHua>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+ShihuaSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 export default mongoose.model<ShiHua>('Shihua', ShihuaSchema)

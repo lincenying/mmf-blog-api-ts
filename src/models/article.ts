@@ -41,4 +41,8 @@ const ArticleSchema = new Schema<Article>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+ArticleSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 export default mongoose.model<Article>('Article', ArticleSchema)

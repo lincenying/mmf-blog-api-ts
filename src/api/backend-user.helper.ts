@@ -91,7 +91,7 @@ export async function login(reqBody: { password: string; username: string }) {
             const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
             if (result) {
                 const _username = encodeURI(username)
-                const id = result._id
+                const id = result.id || ''
                 const token = jwt.sign({ id, username: _username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
 
                 json = {

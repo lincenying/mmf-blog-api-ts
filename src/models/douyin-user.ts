@@ -28,4 +28,8 @@ const DouYinUserSchema = new Schema<DouYinUser>({
     toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 })
 
+DouYinUserSchema.virtual('id').get(function () {
+    return this._id.toString()
+})
+
 export default mongoose.model<DouYinUser>('DouYinUser', DouYinUserSchema)
