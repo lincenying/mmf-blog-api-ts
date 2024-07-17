@@ -1,0 +1,34 @@
+version: "3.2"
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      # https://stackoverflow.com/a/32785014/232619
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    ports:
+      - 4008:4000
+    networks:
+      - webnet
+    depends_on:
+      - mongo
+    environment:
+      - DATABASE_URL=mongo:27017
+
+  mongo:
+    image: mongo:5
+    restart: always
+    networks:
+      - webnet
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+
+networks:
+  webnet: bridge
