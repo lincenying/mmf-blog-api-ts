@@ -1,31 +1,34 @@
-# Use a smaller base image
+# 使用较小的基础镜像
 ARG NODE_VERSION=node:18-alpine
 
-# Production image
+# 生产环境镜像
 FROM $NODE_VERSION AS production
 
-# Install pnpm
+# 安装 pnpm
 RUN npm config set registry https://registry.npmmirror.com
-
 RUN npm install -g pnpm
 
-# Set the working directory
+# 设置工作目录
 WORKDIR /app
 
-# Copy the package files
+# 复制项目文件
 COPY . .
 
-# Install dependencies using pnpm
+# 使用pnpm安装依赖
 RUN pnpm install --frozen-lockfile
 
-# Define environment variables
-ENV NODE_ENV=production \
-    HOST_API_URL=mongodb://host.docker.internal:27017
+# 编译项目
+RUN pnpm build
 
+# 设置环境变量
+## 生产环境
+ENV NODE_ENV=production
+## 如果没有将mongodb容器化, name数据库地址为宿主机数据库地址
+ENV MONGO_URI=mongodb://host.docker.internal:27017
 
 EXPOSE 4000
 
-# Start the app
+# 启动项目
 CMD ["node", "./dist/app.js"]
 
 # 构建镜像

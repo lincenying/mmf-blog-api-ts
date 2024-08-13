@@ -1,34 +1,32 @@
-version: "3.2"
-
 services:
-  node:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      # https://stackoverflow.com/a/32785014/232619
-      - .:/app
-      - /app/node_modules
-    env_file:
-      - .env
-    ports:
-      - 4008:4000
-    networks:
-      - webnet
-    depends_on:
-      - mongo
-    environment:
-      - DATABASE_URL=mongo:27017
+    node:
+        container_name: api-server
+        image: api-server:${TAG}
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        environment:
+            DATABASE_URL: mongodb://mongo:27017
+        env_file:
+            - .env
+        ports:
+            - 4008:4000
+        depends_on:
+            - mongo
+        networks:
+            - webnet
 
-  mongo:
-    image: mongo:5
-    restart: always
-    networks:
-      - webnet
-    volumes:
-      - ./data:/data/db
-    ports:
-      - 27017:27017
+    mongo:
+        container_name: mongo-server
+        image: mongo:3.6
+        restart: always
+        volumes:
+            - /Users/lincenying/web/mongodb/data:/data/db
+        ports:
+            - 27017:27017
+        networks:
+            - webnet
 
 networks:
-  webnet: bridge
+    webnet:
+        driver: bridge
