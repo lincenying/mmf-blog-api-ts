@@ -1,7 +1,7 @@
 services:
     node:
         container_name: api-server
-        image: api-server:${TAG}
+        image: lincenying/api-server:${TAG}
         build:
             context: .
             dockerfile: ./Dockerfile

@@ -49,6 +49,7 @@
     "markdown",
     "json",
     "jsonc",
-    "yaml"
+    "yaml",
+    "yml"
   ]
 }
