@@ -19,10 +19,10 @@ exports.SECRET_KEY = ''
 install nodejs, MongoDB, And start the
 ```bash
 # Install dependencies
-pnpm
+pnpm install & npx simple-git-hooks
 
 # or
-npm install
+npm install & npx simple-git-hooks
 
 # Start the API server
 pnpm serve
