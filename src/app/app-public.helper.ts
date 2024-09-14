@@ -1,5 +1,5 @@
+import type { ResData } from '~/types'
 import fs from 'node:fs'
-import type { ResData } from '@/types'
 
 export interface AppVersion {
     version: number

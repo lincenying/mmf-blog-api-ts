@@ -1,7 +1,7 @@
-import mongooseAutopopulate from 'mongoose-autopopulate'
+import type { Comment } from '~/types'
 
+import mongooseAutopopulate from 'mongoose-autopopulate'
 import mongoose from '../mongoose'
-import type { Comment } from '@/types'
 
 const Schema = mongoose.Schema
 

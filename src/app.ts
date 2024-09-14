@@ -1,21 +1,21 @@
-import path from 'node:path'
 import http from 'node:http'
+import path from 'node:path'
 import process from 'node:process'
 
-import express from 'express'
-import compression from 'compression'
-import favicon from 'serve-favicon'
-import logger from 'morgan'
-import cookieParser from 'cookie-parser'
-import requestIp from 'request-ip'
 import { UTC2Date } from '@lincy/utils'
+import compression from 'compression'
+import cookieParser from 'cookie-parser'
+import express from 'express'
+import logger from 'morgan'
+import requestIp from 'request-ip'
+import favicon from 'serve-favicon'
 
 // 引入 api  路由
 import mockjs from './mockjs/index'
-import routes from './routes/index'
-import frontendRoutes from './routes/frontend'
-import backendRoutes from './routes/backend'
 import appRoutes from './routes/app'
+import backendRoutes from './routes/backend'
+import frontendRoutes from './routes/frontend'
+import routes from './routes/index'
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {

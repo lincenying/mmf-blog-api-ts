@@ -1,5 +1,6 @@
+import type { ArticleInsert, ArticleModify, Req, Res } from '~/types'
+
 import * as helper from './backend-article.helper'
-import type { ArticleInsert, ArticleModify, Req, Res } from '@/types'
 
 /**
  * 获取文章列表的异步函数。

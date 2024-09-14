@@ -1,4 +1,5 @@
-import type { Req, Res } from '../types'
+import type { Req, Res } from '~/types'
+
 import * as helper from './frontend-like.helper'
 
 /**

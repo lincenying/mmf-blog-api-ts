@@ -1,5 +1,5 @@
+import type { Article } from '~/types'
 import mongoose from '../mongoose'
-import type { Article } from '@/types'
 
 const Schema = mongoose.Schema
 

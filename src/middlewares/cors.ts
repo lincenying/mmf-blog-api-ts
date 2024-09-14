@@ -1,5 +1,5 @@
 import type { NextFunction } from 'express'
-import type { Req, Res } from '@/types'
+import type { Req, Res } from '~/types'
 
 /**
  * 跨域资源共享（CORS）中间件。

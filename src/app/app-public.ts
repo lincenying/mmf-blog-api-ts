@@ -1,5 +1,5 @@
+import type { Req, Res } from '~/types'
 import * as helper from './app-public.helper'
-import type { Req, Res } from '@/types'
 
 export interface AppVersion {
     version: number

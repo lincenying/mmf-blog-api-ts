@@ -1,6 +1,6 @@
+import type { Req } from '~/types'
 import express from 'express'
 import * as backendUser from '../api/backend-user.helper'
-import type { Req } from '@/types'
 
 const router = express.Router()
 

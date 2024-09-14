@@ -1,15 +1,15 @@
-import { Buffer } from 'node:buffer'
-
 import type { AxiosResponse } from 'axios'
-import axios from 'axios'
 
-import crc32 from '../utils/crc32'
-import { douyinCache as lruCache } from '../utils/lru-cache'
+import type { DouYinVideo } from './app-douyin.types'
+import type { DouYin, DouYinInsert, DouYinUser, DouYinUserInsert, Lists, Req, Res, ResData } from '~/types'
+
+import { Buffer } from 'node:buffer'
+import axios from 'axios'
 import DouYinM from '../models/douyin'
 import DouYinUserM from '../models/douyin-user'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { DouYinVideo } from './app-douyin.types'
-import type { DouYin, DouYinInsert, DouYinUser, DouYinUserInsert, Lists, Req, Res, ResData } from '@/types'
+import crc32 from '../utils/crc32'
+import { douyinCache as lruCache } from '../utils/lru-cache'
 
 export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     let json: ResData<Nullable<DouYinUser>>

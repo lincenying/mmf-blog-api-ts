@@ -1,5 +1,5 @@
+import type { DouYinUser } from '~/types'
 import mongoose from '../mongoose'
-import type { DouYinUser } from '@/types'
 
 const Schema = mongoose.Schema
 

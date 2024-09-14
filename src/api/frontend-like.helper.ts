@@ -1,5 +1,6 @@
+import type { ResData } from '~/types'
+
 import ArticleM from '../models/article'
-import type { ResData } from '../types'
 import { getErrorMessage } from '../utils'
 
 /**

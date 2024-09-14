@@ -1,6 +1,6 @@
 import type { NextFunction } from 'express'
+import type { Req, Res } from '~/types'
 import { checkJWT } from '../utils/check-jwt'
-import type { Req, Res } from '@/types'
 
 /**
  * 中间件函数，用于校验用户是否登录。

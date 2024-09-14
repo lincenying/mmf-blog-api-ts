@@ -1,5 +1,6 @@
+import type { Req, Res } from '~/types'
+
 import * as helper from './frontend-user.helper'
-import type { Req, Res } from '@/types'
 
 /**
  * 用户列表

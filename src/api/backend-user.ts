@@ -1,5 +1,5 @@
+import type { Req, Res } from '~/types'
 import * as helper from './backend-user.helper'
-import type { Req, Res } from '@/types'
 
 /**
  * 获取管理员列表

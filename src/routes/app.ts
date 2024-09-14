@@ -1,11 +1,11 @@
 import express from 'express'
 
-import * as appPublic from '../app/app-public'
-import * as appShihua from '../app/app-shihua'
-import * as appWeiBo from '../app/app-weibo'
-import * as appTujidao from '../app/app-tujidao'
-import * as appQiniu from '../app/app-qiniu'
 import * as appDouYin from '../app/app-douyin'
+import * as appPublic from '../app/app-public'
+import * as appQiniu from '../app/app-qiniu'
+import * as appShihua from '../app/app-shihua'
+import * as appTujidao from '../app/app-tujidao'
+import * as appWeiBo from '../app/app-weibo'
 
 import cors from '../middlewares/cors'
 import isUser from '../middlewares/is-user'

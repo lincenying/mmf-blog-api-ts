@@ -1,8 +1,8 @@
 // const qiniu = require('qiniu')
 // const config = require('../config')
 
+import type { Req, Res } from '~/types'
 import * as helper from './app-qiniu.helper'
-import type { Req, Res } from '@/types'
 
 // const accessKey = config.qiniu.accessKey
 // const secretKey = config.qiniu.secretKey

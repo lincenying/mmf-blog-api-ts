@@ -1,5 +1,5 @@
+import type { Req, ReqListQuery, Res } from '~/types'
 import * as helper from './frontend-comment.helper'
-import type { Req, ReqListQuery, Res } from '@/types'
 
 /**
  * 发布评论

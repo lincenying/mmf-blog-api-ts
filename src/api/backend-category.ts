@@ -1,5 +1,5 @@
+import type { CategoryInsert, CategoryModify, Req, Res } from '~/types'
 import * as helper from './backend-category.helper'
-import type { CategoryInsert, CategoryModify, Req, Res } from '@/types'
 
 /**
  * 管理时, 获取分类列表

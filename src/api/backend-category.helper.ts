@@ -1,6 +1,7 @@
+import type { Category, CategoryInsert, CategoryModify, ResData } from '~/types'
+
 import CategoryM from '../models/category'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Category, CategoryInsert, CategoryModify, ResData } from '@/types'
 
 /**
  * 管理时, 获取分类列表

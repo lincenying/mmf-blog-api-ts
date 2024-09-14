@@ -1,5 +1,5 @@
+import type { ShiHua } from '~/types'
 import mongoose from '../mongoose'
-import type { ShiHua } from '@/types'
 
 const Schema = mongoose.Schema
 

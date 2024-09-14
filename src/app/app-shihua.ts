@@ -1,13 +1,13 @@
+import type { Lists, Req, Res, ResData, ShiHua } from '~/types'
 import fs from 'node:fs'
-import multer from 'multer'
-import base64Img from 'base64-img'
 import pkg from 'baidu-aip-sdk'
+import base64Img from 'base64-img'
 
+import multer from 'multer'
 import { cdnDomain, domain, shihua as shihuaConfig } from '../config'
-import { checkJWT } from '../utils/check-jwt'
 import ShiHuaM from '../models/shihua'
 import { getErrorMessage, getNowTime } from '../utils'
-import type { Lists, Req, Res, ResData, ShiHua } from '@/types'
+import { checkJWT } from '../utils/check-jwt'
 
 const { imageClassify: AipImageClassifyClient } = pkg
 

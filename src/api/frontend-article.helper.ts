@@ -1,6 +1,7 @@
+import type { Article, Lists, ReqListQuery, ResData, TrendingData } from '~/types'
+
 import ArticleM from '../models/article'
 import { getErrorMessage } from '../utils'
-import type { Article, Lists, ReqListQuery, ResData, TrendingData } from '@/types'
 
 function replaceHtmlTag(html: string) {
     return html

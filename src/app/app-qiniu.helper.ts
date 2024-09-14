@@ -1,7 +1,7 @@
 // const qiniu = require('qiniu')
 // const config = require('../config')
 
-import type { ResData } from '@/types'
+import type { ResData } from '~/types'
 
 // const accessKey = config.qiniu.accessKey
 // const secretKey = config.qiniu.secretKey
