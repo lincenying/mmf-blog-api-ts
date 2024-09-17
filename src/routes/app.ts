@@ -42,7 +42,7 @@ router.post('/douyin/insert', cors, appDouYin.insert)
 router.get('/douyin/list', cors, appDouYin.getList)
 router.get('/douyin/item', cors, appDouYin.getItem)
 
-router.get('*', (req, res) => {
+router.get('*', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

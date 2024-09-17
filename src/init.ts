@@ -4,7 +4,7 @@ function fsExistsSync(path: string) {
     try {
         fs.accessSync(path, fs.constants.F_OK)
     }
-    catch (e) {
+    catch (_e) {
         return false
     }
     return true

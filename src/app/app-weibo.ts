@@ -43,7 +43,7 @@ const baseOptions = {
 }
 
 // 9宫格列表
-export async function list(req: Req, res: Res) {
+export async function list(_req: Req, res: Res) {
     // 1076036854123113 女神instagram https://m.weibo.cn/u/6854123113
     // 1076035647574056 宅男集中处 https://m.weibo.cn/u/5647574056
     // 1076035616641142 翘萌妹 https://m.weibo.cn/u/5616641142

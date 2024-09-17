@@ -4,10 +4,10 @@ import * as helper from './backend-category.helper'
 /**
  * 管理时, 获取分类列表
  * @method
- * @param req - 请求对象，包含查询参数和请求头
+ * @param _req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function getList(req: Req, res: Res) {
+export async function getList(_req: Req, res: Res) {
     const json = await helper.getList()
     res.json(json)
 }

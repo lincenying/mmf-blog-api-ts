@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import type { Document } from 'mongoose'
 
 export type Req<ReqQuery = any, ReqBody = any, ReqParams = any> = Request<ReqParams, any, ReqBody, ReqQuery, any>
 
@@ -92,7 +91,7 @@ export interface Comment {
 /**
  * 用户详情
  */
-export interface User extends Document {
+export interface User {
     _id?: string
     id?: string
     /** * 用户名 */

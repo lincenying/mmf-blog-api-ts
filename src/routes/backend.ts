@@ -68,7 +68,7 @@ router.get('/user/delete', isAdmin, frontendUser.deletes)
 // 恢复用户
 router.get('/user/recover', isAdmin, frontendUser.recover)
 
-router.get('*', (req, res) => {
+router.get('*', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

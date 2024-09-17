@@ -7,7 +7,7 @@ export interface AppVersion {
     url: string
 }
 
-export function checkUpdate(req: Req, res: Res) {
+export function checkUpdate(_req: Req, res: Res) {
     const json = helper.checkUpdate()
     res.json(json)
 }

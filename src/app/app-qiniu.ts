@@ -8,7 +8,7 @@ import * as helper from './app-qiniu.helper'
 // const secretKey = config.qiniu.secretKey
 // const bucket = config.qiniu.bucket
 
-export function token(req: Req, res: Res) {
+export function token(_req: Req, res: Res) {
     const json = helper.token()
 
     // const options = {

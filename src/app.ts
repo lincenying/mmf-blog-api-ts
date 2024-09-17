@@ -108,7 +108,7 @@ app.use('/api/backend', backendRoutes)
 app.use('/backend', routes)
 app.use('/mockjs', mockjs)
 
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

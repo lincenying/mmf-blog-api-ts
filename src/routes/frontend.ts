@@ -60,7 +60,7 @@ router.get('/unlike', isUser, frontendLike.unlike)
 // 重置喜欢
 router.get('/reset/like', isUser, frontendLike.resetLike)
 
-router.get('*', (req, res) => {
+router.get('*', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

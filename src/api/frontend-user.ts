@@ -49,10 +49,10 @@ export async function wxLogin(req: Req<object, { nickName: string; wxSignature: 
 
 /**
  * 用户退出
- * @param req - 请求对象，包含查询参数和请求头
+ * @param _req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export function logout(req: Req, res: Res) {
+export function logout(_req: Req, res: Res) {
     const json = helper.logout()
 
     res.cookie('user', '', { maxAge: -1 })

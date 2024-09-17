@@ -11,7 +11,7 @@ export function fsExistsSync(path: string) {
         // 尝试访问路径，检查其是否存在
         fs.accessSync(path, fs.constants.F_OK)
     }
-    catch (e) {
+    catch (_e) {
         // 如果访问时抛出异常，则路径不存在
         return false
     }

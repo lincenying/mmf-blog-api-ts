@@ -46,7 +46,7 @@ export async function lists(req: Req<{ page: number }>, res: Res) {
         const list: TujidaoList[] = []
         $('.hezi')
             .find('li')
-            .each((index, item) => {
+            .each((_index, item) => {
                 const img = $(item).find('img').eq(0).attr('src') || ''
                 const imgURL = new URL(img)
                 const data: TujidaoList = {

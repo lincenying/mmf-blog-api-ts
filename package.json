@@ -50,11 +50,11 @@
     "twig": "^1.17.1"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^5.2.2",
+    "@lincy/eslint-config": "^5.2.4",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/markdown-it": "^14.1.2",
     "@types/md5": "^2.3.5",
     "@types/mockjs": "^1.0.10",

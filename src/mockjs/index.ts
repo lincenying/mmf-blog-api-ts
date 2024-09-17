@@ -41,7 +41,7 @@ router.get('/list/empty', cors, (req, res) => {
     res.json(data)
 })
 
-router.get('/detail', cors, (req, res) => {
+router.get('/detail', cors, (_req, res) => {
     const data = Mock.mock({
         code: 200,
         data: {
@@ -57,7 +57,7 @@ router.get('/detail', cors, (req, res) => {
     res.json(data)
 })
 
-router.get('/category', cors, (req, res) => {
+router.get('/category', cors, (_req, res) => {
     const data = Mock.mock({
         'code': 200,
         'data|10': [
