@@ -60,11 +60,11 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       mongoose:
-        specifier: ^8.6.2
-        version: 8.6.2
+        specifier: ^8.6.3
+        version: 8.6.3
       mongoose-autopopulate:
         specifier: ^1.1.0
-        version: 1.1.0(mongoose@8.6.2)
+        version: 1.1.0(mongoose@8.6.3)
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -136,8 +136,8 @@ importers:
         specifier: ^15.2.10
         version: 15.2.10
       nodemon:
-        specifier: ^3.1.4
-        version: 3.1.4
+        specifier: ^3.1.5
+        version: 3.1.5
       simple-git-hooks:
         specifier: ^2.11.1
         version: 2.11.1
@@ -1108,8 +1108,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.24:
-    resolution: {integrity: sha512-0x0wLCmpdKFCi9ulhvYZebgcPmHTkFVUfU2wzDykadkslKwT4oAmDTHEKLnlrDsMGZe4B+ksn8quZfZjYsBetA==}
+  electron-to-chromium@1.5.25:
+    resolution: {integrity: sha512-kMb204zvK3PsSlgvvwzI3wBIcAw15tRkYk+NQdsjdDtcQWTp2RABbMQ9rUBy8KNEOM+/E6ep+XC3AykiWZld4g==}
 
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
@@ -1235,8 +1235,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-plugin-n@17.10.2:
-    resolution: {integrity: sha512-e+s4eAf5NtJaxPhTNu3qMO0Iz40WANS93w9LQgYcvuljgvDmWi/a3rh+OrNyMHeng6aOWGJO0rCg5lH4zi8yTw==}
+  eslint-plugin-n@17.10.3:
+    resolution: {integrity: sha512-ySZBfKe49nQZWR1yFaA0v/GsH6Fgp8ah6XV0WDz6CN8WO0ek4McMzb7A2xnf4DCYV43frjCygvb9f/wx7UUxRw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -2143,8 +2143,8 @@ packages:
     peerDependencies:
       mongoose: 6.x || 7.x || 8.0.0-rc0 || 8.x
 
-  mongoose@8.6.2:
-    resolution: {integrity: sha512-ErbDVvuUzUfyQpXvJ6sXznmZDICD8r6wIsa0VKjJtB6/LZncqwUn5Um040G1BaNo6L3Jz+xItLSwT0wZmSmUaQ==}
+  mongoose@8.6.3:
+    resolution: {integrity: sha512-++yRmm7hjMbqVA/8WeiygTnEfrFbiy+OBjQi49GFJIvCQuSYE56myyQWo4j5hbpcHjhHQU8NukMNGTwAWFWjIw==}
     engines: {node: '>=16.20.1'}
 
   morgan@1.10.0:
@@ -2205,8 +2205,8 @@ packages:
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
-  nodemon@3.1.4:
-    resolution: {integrity: sha512-wjPBbFhtpJwmIeY2yP7QF+UKzPfltVGtfce1g/bB15/8vCGZj8uxD62b/b9M9/WVgme0NZudpownKN+c0plXlQ==}
+  nodemon@3.1.5:
+    resolution: {integrity: sha512-V5UtfYc7hjFD4SI3EzD5TR8ChAHEZ+Ns7Z5fBk8fAbTVAj+q3G+w7sHJrHxXBkVn6ApLVTljau8wfHwqmGUjMw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3267,7 +3267,7 @@ snapshots:
       eslint-plugin-import-x: 4.2.1(eslint@9.10.0)(typescript@5.6.2)
       eslint-plugin-jsdoc: 50.2.3(eslint@9.10.0)
       eslint-plugin-jsonc: 2.16.0(eslint@9.10.0)
-      eslint-plugin-n: 17.10.2(eslint@9.10.0)
+      eslint-plugin-n: 17.10.3(eslint@9.10.0)
       eslint-plugin-no-only-tests: 3.3.0
       eslint-plugin-perfectionist: 3.6.0(eslint@9.10.0)(typescript@5.6.2)(vue-eslint-parser@9.4.3(eslint@9.10.0))
       eslint-plugin-regexp: 2.6.0(eslint@9.10.0)
@@ -3708,7 +3708,7 @@ snapshots:
   browserslist@4.23.3:
     dependencies:
       caniuse-lite: 1.0.30001660
-      electron-to-chromium: 1.5.24
+      electron-to-chromium: 1.5.25
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
 
@@ -4039,7 +4039,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.24: {}
+  electron-to-chromium@1.5.25: {}
 
   emoji-regex@10.4.0: {}
 
@@ -4202,7 +4202,7 @@ snapshots:
       natural-compare: 1.4.0
       synckit: 0.6.2
 
-  eslint-plugin-n@17.10.2(eslint@9.10.0):
+  eslint-plugin-n@17.10.3(eslint@9.10.0):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.10.0)
       enhanced-resolve: 5.17.1
@@ -5342,11 +5342,11 @@ snapshots:
       bson: 6.8.0
       mongodb-connection-string-url: 3.0.1
 
-  mongoose-autopopulate@1.1.0(mongoose@8.6.2):
+  mongoose-autopopulate@1.1.0(mongoose@8.6.3):
     dependencies:
-      mongoose: 8.6.2
+      mongoose: 8.6.3
 
-  mongoose@8.6.2:
+  mongoose@8.6.3:
     dependencies:
       bson: 6.8.0
       kareem: 2.6.3
@@ -5425,7 +5425,7 @@ snapshots:
 
   node-releases@2.0.18: {}
 
-  nodemon@3.1.4:
+  nodemon@3.1.5:
     dependencies:
       chokidar: 3.6.0
       debug: 4.3.7(supports-color@5.5.0)

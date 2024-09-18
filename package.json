@@ -10,6 +10,7 @@
     "npm": ">= 8.0.0"
   },
   "scripts": {
+    "hooks": "npx simple-git-hooks",
     "tsc": "tsc",
     "init:config": "tsx src/init.ts",
     "build": "npm run init:config && npm run tsc",
@@ -39,7 +40,7 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.6.2",
+    "mongoose": "^8.6.3",
     "mongoose-autopopulate": "^1.1.0",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
@@ -66,7 +67,7 @@
     "concurrently": "^9.0.1",
     "eslint": "^9.10.0",
     "lint-staged": "^15.2.10",
-    "nodemon": "^3.1.4",
+    "nodemon": "^3.1.5",
     "simple-git-hooks": "^2.11.1",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.19.1",

@@ -66,5 +66,6 @@ volumes:
 
 ```bash
 # 生成镜像及启动容器
+docker-compose build
 docker-compose up -d
 ```

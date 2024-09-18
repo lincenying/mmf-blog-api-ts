@@ -29,10 +29,10 @@ function marked(content: string) {
             // 高亮代码块
             if (lang && hljs.getLanguage(lang)) {
                 try {
-                    return hljs.highlight(lang, str).value
+                    return hljs.highlight(str, { language: lang }).value
+                    // return hljs.highlight(lang, str).value
                 }
-                catch (error) {
-                    console.log(error)
+                catch (_error) {
                 } // 捕获并忽略高亮过程中的错误
             }
             return ''
