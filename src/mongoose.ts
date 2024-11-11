@@ -6,4 +6,8 @@ mongoose.set('strictQuery', false)
 mongoose.connect(`${mongoUrl}/mmfblog_v2`, { })
 mongoose.Promise = globalThis.Promise
 
+mongoose.connection.on('error', (err) => {
+    console.error('mongoose连接出错', err)
+})
+
 export default mongoose

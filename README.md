@@ -31,7 +31,29 @@ pnpm serve
 Add admin
 http://localhost:4000/backend
 
+管理员添加成功后，会自动生成admin.Lock文件锁定，如需继续添加，请直接删除该文件
+
 After the success of the administrator to add, will automatically generate the admin. Lock file locking, if you need to continue to add, please just delete the file
+
+## 注意mongoose的版本
+
+| MongoDB Server | Mongoose |
+|----|----|
+|8.x | ^8.7.0 |
+|7.x | ^7.4.0 &vert; ^8.0.0 |
+|6.x | ^6.5.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|5.x | ^5.13.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|4.4.x | ^5.10.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|4.2.x | ^5.7.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|4.0.x | ^5.2.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|3.6.x | ^5.0.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+|3.4.x | ^4.7.3 &vert; ^5.0.0 |
+|3.2.x | ^4.3.0 &vert; ^5.0.0 |
+|3.0.x | ^3.8.22 &vert; ^4.0.0 &vert; ^5.0.0 |
+|2.6.x | ^3.8.8 &vert; ^4.0.0 &vert; ^5.0.0 |
+|2.4.x | ^3.8.0 &vert; ^4.0.0 |
+
+自行根据系统MongoDB的版本, 安装对应mongoose版本
 
 ## docker
 
