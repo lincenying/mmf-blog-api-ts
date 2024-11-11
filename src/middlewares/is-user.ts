@@ -31,7 +31,7 @@ export default async (req: Req, res: Res, next: NextFunction) => {
             res.cookie('userid', '', { maxAge: 0 })
             res.cookie('username', '', { maxAge: 0 })
             res.cookie('useremail', '', { maxAge: 0 })
-            return res.json({
+            res.json({
                 code: -400,
                 message: '登录验证失败',
                 data: '',
@@ -40,7 +40,7 @@ export default async (req: Req, res: Res, next: NextFunction) => {
     }
     else {
         // 未提供用户信息，返回需要登录的响应
-        return res.json({
+        res.json({
             code: -400,
             message: '请先登录',
             data: '',

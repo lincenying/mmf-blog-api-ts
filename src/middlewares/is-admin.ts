@@ -28,7 +28,7 @@ export default async (req: Req, res: Res, next: NextFunction) => {
             res.cookie('b_userid', '', { maxAge: 0 })
             res.cookie('b_username', '', { maxAge: 0 })
 
-            return res.json({
+            res.json({
                 code: -500,
                 message: '登录验证失败',
                 data: '',
@@ -37,7 +37,7 @@ export default async (req: Req, res: Res, next: NextFunction) => {
     }
     else {
         // 未发现用户信息，直接返回错误信息
-        return res.json({
+        res.json({
             code: -500,
             message: '请先登录',
             data: '',
