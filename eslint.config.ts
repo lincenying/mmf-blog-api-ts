@@ -1,4 +1,4 @@
-const lincy = require('@lincy/eslint-config').lincy
+import lincy from '@lincy/eslint-config'
 
 const config = lincy(
     {

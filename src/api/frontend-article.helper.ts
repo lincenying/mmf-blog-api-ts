@@ -19,6 +19,17 @@ interface ArticleSearch {
     }
 }
 
+function removeFields(fields: string, filter: string) {
+    // 将 fields 和 filter 转换为数组
+    const fieldsArray = fields.split(' ')
+    const filterArray = filter.split(',')
+
+    // 过滤掉需要删除的字段
+    const filteredFields = fieldsArray.filter(field => !filterArray.includes(field))
+
+    // 将结果重新转换为字符串并返回
+    return filteredFields.join(' ')
+}
 /**
  * 前台浏览时, 获取文章列表
  */
@@ -29,6 +40,7 @@ export async function getList(reqQuery: ReqListQuery, user_id: string) {
         by,
         id,
         key,
+        filter,
     } = reqQuery
 
     const page = Number(reqQuery.page) || 1
@@ -51,7 +63,10 @@ export async function getList(reqQuery: ReqListQuery, user_id: string) {
         sort = `-${by}`
     }
 
-    const filds = 'title content category category_name visit like likes comment_count creat_date update_date is_delete timestamp'
+    let filds = 'title content category category_name visit like likes comment_count creat_date update_date is_delete timestamp'
+    if (filter) {
+        filds = removeFields(filds, filter)
+    }
 
     try {
         const [list, total] = await Promise.all([
@@ -154,7 +169,7 @@ export async function getTrending(reqQuery: { id: string }) {
     const id = reqQuery.id
 
     try {
-        const filter: { _id?: string; is_delete: number } = { is_delete: 0 }
+        const filter: { _id?: string, is_delete: number } = { is_delete: 0 }
         if (id) {
             filter._id = id
         }
