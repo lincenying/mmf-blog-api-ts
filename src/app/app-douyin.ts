@@ -93,7 +93,7 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
     res.json(json)
 }
 
-export async function getList(req: Req<{ user_id: string; limit?: number; page?: number }>, res: Res) {
+export async function getList(req: Req<{ user_id: string, limit?: number, page?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<DouYin[]>>>
     const reqQuery = req.query
 
@@ -103,7 +103,7 @@ export async function getList(req: Req<{ user_id: string; limit?: number; page?:
     page = Number(page) || 1
     limit = Number(limit) || 10
 
-    const payload: { is_delete: number; user_id?: string } = { is_delete: 0 }
+    const payload: { is_delete: number, user_id?: string } = { is_delete: 0 }
     const skip = (page - 1) * limit
     const sort = '-aweme_id'
 

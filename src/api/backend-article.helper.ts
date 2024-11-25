@@ -49,7 +49,7 @@ function marked(content: string) {
 /**
  * 获取文章列表的异步函数。
  */
-export async function getList(reqQuery: { page: string; limit: string; sort: string }) {
+export async function getList(reqQuery: { page: string, limit: string, sort: string }) {
     let json: ResData<Nullable<Lists<Article[]>>>
 
     // 处理查询参数，设定默认值

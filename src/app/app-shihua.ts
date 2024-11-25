@@ -65,7 +65,7 @@ function getBase64(img_id: string, cdn: string): Promise<string> {
  * @param {Req<{ id: string; cdn: string }>} req 请求对象，包含图片ID和CDN信息。
  * @param {Res} res 响应对象，用于返回识别结果。
  */
-export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
+export async function shihua(req: Req<{ id: string, cdn: string }>, res: Res) {
     const reqQuery = req.query
 
     const {
@@ -183,7 +183,7 @@ export async function shihua(req: Req<{ id: string; cdn: string }>, res: Res) {
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function getHistory(req: Req<{ page?: number; limit?: number }>, res: Res) {
+export async function getHistory(req: Req<{ page?: number, limit?: number }>, res: Res) {
     let json: ResData<Nullable<Lists<ShiHua[]>>>
     const reqQuery = req.query
 

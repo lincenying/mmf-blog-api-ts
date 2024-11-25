@@ -11,7 +11,7 @@ import { fsExistsSync, getErrorMessage, getNowTime } from '../utils'
 /**
  * 获取管理员列表
  */
-export async function getList(reqQuery: { page?: number; limit?: number }) {
+export async function getList(reqQuery: { page?: number, limit?: number }) {
     let json: ResData<Nullable<Lists<User[]>>>
 
     const sort = '-_id'
@@ -71,8 +71,8 @@ export async function getItem(reqQuery: { id: string }) {
 /**
  * 管理员登录
  */
-export async function login(reqBody: { password: string; username: string }) {
-    let json: ResData<{ userid: string; user: string; username: string } | null>
+export async function login(reqBody: { password: string, username: string }) {
+    let json: ResData<{ userid: string, user: string, username: string } | null>
 
     const {
         password,
@@ -161,7 +161,7 @@ export async function insert(email: string, password: string, username: string) 
 /**
  * 管理员编辑
  */
-export async function modify(reqBody: { id: string; email: string; password: string; username: string }) {
+export async function modify(reqBody: { id: string, email: string, password: string, username: string }) {
     let json: ResData<Nullable<User>>
 
     const {

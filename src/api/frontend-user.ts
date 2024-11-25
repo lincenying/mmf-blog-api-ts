@@ -7,7 +7,7 @@ import * as helper from './frontend-user.helper'
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function getList(req: Req<{ page?: number; limit?: number }>, res: Res) {
+export async function getList(req: Req<{ page?: number, limit?: number }>, res: Res) {
     res.json(await helper.getList(req.query))
 }
 
@@ -16,7 +16,7 @@ export async function getList(req: Req<{ page?: number; limit?: number }>, res: 
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function login(req: Req<object, { username: string; password: string }>, res: Res) {
+export async function login(req: Req<object, { username: string, password: string }>, res: Res) {
     const json = await helper.login(req.body)
 
     const remember_me = 30 * 24 * 60 * 60 * 1000 // 30天
@@ -42,7 +42,7 @@ export async function jscodeToSession(req: Req<object, { js_code: string }>, res
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function wxLogin(req: Req<object, { nickName: string; wxSignature: string; avatar: string }>, res: Res) {
+export async function wxLogin(req: Req<object, { nickName: string, wxSignature: string, avatar: string }>, res: Res) {
     const reqBody = req.body
     res.json(await helper.wxLogin(reqBody))
 }
@@ -68,7 +68,7 @@ export function logout(_req: Req, res: Res) {
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function insert(req: Req<object, { email: string; password: string; username: string }>, res: Res) {
+export async function insert(req: Req<object, { email: string, password: string, username: string }>, res: Res) {
     const reqBody = req.body
     res.json(await helper.insert(reqBody))
 }
@@ -90,7 +90,7 @@ export async function getItem(req: Req, res: Res) {
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function modify(req: Req<object, { id: string; email: string; password: string; username: string }>, res: Res) {
+export async function modify(req: Req<object, { id: string, email: string, password: string, username: string }>, res: Res) {
     const reqBody = req.body
     res.json(await helper.modify(reqBody))
 }
@@ -112,7 +112,7 @@ export async function account(req: Req<object, { email: string }>, res: Res) {
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function password(req: Req<object, { old_password: string; password: string }>, res: Res) {
+export async function password(req: Req<object, { old_password: string, password: string }>, res: Res) {
     const reqBody = req.body
     const user_id = (req.cookies.userid || req.headers.userid) as string
 

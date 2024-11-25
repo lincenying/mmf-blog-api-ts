@@ -12,7 +12,7 @@ import { getErrorMessage, getNowTime } from '../utils'
 /**
  * 用户列表
  */
-export async function getList(reqQuery: { page?: number; limit?: number }) {
+export async function getList(reqQuery: { page?: number, limit?: number }) {
     let json: ResData<Nullable<Lists<User[]>>>
 
     const sort = '-_id'
@@ -46,7 +46,7 @@ export async function getList(reqQuery: { page?: number; limit?: number }) {
 /**
  * 用户登录
  */
-export async function login(reqBody: { username: string; password: string }) {
+export async function login(reqBody: { username: string, password: string }) {
     let json: ResData<Nullable<UserCookies>>
 
     let {
@@ -122,7 +122,7 @@ export async function jscodeToSession(reqBody: { js_code: string }) {
 /**
  * 微信登录
  */
-export async function wxLogin(reqBody: { nickName: string; wxSignature: string; avatar: string }) {
+export async function wxLogin(reqBody: { nickName: string, wxSignature: string, avatar: string }) {
     let json: ResData<Nullable<UserCookies>>
 
     const {
@@ -204,7 +204,7 @@ export function logout() {
 /**
  * 用户注册
  */
-export async function insert(reqBody: { email: string; password: string; username: string }) {
+export async function insert(reqBody: { email: string, password: string, username: string }) {
     let json: ResData<string | null>
 
     const {
@@ -275,7 +275,7 @@ export async function getItem(userid: string) {
 /**
  * 用户编辑
  */
-export async function modify(reqBody: { id: string; email: string; password: string; username: string }) {
+export async function modify(reqBody: { id: string, email: string, password: string, username: string }) {
     let json: ResData<Nullable<User>>
 
     const {
@@ -330,7 +330,7 @@ export async function account(reqBody: { email: string }, user_id: string) {
 /**
  * 密码编辑
  */
-export async function password(reqBody: { old_password: string; password: string }, user_id: string) {
+export async function password(reqBody: { old_password: string, password: string }, user_id: string) {
     let json: ResData<string | null>
 
     const {

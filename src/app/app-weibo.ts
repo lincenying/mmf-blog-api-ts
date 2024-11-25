@@ -153,7 +153,7 @@ export async function get(req: Req<{ page: number }>, res: Res) {
  * @param res - 响应对象，用于返回操作结果
  * @returns void
  */
-export async function user(req: Req<{ containerid: string; since_id: string }>, res: Res) {
+export async function user(req: Req<{ containerid: string, since_id: string }>, res: Res) {
     const reqQuery = req.query
 
     const containerid = reqQuery.containerid
@@ -223,7 +223,7 @@ export async function user(req: Req<{ containerid: string; since_id: string }>, 
  * @param res - 响应对象，用于返回操作结果
  * @returns void
  */
-export async function card(req: Req<{ card_id: string; block_id: string; page: number }>, res: Res) {
+export async function card(req: Req<{ card_id: string, block_id: string, page: number }>, res: Res) {
     let json: CardReturn | ResData<string | null>
     const reqQuery = req.query
 
@@ -347,7 +347,7 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function beautyVideo(req: Req<{ key: string; page: number }>, res: Res) {
+export async function beautyVideo(req: Req<{ key: string, page: number }>, res: Res) {
     let json: WeiBoBlogReturn | ResData<string | null>
     const reqQuery = req.query
 

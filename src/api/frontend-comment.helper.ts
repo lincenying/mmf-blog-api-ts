@@ -7,7 +7,7 @@ import { getErrorMessage, getNowTime } from '../utils'
 /**
  * 发布评论
  */
-export async function insert(reqBody: { id: string; content: string }, userid: string) {
+export async function insert(reqBody: { id: string, content: string }, userid: string) {
     let json: ResData<Comment | null>
 
     const {

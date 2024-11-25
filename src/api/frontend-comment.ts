@@ -7,7 +7,7 @@ import * as helper from './frontend-comment.helper'
  * @param req - 请求对象，包含查询参数和请求头
  * @param res - 响应对象，用于返回操作结果
  */
-export async function insert(req: Req<object, { id: string; content: string }>, res: Res) {
+export async function insert(req: Req<object, { id: string, content: string }>, res: Res) {
     const reqBody = req.body
     const userid = (req.cookies.userid || req.headers.userid) as string
 
