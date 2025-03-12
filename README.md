@@ -64,7 +64,7 @@ After the success of the administrator to add, will automatically generate the a
 
 ```bash
 # 构建镜像
-docker build -t images-api-server -f ./Dockerfile .
+docker build -t lincenying/api-server:1.25.0322 -f ./Dockerfile .
 # 运行镜像
 docker run -d \
 -p 4008:4000 \
