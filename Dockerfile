@@ -53,9 +53,9 @@ EXPOSE 4000
 CMD ["node", "./dist/app.js"]
 
 # 构建镜像
-# docker build -t mmf-blog-api-ts -f ./Dockerfile .
+# docker build -t lincenying/api-server:1.25.0322 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 4008:4000 --name container-api mmf-blog-api-ts
+# docker run -d -p 4008:4000 --name container-api lincenying/api-server:1.25.0322
 # 进入镜像
 # docker exec -it container-api /bin/sh
 # 停止容器

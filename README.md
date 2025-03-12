@@ -69,7 +69,7 @@ docker build -t lincenying/api-server:1.25.0322 -f ./Dockerfile .
 docker run -d \
 -p 4008:4000 \
 --name container-api-server \
-images-api-server
+lincenying/api-server:1.25.0322
 # 进入容器
 docker exec -it container-api-server /bin/bash
 # 停止容器
