@@ -102,6 +102,7 @@ app.use(cookieParser())
 // app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/static', serve('./public', true))
+app.use('/uploads', serve('./uploads', true))
 app.use('/api/app', appRoutes)
 app.use('/api/frontend', frontendRoutes)
 app.use('/api/backend', backendRoutes)
