@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "version": "1.0.1",
-  "packageManager": "pnpm@10.6.2",
+  "packageManager": "pnpm@10.6.5",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@lincy/utils": "^0.6.2",
-    "axios": "^1.8.2",
+    "axios": "^1.8.4",
     "baidu-aip-sdk": "^4.16.16",
     "base64-img": "^1.0.4",
     "cheerio": "1.0.0",
@@ -40,7 +40,7 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.12.1",
+    "mongoose": "^8.12.2",
     "mongoose-autopopulate": "^1.1.0",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
@@ -51,25 +51,25 @@
     "twig": "^1.17.1"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^5.5.0",
+    "@lincy/eslint-config": "^5.5.2",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.8",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/markdown-it": "^14.1.2",
     "@types/md5": "^2.3.5",
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.12",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.13.12",
     "@types/request-ip": "^0.0.41",
     "@types/serve-favicon": "^2.5.7",
     "concurrently": "^9.1.2",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "jiti": "^2.4.2",
-    "lint-staged": "^15.4.3",
+    "lint-staged": "^15.5.0",
     "nodemon": "^3.1.9",
-    "simple-git-hooks": "^2.11.1",
+    "simple-git-hooks": "^2.12.1",
     "tsc-alias": "^1.8.11",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
@@ -79,7 +79,10 @@
       "ignoreMissing": [
         "prettier"
       ]
-    }
+    },
+    "onlyBuiltDependencies": [
+      "simple-git-hooks"
+    ]
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
