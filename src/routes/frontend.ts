@@ -14,7 +14,7 @@ const router = express.Router()
 
 const multipartMiddleware = multipart()
 
-router.options('*', cors)
+router.options('/{*frotend}', cors)
 
 // API
 
@@ -60,7 +60,7 @@ router.get('/unlike', isUser, frontendLike.unlike)
 // 重置喜欢
 router.get('/reset/like', isUser, frontendLike.resetLike)
 
-router.get('*', (_req, res) => {
+router.get('/{*frotend}', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

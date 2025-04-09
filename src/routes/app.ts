@@ -12,7 +12,7 @@ import isUser from '../middlewares/is-user'
 
 const router = express.Router()
 
-router.options('*', cors)
+router.options('/{*app}', cors)
 
 // API
 // ================= APP =================
@@ -42,7 +42,7 @@ router.post('/douyin/insert', cors, appDouYin.insert)
 router.get('/douyin/list', cors, appDouYin.getList)
 router.get('/douyin/item', cors, appDouYin.getItem)
 
-router.get('*', (_req, res) => {
+router.get('/{*app}', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

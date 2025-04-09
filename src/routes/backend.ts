@@ -13,7 +13,7 @@ const router = express.Router()
 
 const multipartMiddleware = multipart()
 
-router.options('*', cors)
+router.options('/{*backend}', cors)
 
 // API
 // ================ 后台 ================
@@ -68,7 +68,7 @@ router.get('/user/delete', isAdmin, frontendUser.deletes)
 // 恢复用户
 router.get('/user/recover', isAdmin, frontendUser.recover)
 
-router.get('*', (_req, res) => {
+router.get('/{*backend}', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',

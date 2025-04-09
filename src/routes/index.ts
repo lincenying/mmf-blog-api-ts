@@ -14,7 +14,7 @@ router.post('/', async (req: Req<object, { email: string, password: string, user
     return res.render('index.twig', { title: '添加管理员', message })
 })
 
-router.get('*', (_req, res) => {
+router.get('/{*index}', (_req, res) => {
     res.json({
         code: -200,
         message: '没有找到该页面',
