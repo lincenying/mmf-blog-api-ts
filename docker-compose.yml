@@ -1,25 +1,24 @@
 services:
-  node:
-    container_name: api-server
+  api_node:
+    container_name: api-node-server
     image: lincenying/api-server:${TAG}
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      DATABASE_URL: mongodb://mongo:27017
+      DATABASE_URL: mongodb://api_mongo:27017
     env_file:
       - .env
     ports:
       - 4008:4000
     depends_on:
-      - mongo
+      - api_mongo
     networks:
       - webnet
 
-  mongo:
-    container_name: mongo-server
-    image: mongo:3.6
-    restart: always
+  api_mongo:
+    container_name: api-mongo-server
+    image: mongo:4.0
     volumes:
       - /Users/lincenying/web/mongodb/data:/data/db
     ports:

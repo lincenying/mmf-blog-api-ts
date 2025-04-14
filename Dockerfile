@@ -1,5 +1,5 @@
 # 使用较小的基础镜像
-ARG NODE_VERSION=node:18-alpine
+ARG NODE_VERSION=node:22-alpine
 
 # 生产环境镜像
 FROM $NODE_VERSION AS dependency-base
@@ -53,9 +53,9 @@ EXPOSE 4000
 CMD ["node", "./dist/app.js"]
 
 # 构建镜像
-# docker build -t lincenying/api-server:1.25.0322 -f ./Dockerfile .
+# docker build -t lincenying/api-server:1.25.0414 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 4008:4000 --name container-api lincenying/api-server:1.25.0322
+# docker run -d -p 4008:4000 --name container-api lincenying/api-server:1.25.0414
 # 进入镜像
 # docker exec -it container-api /bin/sh
 # 停止容器
