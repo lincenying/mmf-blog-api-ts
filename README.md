@@ -63,6 +63,9 @@ After the success of the administrator to add, will automatically generate the a
 如果要将`mongodb`也容器化, 可以直接使用`docker-compose`
 
 ```bash
+# 第一次执行时, 如果node镜像拉不下来, 可以执行以下命令:
+docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
+docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
 docker build -t lincenying/api-server:1.25.0414 -f ./Dockerfile .
 # 运行镜像

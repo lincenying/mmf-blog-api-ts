@@ -10,7 +10,7 @@
     "npm": ">= 8.0.0"
   },
   "scripts": {
-    "hooks": "npx simple-git-hooks",
+    "prepare": "npx simple-git-hooks",
     "tsc": "tsc",
     "init:config": "tsx src/init.ts",
     "build": "npm run init:config && npm run tsc",
