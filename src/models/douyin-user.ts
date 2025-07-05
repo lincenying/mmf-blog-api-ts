@@ -14,19 +14,22 @@ const Schema = mongoose.Schema
  * @property {number} is_delete - 用户是否已删除标志，0表示未删除，1表示已删除。
  * @property {number} timestamp - 用户数据的时间戳。
  */
-const DouYinUserSchema = new Schema<DouYinUser>({
-    user_id: String,
-    user_name: String,
-    user_avatar: String,
-    sec_uid: String,
-    share_url: String,
-    creat_date: String,
-    is_delete: { type: Number, default: 0 },
-    timestamp: Number,
-}, {
-    toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
-    toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
-})
+const DouYinUserSchema = new Schema<DouYinUser>(
+    {
+        user_id: String,
+        user_name: String,
+        user_avatar: String,
+        sec_uid: String,
+        share_url: String,
+        creat_date: String,
+        is_delete: { type: Number, default: 0 },
+        timestamp: Number,
+    },
+    {
+        toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+        toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
+    },
+)
 
 DouYinUserSchema.virtual('id').get(function () {
     return this._id.toString()

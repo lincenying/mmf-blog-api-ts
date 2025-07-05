@@ -20,7 +20,12 @@ export async function getList(reqQuery: { page?: number, limit?: number }) {
     const skip = (page - 1) * limit
     try {
         const [list, total] = await Promise.all([
-            AdminM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            AdminM.find()
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             AdminM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
@@ -47,9 +52,7 @@ export async function getList(reqQuery: { page?: number, limit?: number }) {
 export async function getItem(reqQuery: { id: string }) {
     let json: ResData<Nullable<User>>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -57,7 +60,9 @@ export async function getItem(reqQuery: { id: string }) {
     else {
         try {
             const filter = { _id }
-            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
+            const result = await AdminM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject())
             json = { code: 200, data: result, message: 'success' }
         }
         catch (err: unknown) {
@@ -74,10 +79,7 @@ export async function getItem(reqQuery: { id: string }) {
 export async function login(reqBody: { password: string, username: string }) {
     let json: ResData<{ userid: string, user: string, username: string } | null>
 
-    const {
-        password,
-        username,
-    } = reqBody
+    const { password, username } = reqBody
 
     if (username === '' || password === '') {
         json = { code: -200, data: null, message: '请输入用户名和密码' }
@@ -89,7 +91,9 @@ export async function login(reqBody: { password: string, username: string }) {
                 password: md5(md5Pre + password),
                 is_delete: 0,
             }
-            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
+            const result = await AdminM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject())
             if (result) {
                 const _username = encodeURI(username)
                 const id = result.id || ''
@@ -132,7 +136,9 @@ export async function insert(email: string, password: string, username: string) 
     else {
         try {
             const filter = { username }
-            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
+            const result = await AdminM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject())
             if (result) {
                 message = `${username}: 已经存在`
             }
@@ -164,12 +170,7 @@ export async function insert(email: string, password: string, username: string) 
 export async function modify(reqBody: { id: string, email: string, password: string, username: string }) {
     let json: ResData<Nullable<User>>
 
-    const {
-        id: _id,
-        email,
-        password,
-        username,
-    } = reqBody
+    const { id: _id, email, password, username } = reqBody
 
     const body: UserModify = {
         email,
@@ -182,7 +183,9 @@ export async function modify(reqBody: { id: string, email: string, password: str
 
     try {
         const filter = { _id }
-        const result = await AdminM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        const result = await AdminM.findOneAndUpdate(filter, body, { new: true })
+            .exec()
+            .then(data => data?.toObject())
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
@@ -198,9 +201,7 @@ export async function modify(reqBody: { id: string, email: string, password: str
 export async function deletes(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
@@ -221,9 +222,7 @@ export async function deletes(reqQuery: { id: string }) {
 export async function recover(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }

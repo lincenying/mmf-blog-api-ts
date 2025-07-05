@@ -36,12 +36,7 @@ function removeFields(fields: string, filter: string) {
 export async function getList(reqQuery: ReqListQuery, user_id: string) {
     let json: ResData<Nullable<Lists<Article[]>>>
 
-    const {
-        by,
-        id,
-        key,
-        filter,
-    } = reqQuery
+    const { by, id, key, filter } = reqQuery
 
     const page = Number(reqQuery.page) || 1
     const limit = Number(reqQuery.limit) || 10
@@ -70,7 +65,12 @@ export async function getList(reqQuery: ReqListQuery, user_id: string) {
 
     try {
         const [list, total] = await Promise.all([
-            ArticleM.find(payload, filds).sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            ArticleM.find(payload, filds)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             ArticleM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
@@ -85,20 +85,24 @@ export async function getList(reqQuery: ReqListQuery, user_id: string) {
             message: 'success',
         }
         if (user_id) {
-            json.data!.list = list.map((item): Article => ({
-                ...item,
-                like_status: item.likes && item.likes.includes(user_id),
-                content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
-                likes: [],
-            }))
+            json.data!.list = list.map(
+                (item): Article => ({
+                    ...item,
+                    like_status: item.likes && item.likes.includes(user_id),
+                    content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
+                    likes: [],
+                }),
+            )
         }
         else {
-            json.data!.list = list.map((item): Article => ({
-                ...item,
-                like_status: false,
-                content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
-                likes: [],
-            }))
+            json.data!.list = list.map(
+                (item): Article => ({
+                    ...item,
+                    like_status: false,
+                    content: `${replaceHtmlTag(item.content).substring(0, 500)}...`,
+                    likes: [],
+                }),
+            )
         }
     }
     catch (err: unknown) {
@@ -114,9 +118,7 @@ export async function getList(reqQuery: ReqListQuery, user_id: string) {
 export async function getItem(reqQuery: { id: string }, user_id: Nullable<string>) {
     let json: ResData<Nullable<Article>>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -126,7 +128,9 @@ export async function getItem(reqQuery: { id: string }, user_id: Nullable<string
         const filter = { _id, is_delete: 0 }
         const body = { $inc: { visit: 1 } }
         const [result, _] = await Promise.all([
-            ArticleM.findOne(filter).exec().then(data => data?.toObject()),
+            ArticleM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject()),
             ArticleM.updateOne(filter, body).exec(),
         ])
         if (!result) {
@@ -173,7 +177,9 @@ export async function getTrending(reqQuery: { id: string }) {
         if (id) {
             filter._id = id
         }
-        const category = await ArticleM.findOne(filter, 'category').exec().then(data => data?.category)
+        const category = await ArticleM.findOne(filter, 'category')
+            .exec()
+            .then(data => data?.category)
 
         const limit = 5
         const data: TrendingData = { is_delete: 0 }
@@ -181,7 +187,11 @@ export async function getTrending(reqQuery: { id: string }) {
             data.category = category
         }
         const filds = 'title visit like comment_count'
-        const result = await ArticleM.find(data, filds).sort('-visit').limit(limit).exec().then(data => data.map(item => item.toObject()))
+        const result = await ArticleM.find(data, filds)
+            .sort('-visit')
+            .limit(limit)
+            .exec()
+            .then(data => data.map(item => item.toObject()))
         json = {
             code: 200,
             data: {

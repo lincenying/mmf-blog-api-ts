@@ -10,10 +10,7 @@ import { getErrorMessage, getNowTime } from '../utils'
 export async function insert(reqBody: { id: string, content: string }, userid: string) {
     let json: ResData<Comment | null>
 
-    const {
-        id: _id,
-        content,
-    } = reqBody
+    const { id: _id, content } = reqBody
 
     const creat_date = getNowTime()
     const timestamp = getNowTime('X')
@@ -60,10 +57,7 @@ export async function insert(reqBody: { id: string, content: string }, userid: s
 export async function getList(reqQuery: ReqListQuery) {
     let json: ResData<Nullable<Lists<Comment[]>>>
 
-    const {
-        all,
-        id: article_id,
-    } = reqQuery
+    const { all, id: article_id } = reqQuery
 
     let { limit, page } = reqQuery
 
@@ -87,7 +81,12 @@ export async function getList(reqQuery: ReqListQuery) {
 
         try {
             const [list, total] = await Promise.all([
-                CommentM.find(data).sort('-_id').skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+                CommentM.find(data)
+                    .sort('-_id')
+                    .skip(skip)
+                    .limit(limit)
+                    .exec()
+                    .then(data => data.map(item => item.toObject())),
                 CommentM.countDocuments(data),
             ])
             const totalPage = Math.ceil(total / limit)
@@ -115,18 +114,13 @@ export async function getList(reqQuery: ReqListQuery) {
 export async function deletes(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
         const commentBody = { is_delete: 0 }
         const ArticleBody = { $inc: { comment_count: -1 } }
-        await Promise.all([
-            CommentM.updateOne(filter, commentBody).exec(),
-            ArticleM.updateOne(filter, ArticleBody).exec(),
-        ])
+        await Promise.all([CommentM.updateOne(filter, commentBody).exec(), ArticleM.updateOne(filter, ArticleBody).exec()])
         json = { code: 200, message: '删除成功', data: 'success' }
     }
     catch (err: unknown) {
@@ -142,18 +136,13 @@ export async function deletes(reqQuery: { id: string }) {
 export async function recover(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
         const commentBody = { is_delete: 0 }
         const ArticleBody = { $inc: { comment_count: 1 } }
-        await Promise.all([
-            CommentM.updateOne(filter, commentBody).exec(),
-            ArticleM.updateOne(filter, ArticleBody).exec(),
-        ])
+        await Promise.all([CommentM.updateOne(filter, commentBody).exec(), ArticleM.updateOne(filter, ArticleBody).exec()])
         json = { code: 200, message: '恢复成功', data: 'success' }
     }
     catch (err: unknown) {

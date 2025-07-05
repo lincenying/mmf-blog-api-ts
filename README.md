@@ -4,6 +4,7 @@
 
 在 src/config 文件夹下 创建 mpapp.js 文件
 里面写入: (小程序登录用的)
+
 ```javascript
 exports.apiId = ''
 exports.secret = ''
@@ -12,6 +13,7 @@ exports.secret = ''
 在 src/config 文件夹下 创建 shihua.js 文件
 里面写入: (百度识花用的)
 接口申请地址: http://ai.baidu.com/tech/imagerecognition
+
 ```javascript
 exports.APP_ID = ''
 exports.API_KEY = ''
@@ -19,6 +21,7 @@ exports.SECRET_KEY = ''
 ```
 
 install nodejs, MongoDB, And start the
+
 ```bash
 # Install dependencies
 pnpm install & npx simple-git-hooks
@@ -39,21 +42,21 @@ After the success of the administrator to add, will automatically generate the a
 
 ## 注意mongoose的版本
 
-| MongoDB Server | Mongoose |
-|----|----|
-|8.x | ^8.7.0 |
-|7.x | ^7.4.0 &vert; ^8.0.0 |
-|6.x | ^6.5.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|5.x | ^5.13.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|4.4.x | ^5.10.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|4.2.x | ^5.7.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|4.0.x | ^5.2.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|3.6.x | ^5.0.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
-|3.4.x | ^4.7.3 &vert; ^5.0.0 |
-|3.2.x | ^4.3.0 &vert; ^5.0.0 |
-|3.0.x | ^3.8.22 &vert; ^4.0.0 &vert; ^5.0.0 |
-|2.6.x | ^3.8.8 &vert; ^4.0.0 &vert; ^5.0.0 |
-|2.4.x | ^3.8.0 &vert; ^4.0.0 |
+| MongoDB Server | Mongoose                                          |
+| -------------- | ------------------------------------------------- |
+| 8.x            | ^8.7.0                                            |
+| 7.x            | ^7.4.0 &vert; ^8.0.0                              |
+| 6.x            | ^6.5.0 &vert; ^7.0.0 &vert; ^8.0.0                |
+| 5.x            | ^5.13.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+| 4.4.x          | ^5.10.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0 |
+| 4.2.x          | ^5.7.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0  |
+| 4.0.x          | ^5.2.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0  |
+| 3.6.x          | ^5.0.0 &vert; ^6.0.0 &vert; ^7.0.0 &vert; ^8.0.0  |
+| 3.4.x          | ^4.7.3 &vert; ^5.0.0                              |
+| 3.2.x          | ^4.3.0 &vert; ^5.0.0                              |
+| 3.0.x          | ^3.8.22 &vert; ^4.0.0 &vert; ^5.0.0               |
+| 2.6.x          | ^3.8.8 &vert; ^4.0.0 &vert; ^5.0.0                |
+| 2.4.x          | ^3.8.0 &vert; ^4.0.0                              |
 
 自行根据系统MongoDB的版本, 安装对应mongoose版本
 
@@ -86,6 +89,7 @@ docker rmi images-api-server
 ## docker-compose
 
 修改`docker-compose.yml`中的`mongo.volumes`配置, 将宿主机数据库路径映射到容器中
+
 ```yaml
 volumes:
   - /Users/lincenying/web/mongodb/data:/data/db

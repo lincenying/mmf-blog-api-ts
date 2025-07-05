@@ -68,10 +68,7 @@ function getBase64(img_id: string, cdn: string): Promise<string> {
 export async function shihua(req: Req<{ id: string, cdn: string }>, res: Res) {
     const reqQuery = req.query
 
-    const {
-        id: img_id,
-        cdn,
-    } = reqQuery
+    const { id: img_id, cdn } = reqQuery
 
     const token = req.cookies.user || req.headers.user
     const userid = req.cookies.userid || req.headers.userid
@@ -189,10 +186,7 @@ export async function getHistory(req: Req<{ page?: number, limit?: number }>, re
 
     const userid = req.cookies.userid || req.headers.userid
 
-    const {
-        page = 1,
-        limit = 10,
-    } = reqQuery
+    const { page = 1, limit = 10 } = reqQuery
 
     const payload = {
         is_delete: 0,
@@ -203,7 +197,12 @@ export async function getHistory(req: Req<{ page?: number, limit?: number }>, re
 
     try {
         const [data, total] = await Promise.all([
-            ShiHuaM.find(payload).sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            ShiHuaM.find(payload)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             ShiHuaM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)

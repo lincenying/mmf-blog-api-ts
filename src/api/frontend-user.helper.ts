@@ -22,7 +22,12 @@ export async function getList(reqQuery: { page?: number, limit?: number }) {
 
     try {
         const [list, total] = await Promise.all([
-            UserM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            UserM.find()
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             UserM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
@@ -49,13 +54,9 @@ export async function getList(reqQuery: { page?: number, limit?: number }) {
 export async function login(reqBody: { username: string, password: string }) {
     let json: ResData<Nullable<UserCookies>>
 
-    let {
-        username,
-    } = reqBody
+    let { username } = reqBody
 
-    const {
-        password,
-    } = reqBody
+    const { password } = reqBody
 
     if (username === '' || password === '') {
         json = { code: -200, data: null, message: '请输入用户名和密码' }
@@ -67,13 +68,12 @@ export async function login(reqBody: { username: string, password: string }) {
             password: md5(md5Pre + password),
             is_delete: 0,
         }
-        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
+        const result = await UserM.findOne(filter)
+            .exec()
+            .then(data => data?.toObject())
         if (result) {
             username = encodeURI(username)
-            const {
-                id,
-                email: useremail,
-            } = result
+            const { id, email: useremail } = result
 
             const token = jwt.sign({ id, username }, secret, { expiresIn: 60 * 60 * 24 * 30 })
             json = {
@@ -102,9 +102,7 @@ export async function login(reqBody: { username: string, password: string }) {
  * 微信登录
  */
 export async function jscodeToSession(reqBody: { js_code: string }) {
-    const {
-        js_code,
-    } = reqBody
+    const { js_code } = reqBody
 
     const xhr = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
         params: {
@@ -125,11 +123,7 @@ export async function jscodeToSession(reqBody: { js_code: string }) {
 export async function wxLogin(reqBody: { nickName: string, wxSignature: string, avatar: string }) {
     let json: ResData<Nullable<UserCookies>>
 
-    const {
-        nickName,
-        wxSignature,
-        avatar,
-    } = reqBody
+    const { nickName, wxSignature, avatar } = reqBody
 
     let id, token, username
     if (!nickName || !wxSignature) {
@@ -142,7 +136,9 @@ export async function wxLogin(reqBody: { nickName: string, wxSignature: string, 
                 wx_signature: wxSignature,
                 is_delete: 0,
             }
-            const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
+            const result = await UserM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject())
             if (result) {
                 id = result._id
                 username = encodeURI(nickName)
@@ -207,11 +203,7 @@ export function logout() {
 export async function insert(reqBody: { email: string, password: string, username: string }) {
     let json: ResData<string | null>
 
-    const {
-        email,
-        password,
-        username,
-    } = reqBody
+    const { email, password, username } = reqBody
 
     if (!username || !password || !email) {
         json = { code: -200, data: null, message: '请将表单填写完整' }
@@ -224,7 +216,9 @@ export async function insert(reqBody: { email: string, password: string, usernam
     }
     else {
         try {
-            const result = await UserM.findOne({ username }).exec().then(data => data?.toObject())
+            const result = await UserM.findOne({ username })
+                .exec()
+                .then(data => data?.toObject())
             if (result) {
                 json = { code: -200, message: '该用户名已经存在!', data: 'error' }
             }
@@ -257,7 +251,9 @@ export async function getItem(userid: string) {
 
     try {
         const filter = { _id: userid, is_delete: 0 }
-        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
+        const result = await UserM.findOne(filter)
+            .exec()
+            .then(data => data?.toObject())
         if (result) {
             json = { code: 200, data: result, message: 'success' }
         }
@@ -278,12 +274,7 @@ export async function getItem(userid: string) {
 export async function modify(reqBody: { id: string, email: string, password: string, username: string }) {
     let json: ResData<Nullable<User>>
 
-    const {
-        id,
-        email,
-        password,
-        username,
-    } = reqBody
+    const { id, email, password, username } = reqBody
 
     const body: UserModify = {
         email,
@@ -296,7 +287,9 @@ export async function modify(reqBody: { id: string, email: string, password: str
 
     try {
         const filter = { _id: id }
-        const result = await UserM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        const result = await UserM.findOneAndUpdate(filter, body, { new: true })
+            .exec()
+            .then(data => data?.toObject())
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {
@@ -312,9 +305,7 @@ export async function modify(reqBody: { id: string, email: string, password: str
 export async function account(reqBody: { email: string }, user_id: string) {
     let json: ResData<{ email: string } | null>
 
-    const {
-        email,
-    } = reqBody
+    const { email } = reqBody
 
     try {
         await UserM.updateOne<User>({ _id: user_id }, { $set: { email } }).exec()
@@ -333,10 +324,7 @@ export async function account(reqBody: { email: string }, user_id: string) {
 export async function password(reqBody: { old_password: string, password: string }, user_id: string) {
     let json: ResData<string | null>
 
-    const {
-        old_password,
-        password,
-    } = reqBody
+    const { old_password, password } = reqBody
 
     try {
         const filter = {
@@ -345,7 +333,9 @@ export async function password(reqBody: { old_password: string, password: string
             is_delete: 0,
         }
 
-        const result = await UserM.findOne(filter).exec().then(data => data?.toObject())
+        const result = await UserM.findOne(filter)
+            .exec()
+            .then(data => data?.toObject())
         if (result) {
             const filter = {
                 _id: user_id,
@@ -375,9 +365,7 @@ export async function password(reqBody: { old_password: string, password: string
 export async function deletes(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
@@ -400,9 +388,7 @@ export async function deletes(reqQuery: { id: string }) {
 export async function recover(reqQuery: { id: string }) {
     let json: ResData<string | null>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }

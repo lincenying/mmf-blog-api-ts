@@ -10,7 +10,10 @@ export async function getList() {
     let json: ResData<Nullable<{ list: Category[] }>>
 
     try {
-        const result = await CategoryM.find().sort('-cate_order').exec().then(data => data.map(item => item.toObject()))
+        const result = await CategoryM.find()
+            .sort('-cate_order')
+            .exec()
+            .then(data => data.map(item => item.toObject()))
         json = {
             code: 200,
             data: {
@@ -31,9 +34,7 @@ export async function getList() {
 export async function getItem(reqQuery: { id: string }) {
     let json: ResData<Nullable<Category>>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     if (!_id) {
         json = { code: -200, data: null, message: '参数错误' }
@@ -41,7 +42,9 @@ export async function getItem(reqQuery: { id: string }) {
 
     try {
         const filter = { _id }
-        const result = await CategoryM.findOne(filter).exec().then(data => data?.toObject())
+        const result = await CategoryM.findOne(filter)
+            .exec()
+            .then(data => data?.toObject())
         json = { code: 200, data: result }
     }
     catch (err: unknown) {
@@ -57,10 +60,7 @@ export async function getItem(reqQuery: { id: string }) {
 export async function insert(reqBody: CategoryInsert) {
     let json: ResData<Nullable<Category>>
 
-    const {
-        cate_name,
-        cate_order,
-    } = reqBody
+    const { cate_name, cate_order } = reqBody
 
     if (!cate_name || !cate_order) {
         json = { code: -200, data: null, message: '请填写分类名称和排序' }
@@ -93,9 +93,7 @@ export async function insert(reqBody: CategoryInsert) {
 export async function deletes(reqQuery: { id: string }) {
     let json: ResData<Nullable<string>>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
@@ -116,9 +114,7 @@ export async function deletes(reqQuery: { id: string }) {
 export async function recover(reqQuery: { id: string }) {
     let json: ResData<Nullable<string>>
 
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         const filter = { _id }
@@ -139,11 +135,7 @@ export async function recover(reqQuery: { id: string }) {
 export async function modify(reqBody: CategoryModify) {
     let json: ResData<Nullable<Category>>
 
-    const {
-        id: _id,
-        cate_name,
-        cate_order,
-    } = reqBody
+    const { id: _id, cate_name, cate_order } = reqBody
 
     try {
         const filter = { _id }
@@ -152,7 +144,9 @@ export async function modify(reqBody: CategoryModify) {
             cate_order,
             update_date: getNowTime(),
         }
-        const result = await CategoryM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        const result = await CategoryM.findOneAndUpdate(filter, body, { new: true })
+            .exec()
+            .then(data => data?.toObject())
         json = { code: 200, message: '更新成功', data: result }
     }
     catch (err: unknown) {

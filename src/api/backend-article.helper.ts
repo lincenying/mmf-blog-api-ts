@@ -32,8 +32,7 @@ function marked(content: string) {
                     return hljs.highlight(str, { language: lang }).value
                     // return hljs.highlight(lang, str).value
                 }
-                catch (_error) {
-                } // 捕获并忽略高亮过程中的错误
+                catch (_error) {} // 捕获并忽略高亮过程中的错误
             }
             return ''
         },
@@ -61,7 +60,12 @@ export async function getList(reqQuery: { page: string, limit: string, sort: str
     try {
         // 同时查询文章列表和总数，计算总页数
         const [list, total] = await Promise.all([
-            ArticleM.find().sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            ArticleM.find()
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             ArticleM.countDocuments(),
         ])
         const totalPage = Math.ceil(total / limit)
@@ -92,9 +96,7 @@ export async function getItem(reqQuery: { id: string }) {
     let json: ResData<Nullable<Article>>
 
     // 从请求中提取文章ID
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     // 检查ID是否提供
     if (!_id) {
@@ -106,7 +108,9 @@ export async function getItem(reqQuery: { id: string }) {
             // 构建查询过滤条件
             const filter = { _id }
             // 尝试从数据库中查找文章
-            const result = await ArticleM.findOne(filter).exec().then(data => data?.toObject())
+            const result = await ArticleM.findOne(filter)
+                .exec()
+                .then(data => data?.toObject())
             // 查询成功，返回文章详情
             json = { code: 200, message: 'success', data: result }
         }
@@ -127,12 +131,7 @@ export async function insert(reqBody: ArticleInsert) {
     let json: ResData<Nullable<Article>>
 
     // 从请求体中解构文章信息
-    const {
-        category,
-        content,
-        title,
-        html,
-    } = reqBody
+    const { category, content, title, html } = reqBody
 
     // 根据是否提供html，处理markdown内容
     let mdHtml: string, mdToc: string
@@ -193,9 +192,7 @@ export async function deletes(reqQuery: { id: string }) {
     let json: ResData<Nullable<Article>>
 
     // 从请求中提取文章ID
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         // 准备过滤条件和更新内容
@@ -230,9 +227,7 @@ export async function recover(reqQuery: { id: string }) {
     let json: ResData<Nullable<Article>>
 
     // 从请求中提取文章ID
-    const {
-        id: _id,
-    } = reqQuery
+    const { id: _id } = reqQuery
 
     try {
         // 构建用于查找和更新的过滤条件和更新内容
@@ -269,15 +264,7 @@ export async function modify(reqBody: ArticleModify) {
     let json: ResData<Nullable<Article>>
 
     // 从请求体中解构需要的字段
-    const {
-        id: _id,
-        category,
-        category_old,
-        content,
-        title,
-        html,
-        category_name,
-    } = reqBody
+    const { id: _id, category, category_old, content, title, html, category_name } = reqBody
 
     let mdHtml: string, mdToc: string
     // 根据是否有html字段来处理markdown内容
@@ -305,7 +292,9 @@ export async function modify(reqBody: ArticleModify) {
             update_date: getNowTime(),
         }
         // 使用findOneAndUpdate更新文章信息，并获取更新后的文档对象
-        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
+        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true })
+            .exec()
+            .then(data => data?.toObject())
         if (result && category !== category_old) {
             // 如果分类发生变化，则更新分类计数
             const newCategofyFilter = { _id: category }

@@ -122,10 +122,10 @@ export async function get(req: Req<{ page: number }>, res: Res) {
                         if (item.mblog.page_info && item.mblog.page_info.media_info) {
                             video
                                 = item.mblog.page_info.urls.mp4_720p_mp4
-                                || item.mblog.page_info.urls.mp4_hd_mp4
-                                || item.mblog.page_info.urls.mp4_ld_mp4
-                                || item.mblog.page_info.media_info.stream_url_hd
-                                || item.mblog.page_info.media_info.stream_url
+                                    || item.mblog.page_info.urls.mp4_hd_mp4
+                                    || item.mblog.page_info.urls.mp4_ld_mp4
+                                    || item.mblog.page_info.media_info.stream_url_hd
+                                    || item.mblog.page_info.media_info.stream_url
                             video_img = item.mblog.page_info.page_pic.url
                         }
                         pics = item.mblog.pics
@@ -182,10 +182,10 @@ export async function user(req: Req<{ containerid: string, since_id: string }>, 
                 else if (mblog.page_info && mblog.page_info.media_info) {
                     video
                         = mblog.page_info.urls.mp4_720p_mp4
-                        || mblog.page_info.media_info.stream_url_hd
-                        || mblog.page_info.media_info.stream_url
-                        || mblog.page_info.urls.mp4_hd_mp4
-                        || mblog.page_info.urls.mp4_ld_mp4
+                            || mblog.page_info.media_info.stream_url_hd
+                            || mblog.page_info.media_info.stream_url
+                            || mblog.page_info.urls.mp4_hd_mp4
+                            || mblog.page_info.urls.mp4_ld_mp4
                     video_img = mblog.page_info.page_pic.url
                 }
                 const pics = (mblog.pics && mblog.pics.map(sub_item => ({ url: sub_item.url, large: sub_item.large.url }))) || null
@@ -309,10 +309,10 @@ export async function video(req: Req<{ since_id: string }>, res: Res) {
                     if (sub_item.mblog && sub_item.mblog.page_info && sub_item.mblog.page_info.media_info) {
                         video
                             = sub_item.mblog.page_info.urls.mp4_720p_mp4
-                            || sub_item.mblog.page_info.media_info.stream_url_hd
-                            || sub_item.mblog.page_info.media_info.stream_url
-                            || sub_item.mblog.page_info.urls.mp4_hd_mp4
-                            || sub_item.mblog.page_info.urls.mp4_ld_mp4
+                                || sub_item.mblog.page_info.media_info.stream_url_hd
+                                || sub_item.mblog.page_info.media_info.stream_url
+                                || sub_item.mblog.page_info.urls.mp4_hd_mp4
+                                || sub_item.mblog.page_info.urls.mp4_ld_mp4
                         video_img = sub_item.mblog.page_info.page_pic.url
                         $list.push({
                             itemid: sub_item.mblog.id,
@@ -384,10 +384,11 @@ export async function beautyVideo(req: Req<{ key: string, page: number }>, res: 
                     if (sub_item && sub_item.page_info && sub_item.page_info.media_info) {
                         video
                             = sub_item.page_info.media_info.mp4_720p_mp4
-                            || sub_item.page_info.media_info.stream_url_hd
-                            || sub_item.page_info.media_info.stream_url
-                            || sub_item.page_info.media_info.mp4_hd_url
-                            || sub_item.page_info.media_info.mp4_sd_url || ''
+                                || sub_item.page_info.media_info.stream_url_hd
+                                || sub_item.page_info.media_info.stream_url
+                                || sub_item.page_info.media_info.mp4_hd_url
+                                || sub_item.page_info.media_info.mp4_sd_url
+                                || ''
                         video_img = sub_item.page_info.page_pic.url
                         $list.push({
                             itemid: sub_item.id,
@@ -421,11 +422,13 @@ export async function beautyVideo(req: Req<{ key: string, page: number }>, res: 
  * @returns void
  */
 export async function detail(req: Req<{ id: string }>, res: Res) {
-    let json: ResData<Nullable<{
-        itemid: string
-        text: string
-        pics: string[]
-    }>>
+    let json: ResData<
+        Nullable<{
+            itemid: string
+            text: string
+            pics: string[]
+        }>
+    >
     const reqQuery = req.query
 
     const id = reqQuery.id

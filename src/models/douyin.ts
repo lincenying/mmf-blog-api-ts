@@ -27,7 +27,8 @@ const DouYinSchema = new Schema<DouYin>(
     },
 )
 
-DouYinSchema.virtual('user', { // 键名
+DouYinSchema.virtual('user', {
+    // 键名
     ref: 'DouYinUser', // 目标表
     localField: 'user_id', // 本地表键名
     foreignField: 'user_id', // 目标表键名

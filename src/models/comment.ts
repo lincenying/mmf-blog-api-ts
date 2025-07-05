@@ -15,17 +15,20 @@ const Schema = mongoose.Schema
  * @property {number} is_delete - 是否删除，0表示未删除，1表示已删除
  * @property {number} timestamp - 时间戳
  */
-const CommentSchema = new Schema<Comment>({
-    article_id: String,
-    userid: { type: Schema.Types.ObjectId, ref: 'User', autopopulate: { select: '_id email username' } },
-    content: String,
-    creat_date: String,
-    is_delete: { type: Number, default: 0 },
-    timestamp: Number,
-}, {
-    toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
-    toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
-})
+const CommentSchema = new Schema<Comment>(
+    {
+        article_id: String,
+        userid: { type: Schema.Types.ObjectId, ref: 'User', autopopulate: { select: '_id email username' } },
+        content: String,
+        creat_date: String,
+        is_delete: { type: Number, default: 0 },
+        timestamp: Number,
+    },
+    {
+        toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+        toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
+    },
+)
 
 CommentSchema.virtual('id').get(function () {
     return this._id.toString()

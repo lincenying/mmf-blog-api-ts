@@ -46,12 +46,12 @@ const isProd = process.env.NODE_ENV === 'production'
 function serve(path: string, cache: boolean) {
     // 根据是否启用缓存以及当前环境（是否是生产环境），设置文件的最大缓存时间。
     return express.static(resolve(path), {
-        maxAge: (cache && isProd) ? 1000 * 60 * 60 * 24 * 30 : 0,
+        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0,
     })
 }
 
 // view engine setup
-app.set('views', resolve('./views'))// twig
+app.set('views', resolve('./views')) // twig
 app.set('twig options', {
     allow_async: true,
     strict_variables: false,

@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "version": "1.0.1",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.4",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "@lincy/utils": "^0.6.2",
-    "axios": "^1.9.0",
+    "@lincy/utils": "^0.6.3",
+    "axios": "^1.10.0",
     "baidu-aip-sdk": "^4.16.16",
     "base64-img": "^1.0.4",
     "cheerio": "1.0.0",
@@ -40,38 +40,38 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.15.1",
+    "mongoose": "^8.16.1",
     "mongoose-autopopulate": "^1.1.0",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
     "qiniu": "^7.14.0",
     "request-ip": "^3.3.0",
-    "serve-favicon": "^2.5.0",
+    "serve-favicon": "^2.5.1",
     "tslib": "^2.8.1",
     "twig": "^1.17.1"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^5.6.1",
+    "@lincy/eslint-config": "^5.7.0",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
-    "@types/jsonwebtoken": "^9.0.9",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/markdown-it": "^14.1.2",
     "@types/md5": "^2.3.5",
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.10",
-    "@types/multer": "^1.4.13",
-    "@types/node": "^22.15.31",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^22.16.0",
     "@types/request-ip": "^0.0.41",
     "@types/serve-favicon": "^2.5.7",
-    "concurrently": "^9.1.2",
-    "eslint": "^9.28.0",
+    "concurrently": "^9.2.0",
+    "eslint": "^9.30.1",
     "jiti": "^2.4.2",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.1.2",
     "nodemon": "^3.1.10",
     "simple-git-hooks": "^2.13.0",
     "tsc-alias": "^1.8.16",
-    "tsx": "^4.19.4",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   },
   "pnpm": {
@@ -81,6 +81,7 @@
       ]
     },
     "onlyBuiltDependencies": [
+      "esbuild",
       "simple-git-hooks"
     ]
   },

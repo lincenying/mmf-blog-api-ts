@@ -15,13 +15,7 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     let json: ResData<Nullable<DouYinUser>>
     const reqBody = req.body
 
-    const {
-        user_id,
-        user_name,
-        user_avatar,
-        sec_uid,
-        share_url,
-    } = reqBody
+    const { user_id, user_name, user_avatar, sec_uid, share_url } = reqBody
 
     const data = {
         user_id,
@@ -35,7 +29,9 @@ export async function insertUser(req: Req<object, DouYinUserInsert>, res: Res) {
     }
     try {
         const filter = { user_id }
-        const checkRepeat = await DouYinUserM.findOne(filter).exec().then(data => data?.toObject())
+        const checkRepeat = await DouYinUserM.findOne(filter)
+            .exec()
+            .then(data => data?.toObject())
         if (checkRepeat) {
             json = { code: 300, data: null, message: '该用户已经存在!' }
         }
@@ -55,14 +51,7 @@ export async function insert(req: Req<object, DouYinInsert>, res: Res) {
     let json: ResData<Nullable<DouYin>>
     const reqBody = req.body
 
-    const {
-        user_id,
-        aweme_id,
-        desc,
-        vid,
-        image,
-        video,
-    } = reqBody
+    const { user_id, aweme_id, desc, vid, image, video } = reqBody
 
     const data = {
         author: user_id,
@@ -115,7 +104,12 @@ export async function getList(req: Req<{ user_id: string, limit?: number, page?:
 
     try {
         const [list, total] = await Promise.all([
-            DouYinM.find(payload, filds).sort(sort).skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
+            DouYinM.find(payload, filds)
+                .sort(sort)
+                .skip(skip)
+                .limit(limit)
+                .exec()
+                .then(data => data.map(item => item.toObject())),
             DouYinM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
@@ -162,7 +156,8 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             url: fullUrl,
             headers: {
                 'Referer': 'https://www.ixigua.com/',
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
+                'User-Agent':
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
                 'cookie': 'wafid=b91cc9ea-f8c9-4665-aefd-5eb32504c548; wafid.sig=6RJyXryyR309k1jBSiRHNOIUbWg; xiguavideopcwebid=6779498568983889411; xiguavideopcwebid.sig=thxI4ay_N8VBsX1clmDdpMXPDf8; SLARDAR_WEB_ID=bc0b73ca-1788-4689-b919-05355f8a0021',
                 'upgrade-insecure-requests': 1,
             },
@@ -173,9 +168,9 @@ export async function getItem(req: Req<{ id: string }>, res: Res) {
             if (video_list) {
                 main_url
                     = (video_list.video_3 && video_list.video_3.main_url)
-                    || (video_list.video_2 && video_list.video_2.main_url)
-                    || (video_list.video_1 && video_list.video_1.main_url)
-                    || ''
+                        || (video_list.video_2 && video_list.video_2.main_url)
+                        || (video_list.video_1 && video_list.video_1.main_url)
+                        || ''
                 if (main_url) {
                     main_url = Buffer.from(main_url, 'base64').toString()
                     lruCache.set(`douyin_${vid}`, main_url)
