@@ -60,11 +60,11 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       mongoose:
-        specifier: ^8.16.1
-        version: 8.16.1
+        specifier: ^8.16.2
+        version: 8.16.2
       mongoose-autopopulate:
         specifier: ^1.1.0
-        version: 1.1.0(mongoose@8.16.1)
+        version: 1.1.0(mongoose@8.16.2)
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -118,8 +118,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       '@types/node':
-        specifier: ^22.16.0
-        version: 22.16.0
+        specifier: ^24.0.10
+        version: 24.0.10
       '@types/request-ip':
         specifier: ^0.0.41
         version: 0.0.41
@@ -544,8 +544,8 @@ packages:
   '@types/multer@2.0.0':
     resolution: {integrity: sha512-C3Z9v9Evij2yST3RSBktxP9STm6OdMc5uR1xF1SGr98uv8dUlAL2hqwrZ3GVB3uyMyiegnscEK6PGtYvNrjTjw==}
 
-  '@types/node@22.16.0':
-    resolution: {integrity: sha512-B2egV9wALML1JCpv3VQoQ+yesQKAmNMBIAY7OteVrikcOcAkWm+dGL6qpeCktPjAv6N1JLnhbNiqS35UpFyBsQ==}
+  '@types/node@24.0.10':
+    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
 
   '@types/qs@6.9.16':
     resolution: {integrity: sha512-7i+zxXdPD0T4cKDuxCUXJ4wHcsJLwENa6Z3dCu8cfCK743OGy5Nu1RmAGqDPsoTDINVEcdXKRvR/zre+P2Ku1A==}
@@ -2243,8 +2243,8 @@ packages:
     peerDependencies:
       mongoose: 6.x || 7.x || 8.0.0-rc0 || 8.x
 
-  mongoose@8.16.1:
-    resolution: {integrity: sha512-Q+0TC+KLdY4SYE+u9gk9pdW1tWu/pl0jusyEkMGTgBoAbvwQdfy4f9IM8dmvCwb/blSfp7IfLkob7v76x6ZGpQ==}
+  mongoose@8.16.2:
+    resolution: {integrity: sha512-52T4XPhDgJL4cqooBsOORzYBH3ddMwABMEF/LV7TgvD2DEKZlnYTc2HF9ch1U2lcKjhE4pQ+WuInfLFJbguGcQ==}
     engines: {node: '>=16.20.1'}
 
   morgan@1.10.0:
@@ -2974,8 +2974,8 @@ packages:
   underscore@1.13.7:
     resolution: {integrity: sha512-GMXzWtsc57XAtguZgaQViUOzs0KTkk8ojr3/xAxXLITqf/3EMwxC0inyETfDFjH/Krbhuep0HNbbjI9i/q3F3g==}
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   undici@6.19.8:
     resolution: {integrity: sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g==}
@@ -3425,16 +3425,16 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/compression@1.8.1':
     dependencies:
       '@types/express': 5.0.3
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/cookie-parser@1.4.9(@types/express@5.0.3)':
     dependencies:
@@ -3450,7 +3450,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.0':
     dependencies:
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
       '@types/qs': 6.9.16
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -3468,7 +3468,7 @@ snapshots:
   '@types/jsonwebtoken@9.0.10':
     dependencies:
       '@types/ms': 0.7.34
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/linkify-it@5.0.0': {}
 
@@ -3491,7 +3491,7 @@ snapshots:
 
   '@types/morgan@1.9.10':
     dependencies:
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/ms@0.7.34': {}
 
@@ -3499,9 +3499,9 @@ snapshots:
     dependencies:
       '@types/express': 5.0.3
 
-  '@types/node@22.16.0':
+  '@types/node@24.0.10':
     dependencies:
-      undici-types: 6.21.0
+      undici-types: 7.8.0
 
   '@types/qs@6.9.16': {}
 
@@ -3509,12 +3509,12 @@ snapshots:
 
   '@types/request-ip@0.0.41':
     dependencies:
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
 
   '@types/serve-favicon@2.5.7':
     dependencies:
@@ -3523,7 +3523,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.16.0
+      '@types/node': 24.0.10
       '@types/send': 0.17.4
 
   '@types/unist@3.0.3': {}
@@ -5540,11 +5540,11 @@ snapshots:
       bson: 6.10.4
       mongodb-connection-string-url: 3.0.1
 
-  mongoose-autopopulate@1.1.0(mongoose@8.16.1):
+  mongoose-autopopulate@1.1.0(mongoose@8.16.2):
     dependencies:
-      mongoose: 8.16.1
+      mongoose: 8.16.2
 
-  mongoose@8.16.1:
+  mongoose@8.16.2:
     dependencies:
       bson: 6.10.4
       kareem: 2.6.3
@@ -6329,7 +6329,7 @@ snapshots:
 
   underscore@1.13.7: {}
 
-  undici-types@6.21.0: {}
+  undici-types@7.8.0: {}
 
   undici@6.19.8: {}
 

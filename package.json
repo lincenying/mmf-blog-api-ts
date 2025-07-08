@@ -40,7 +40,7 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.16.1",
+    "mongoose": "^8.16.2",
     "mongoose-autopopulate": "^1.1.0",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
@@ -61,7 +61,7 @@
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
-    "@types/node": "^22.16.0",
+    "@types/node": "^24.0.10",
     "@types/request-ip": "^0.0.41",
     "@types/serve-favicon": "^2.5.7",
     "concurrently": "^9.2.0",
@@ -82,7 +82,8 @@
     },
     "onlyBuiltDependencies": [
       "esbuild",
-      "simple-git-hooks"
+      "simple-git-hooks",
+      "unrs-resolver"
     ]
   },
   "simple-git-hooks": {
