@@ -308,7 +308,7 @@ export async function account(reqBody: { email: string }, user_id: string) {
     const { email } = reqBody
 
     try {
-        await UserM.updateOne<User>({ _id: user_id }, { $set: { email } }).exec()
+        await UserM.updateOne({ _id: user_id }, { $set: { email } }).exec()
         json = { code: 200, message: '更新成功', data: { email } }
     }
     catch (err: unknown) {

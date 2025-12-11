@@ -136,9 +136,7 @@ export async function insert(email: string, password: string, username: string) 
     else {
         try {
             const filter = { username }
-            const result = await AdminM.findOne(filter)
-                .exec()
-                .then(data => data?.toObject())
+            const result = await AdminM.findOne(filter).exec().then(data => data?.toObject())
             if (result) {
                 message = `${username}: 已经存在`
             }

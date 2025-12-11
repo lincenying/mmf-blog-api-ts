@@ -108,9 +108,7 @@ export async function getItem(reqQuery: { id: string }) {
             // 构建查询过滤条件
             const filter = { _id }
             // 尝试从数据库中查找文章
-            const result = await ArticleM.findOne(filter)
-                .exec()
-                .then(data => data?.toObject())
+            const result = await ArticleM.findOne(filter).exec().then(data => data?.toObject())
             // 查询成功，返回文章详情
             json = { code: 200, message: 'success', data: result }
         }
@@ -292,9 +290,7 @@ export async function modify(reqBody: ArticleModify) {
             update_date: getNowTime(),
         }
         // 使用findOneAndUpdate更新文章信息，并获取更新后的文档对象
-        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true })
-            .exec()
-            .then(data => data?.toObject())
+        const result = await ArticleM.findOneAndUpdate(filter, body, { new: true }).exec().then(data => data?.toObject())
         if (result && category !== category_old) {
             // 如果分类发生变化，则更新分类计数
             const newCategofyFilter = { _id: category }

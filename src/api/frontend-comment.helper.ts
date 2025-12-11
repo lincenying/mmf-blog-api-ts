@@ -81,12 +81,7 @@ export async function getList(reqQuery: ReqListQuery) {
 
         try {
             const [list, total] = await Promise.all([
-                CommentM.find(data)
-                    .sort('-_id')
-                    .skip(skip)
-                    .limit(limit)
-                    .exec()
-                    .then(data => data.map(item => item.toObject())),
+                CommentM.find(data).sort('-_id').skip(skip).limit(limit).exec().then(data => data.map(item => item.toObject())),
                 CommentM.countDocuments(data),
             ])
             const totalPage = Math.ceil(total / limit)
@@ -120,7 +115,10 @@ export async function deletes(reqQuery: { id: string }) {
         const filter = { _id }
         const commentBody = { is_delete: 0 }
         const ArticleBody = { $inc: { comment_count: -1 } }
-        await Promise.all([CommentM.updateOne(filter, commentBody).exec(), ArticleM.updateOne(filter, ArticleBody).exec()])
+        await Promise.all([
+            CommentM.updateOne(filter, commentBody).exec(),
+            ArticleM.updateOne(filter, ArticleBody).exec(),
+        ])
         json = { code: 200, message: '删除成功', data: 'success' }
     }
     catch (err: unknown) {
@@ -142,7 +140,10 @@ export async function recover(reqQuery: { id: string }) {
         const filter = { _id }
         const commentBody = { is_delete: 0 }
         const ArticleBody = { $inc: { comment_count: 1 } }
-        await Promise.all([CommentM.updateOne(filter, commentBody).exec(), ArticleM.updateOne(filter, ArticleBody).exec()])
+        await Promise.all([
+            CommentM.updateOne(filter, commentBody).exec(),
+            ArticleM.updateOne(filter, ArticleBody).exec(),
+        ])
         json = { code: 200, message: '恢复成功', data: 'success' }
     }
     catch (err: unknown) {

@@ -3,11 +3,8 @@ import type { Comment } from '~/types'
 import mongooseAutopopulate from 'mongoose-autopopulate'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * 评论模型
- * @typedef {object} CommentSchema
  * @property {string} article_id - 关联的文章ID
  * @property {ObjectId} userid - 用户ID，关联到User模型
  * @property {string} content - 评论内容
@@ -15,10 +12,14 @@ const Schema = mongoose.Schema
  * @property {number} is_delete - 是否删除，0表示未删除，1表示已删除
  * @property {number} timestamp - 时间戳
  */
-const CommentSchema = new Schema<Comment>(
+const CommentSchema = new mongoose.Schema<Comment>(
     {
         article_id: String,
-        userid: { type: Schema.Types.ObjectId, ref: 'User', autopopulate: { select: '_id email username' } },
+        userid: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            autopopulate: { select: '_id email username' },
+        },
         content: String,
         creat_date: String,
         is_delete: { type: Number, default: 0 },
@@ -47,4 +48,5 @@ CommentSchema.virtual('id').get(function () {
 // })
 
 CommentSchema.plugin(mongooseAutopopulate)
+
 export default mongoose.model<Comment>('Comment', CommentSchema)

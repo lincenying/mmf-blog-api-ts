@@ -1,13 +1,11 @@
 import type { ShiHua } from '~/types'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * ShihuaSchema 定义了一个用于表示 ShiHua 数据模型的 Mongoose Schema。
  * ShiHua 是一个包含用户ID、图片ID、名称、图片、结果、创建日期、是否删除和时间戳的对象。
  */
-const ShihuaSchema = new Schema<ShiHua>(
+const ShihuaSchema = new mongoose.Schema<ShiHua>(
     {
         user_id: { type: String, description: '用户ID' },
         img_id: { type: String, description: '图片ID' },

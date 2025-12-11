@@ -1,8 +1,6 @@
 import type { DouYinUser } from '~/types'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * 定义抖音用户的数据模型。
  * @property {string} user_id - 用户ID。
@@ -14,7 +12,7 @@ const Schema = mongoose.Schema
  * @property {number} is_delete - 用户是否已删除标志，0表示未删除，1表示已删除。
  * @property {number} timestamp - 用户数据的时间戳。
  */
-const DouYinUserSchema = new Schema<DouYinUser>(
+const DouYinUserSchema = new mongoose.Schema<DouYinUser>(
     {
         user_id: String,
         user_name: String,

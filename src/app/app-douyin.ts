@@ -92,7 +92,7 @@ export async function getList(req: Req<{ user_id: string, limit?: number, page?:
     page = Number(page) || 1
     limit = Number(limit) || 10
 
-    const payload: { is_delete: number, user_id?: string } = { is_delete: 0 }
+    const payload: { is_delete: number, user_id: string } = { is_delete: 0, user_id: '' }
     const skip = (page - 1) * limit
     const sort = '-aweme_id'
 

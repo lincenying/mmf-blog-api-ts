@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "version": "1.0.1",
-  "packageManager": "pnpm@10.20.0",
+  "packageManager": "pnpm@10.25.0",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -23,25 +23,25 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "@lincy/utils": "^0.7.0",
-    "axios": "^1.13.1",
+    "@lincy/utils": "^0.7.3",
+    "axios": "^1.13.2",
     "baidu-aip-sdk": "^4.16.16",
     "base64-img": "^1.0.4",
     "cheerio": "1.0.0",
     "compression": "^1.8.1",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "^1.4.7",
-    "dayjs": "^1.11.18",
-    "express": "^5.1.0",
+    "dayjs": "^1.11.19",
+    "express": "^5.2.1",
     "highlight.js": "^11.11.1",
-    "jsonwebtoken": "^9.0.2",
-    "lru-cache": "^11.2.2",
+    "jsonwebtoken": "^9.0.3",
+    "lru-cache": "^11.2.4",
     "markdown-it": "^14.1.0",
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^8.19.2",
-    "mongoose-autopopulate": "^1.1.0",
+    "mongoose": "^9.0.1",
+    "mongoose-autopopulate": "^1.2.1",
     "morgan": "^1.10.1",
     "multer": "1.4.5-lts.1",
     "qiniu": "^7.14.0",
@@ -51,40 +51,28 @@
     "twig": "^1.17.1"
   },
   "devDependencies": {
-    "@lincy/eslint-config": "^6.0.0",
+    "@lincy/eslint-config": "^6.2.0",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
-    "@types/express": "^5.0.5",
+    "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/markdown-it": "^14.1.2",
     "@types/md5": "^2.3.6",
     "@types/mockjs": "^1.0.10",
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
-    "@types/node": "^24.9.2",
+    "@types/node": "^25.0.0",
     "@types/request-ip": "^0.0.41",
     "@types/serve-favicon": "^2.5.7",
     "concurrently": "^9.2.1",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.1",
     "jiti": "^2.6.1",
-    "lint-staged": "^16.2.6",
-    "nodemon": "^3.1.10",
+    "lint-staged": "^16.2.7",
+    "nodemon": "^3.1.11",
     "simple-git-hooks": "^2.13.1",
     "tsc-alias": "^1.8.16",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "prettier"
-      ]
-    },
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "simple-git-hooks",
-      "unrs-resolver"
-    ]
   },
   "simple-git-hooks[-del]": {
     "pre-commit": "npx lint-staged"

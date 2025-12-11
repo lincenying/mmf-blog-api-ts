@@ -3,13 +3,11 @@ import type { DouYin } from '~/types'
 import mongooseAutopopulate from 'mongoose-autopopulate'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * DouYinSchema 定义了抖音视频数据的模式。
  * 包含了用户ID、视频ID、视频描述、视频ID、图片URL、视频URL、创建日期、是否删除标记和时间戳等字段。
  */
-const DouYinSchema = new Schema<DouYin>(
+const DouYinSchema = new mongoose.Schema<DouYin>(
     {
         user_id: String, // 用户ID
         aweme_id: String, // 视频ID

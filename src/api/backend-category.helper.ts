@@ -42,9 +42,7 @@ export async function getItem(reqQuery: { id: string }) {
 
     try {
         const filter = { _id }
-        const result = await CategoryM.findOne(filter)
-            .exec()
-            .then(data => data?.toObject())
+        const result = await CategoryM.findOne(filter).exec().then(data => data?.toObject())
         json = { code: 200, data: result }
     }
     catch (err: unknown) {
@@ -74,7 +72,7 @@ export async function insert(reqBody: CategoryInsert) {
                 creat_date: getNowTime(),
                 update_date: getNowTime(),
                 is_delete: 0,
-                timestamp: getNowTime('X'),
+                timestamp: Number(getNowTime('X')),
             }
             const result = await CategoryM.create(creatData).then(data => data.toObject())
             json = { code: 200, message: '添加成功', data: result }

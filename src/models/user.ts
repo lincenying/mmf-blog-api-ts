@@ -1,11 +1,8 @@
 import type { User } from '~/types'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * 用户模型
- * @typedef {object} UserSchema
  * @property {string} username - 用户名
  * @property {string} email - 用户邮箱
  * @property {string} password - 用户密码
@@ -16,7 +13,7 @@ const Schema = mongoose.Schema
  * @property {string} wx_avatar - 微信头像
  * @property {string} wx_signature - 微信签名
  */
-const UserSchema = new Schema<User>(
+const UserSchema = new mongoose.Schema<User>(
     {
         username: String,
         email: String,
@@ -29,9 +26,7 @@ const UserSchema = new Schema<User>(
         wx_signature: String,
     },
     {
-        toJSON: {
-            virtuals: true,
-        }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+        toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
         toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
     },
 )

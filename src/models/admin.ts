@@ -1,11 +1,8 @@
 import type { User } from '~/types'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * 管理员模型
- * @typedef {object} AdminSchema
  * @property {string} username - 用户名
  * @property {string} email - 邮箱
  * @property {string} password - 密码
@@ -14,7 +11,7 @@ const Schema = mongoose.Schema
  * @property {number} is_delete - 是否删除，0表示未删除，1表示已删除
  * @property {number} timestamp - 时间戳
  */
-const AdminSchema = new Schema<User>(
+const AdminSchema = new mongoose.Schema<User>(
     {
         username: String,
         email: String,

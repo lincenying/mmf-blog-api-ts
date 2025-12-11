@@ -1,11 +1,8 @@
 import type { Article } from '~/types'
 import mongoose from '../mongoose'
 
-const Schema = mongoose.Schema
-
 /**
  * 文章模型的Schema定义
- * @typedef {object} ArticleSchema
  * @property {string} title - 文章标题
  * @property {string} content - 文章内容（Markdown格式）
  * @property {string} html - 文章内容（HTML格式）
@@ -21,7 +18,7 @@ const Schema = mongoose.Schema
  * @property {number} timestamp - 文章时间戳
  * @property {string[]} likes - 点赞用户ID列表
  */
-const ArticleSchema = new Schema<Article>(
+const ArticleSchema = new mongoose.Schema<Article>(
     {
         title: String,
         content: String,
@@ -39,6 +36,7 @@ const ArticleSchema = new Schema<Article>(
         likes: [String],
     },
     {
+        // id: true, // 会默认生成一个虚拟值 id，指向文档的 _id 字段
         toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
         toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
     },

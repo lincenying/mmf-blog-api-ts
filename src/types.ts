@@ -61,7 +61,7 @@ export interface Category {
     /** * 是否删除: 0: 正常 | 1: 已删除 */
     is_delete?: number
     /** * 发布时间戳 */
-    timestamp?: number
+    timestamp?: number | string
 }
 
 /**
@@ -134,7 +134,7 @@ export interface DouYinUser {
  */
 export interface DouYin {
     id?: string
-    user_id: Objable
+    user_id: string
     user: User
     aweme_id: string
     desc: string

@@ -128,9 +128,7 @@ export async function getItem(reqQuery: { id: string }, user_id: Nullable<string
         const filter = { _id, is_delete: 0 }
         const body = { $inc: { visit: 1 } }
         const [result, _] = await Promise.all([
-            ArticleM.findOne(filter)
-                .exec()
-                .then(data => data?.toObject()),
+            ArticleM.findOne(filter).exec().then(data => data?.toObject()),
             ArticleM.updateOne(filter, body).exec(),
         ])
         if (!result) {
@@ -177,9 +175,7 @@ export async function getTrending(reqQuery: { id: string }) {
         if (id) {
             filter._id = id
         }
-        const category = await ArticleM.findOne(filter, 'category')
-            .exec()
-            .then(data => data?.category)
+        const category = await ArticleM.findOne(filter, 'category').exec().then(data => data?.category)
 
         const limit = 5
         const data: TrendingData = { is_delete: 0 }

@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
  * @param path 要检查其存在的文件或目录的路径。
  * @returns {boolean} 如果路径存在，则返回true；如果不存在，则返回false。
  */
-export function fsExistsSync(path: string) {
+export function fsExistsSync(path: string): boolean {
     try {
         // 尝试访问路径，检查其是否存在
         fs.accessSync(path, fs.constants.F_OK)
