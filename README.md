@@ -65,6 +65,8 @@ After the success of the administrator to add, will automatically generate the a
 如果宿主机起`mongodb`服务, 可以直接使用下面命令构建启动容器,
 如果要将`mongodb`也容器化, 可以直接使用`docker-compose`
 
+`mongodb`连接地址配置见`Dockerfile`的`ENV MONGO_URI=mongodb://host.docker.internal:27017`
+
 ```bash
 # 第一次执行时, 如果node镜像拉不下来, 可以执行以下命令:
 docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22

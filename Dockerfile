@@ -66,4 +66,4 @@ CMD ["node", "./dist/app.js"]
 # 删除容器
 # docker rm container-api
 # 删除镜像
-# docker rmi mmf-blog-api-ts
+# docker rmi lincenying/api-server:1.25.1029
