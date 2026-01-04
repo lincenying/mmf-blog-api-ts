@@ -80,7 +80,7 @@ export async function getList(reqQuery: { page: string, limit: string, sort: str
                 .limit(limit)
                 .exec()
                 .then(data => data.map(item => item.toObject())),
-            ArticleM.countDocuments(),
+            ArticleM.countDocuments(payload),
         ])
         const totalPage = Math.ceil(total / limit)
         // 构建响应数据对象
