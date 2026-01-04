@@ -40,7 +40,7 @@
     "markdown-it-toc-and-anchor": "^4.2.0",
     "md5": "^2.3.0",
     "mockjs": "^1.1.0",
-    "mongoose": "^9.1.1",
+    "mongoose": "8.21.0",
     "mongoose-autopopulate": "^1.2.1",
     "morgan": "^1.10.1",
     "multer": "1.4.5-lts.1",
