@@ -8,7 +8,7 @@ import * as helper from './backend-article.helper'
  * @param res 响应对象，用于返回数据或错误信息。
  * @returns 返回一个Promise，解析为一个包含响应数据或错误信息的对象。
  */
-export async function getList(req: Req<{ page: string, limit: string, sort: string }>, res: Res) {
+export async function getList(req: Req<{ page: string, limit: string, sort: string, key: string }>, res: Res) {
     // 发送响应
     res.json(await helper.getList(req.query))
 }

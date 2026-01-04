@@ -7,6 +7,12 @@ import ArticleM from '../models/article'
 import CategoryM from '../models/category'
 import { getErrorMessage, getNowTime } from '../utils'
 
+interface ArticleSearch {
+    title?: {
+        $regex: RegExp
+    }
+}
+
 /**
  * 将 Markdown 格式的内容转换成 HTML 格式，并生成目录（TOC）。
  * @param content Markdown格式的字符串。
@@ -48,7 +54,7 @@ function marked(content: string) {
 /**
  * 获取文章列表的异步函数。
  */
-export async function getList(reqQuery: { page: string, limit: string, sort: string }) {
+export async function getList(reqQuery: { page: string, limit: string, sort: string, key: string }) {
     let json: ResData<Nullable<Lists<Article[]>>>
 
     // 处理查询参数，设定默认值
@@ -56,11 +62,19 @@ export async function getList(reqQuery: { page: string, limit: string, sort: str
     const page = Number(reqQuery.page) || 1
     const limit = Number(reqQuery.limit) || 15
     const skip = (page - 1) * limit
+    const key = reqQuery.key || ''
+
+    const payload: ArticleSearch = {}
+
+    if (key) {
+        const reg = new RegExp(key, 'i')
+        payload.title = { $regex: reg }
+    }
 
     try {
         // 同时查询文章列表和总数，计算总页数
         const [list, total] = await Promise.all([
-            ArticleM.find()
+            ArticleM.find(payload)
                 .sort(sort)
                 .skip(skip)
                 .limit(limit)
