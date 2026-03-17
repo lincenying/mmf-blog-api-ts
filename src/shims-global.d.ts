@@ -26,3 +26,15 @@ declare type AnyFn<T = any> = (...args: any[]) => T
  * Promise, or maybe not
  */
 declare type Awaitable<T> = T | PromiseLike<T>
+
+/**
+ * 部分可选
+ */
+declare type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+/**
+ * 深度只读
+ */
+declare type DeepReadonly<T> = {
+    readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]
+}
