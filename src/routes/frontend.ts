@@ -1,4 +1,3 @@
-import multipart from 'connect-multiparty'
 import express from 'express'
 
 import * as frontendArticle from '../api/frontend-article'
@@ -11,8 +10,6 @@ import isAdmin from '../middlewares/is-admin'
 import isUser from '../middlewares/is-user'
 
 const router = express.Router()
-
-const multipartMiddleware = multipart()
 
 router.options('/{*frotend}', cors)
 
@@ -33,25 +30,25 @@ router.get('/article/item', frontendArticle.getItem)
 router.get('/trending', frontendArticle.getTrending)
 // ------ 评论 ------
 // 发布评论
-router.post('/comment/insert', isUser, multipartMiddleware, frontendComment.insert)
+router.post('/comment/insert', isUser, frontendComment.insert)
 // 读取评论列表
 router.get('/comment/list', frontendComment.getList)
 // ------ 用户 ------
 // 前台注册
-router.post('/user/insert', multipartMiddleware, frontendUser.insert)
+router.post('/user/insert', frontendUser.insert)
 // 前台登录
-router.post('/user/login', multipartMiddleware, frontendUser.login)
+router.post('/user/login', frontendUser.login)
 // 微信登录
-router.post('/user/wxLogin', multipartMiddleware, frontendUser.wxLogin)
-router.post('/user/jscode2session', multipartMiddleware, frontendUser.jscodeToSession)
+router.post('/user/wxLogin', frontendUser.wxLogin)
+router.post('/user/jscode2session', frontendUser.jscodeToSession)
 // 前台退出
 router.post('/user/logout', frontendUser.logout)
 // 前台账号读取
 router.get('/user/account', isUser, frontendUser.getItem)
 // 前台账号修改
-router.post('/user/account', isUser, multipartMiddleware, frontendUser.account)
+router.post('/user/account', isUser, frontendUser.account)
 // 前台密码修改
-router.post('/user/password', isUser, multipartMiddleware, frontendUser.password)
+router.post('/user/password', isUser, frontendUser.password)
 // ------ 喜欢 ------
 // 喜欢
 router.get('/like', isUser, frontendLike.like)
