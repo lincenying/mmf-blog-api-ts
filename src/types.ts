@@ -8,7 +8,7 @@ export type Res = Response
  * 文章详情
  */
 export interface Article {
-    id?: string
+    id: string
     /** * 文章标题 */
     title: string
     /** * 文章内容: markdown */
@@ -39,7 +39,7 @@ export interface Article {
     likes?: string[]
     /** * 登录用户是否已点赞 */
     like_status?: boolean
-    _doc?: any
+    _doc: any
 }
 
 /**
