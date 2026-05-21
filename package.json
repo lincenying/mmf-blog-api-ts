@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "version": "1.0.1",
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@10.33.4",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
