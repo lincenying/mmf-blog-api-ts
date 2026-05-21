@@ -160,7 +160,7 @@ export async function insert(reqBody: ArticleInsert) {
 
     // 处理文章分类，将其拆分为id和名称
     const arr_category = category.split('|')
-    const data: Article = {
+    const data: Optional<Article, 'id' | '_doc'> = {
         title,
         category: arr_category[0],
         category_name: arr_category[1],
