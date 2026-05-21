@@ -244,7 +244,7 @@ export async function recover(reqQuery: { id: string }) {
     try {
         // 构建用于查找和更新的过滤条件和更新内容
         const filter = { _id }
-        const body = { is_delete: 1 }
+        const body = { is_delete: 0 }
 
         // 找到并更新文章的删除状态
         const result = await ArticleM.findOneAndUpdate(filter, body).exec()
