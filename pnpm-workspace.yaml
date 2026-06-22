@@ -38,26 +38,27 @@ packages:
 
 catalogs:
   prod:
+    '@lincy/markdown-it-toc-and-anchor': ^4.2.0
     '@lincy/utils': ^0.7.3
-    axios: ^1.16.1
+    axios: ^1.18.0
     baidu-aip-sdk: ^4.16.16
     base64-img: ^1.0.4
     cheerio: 1.0.0
     compression: ^1.8.1
     cookie-parser: ^1.4.7
-    dayjs: ^1.11.20
+    dayjs: ^1.11.21
     express: ^5.2.1
     highlight.js: ^11.11.1
     jsonwebtoken: ^9.0.3
-    lru-cache: ^11.5.0
-    markdown-it: ^14.1.1
+    lru-cache: ^11.5.1
+    markdown-it: ^14.2.0
     markdown-it-toc-and-anchor: ^4.2.0
     md5: ^2.3.0
     mockjs: ^1.1.0
     mongoose: 8.7.3
     mongoose-autopopulate: ^1.2.1
-    morgan: ^1.10.1
-    multer: ^2.1.1
+    morgan: ^1.11.0
+    multer: ^2.2.0
     qiniu: ^7.15.2
     request-ip: ^3.3.0
     serve-favicon: ^2.5.1
@@ -67,10 +68,10 @@ catalogs:
 
   lint:
     '@lincy/eslint-config': ^7.2.0
-    eslint: ^10.4.0
+    eslint: ^10.5.0
 
   types:
-    '@types/supertest': ^6.0.3
+    '@types/supertest': ^7.2.0
     '@types/compression': ^1.8.1
     '@types/cookie-parser': ^1.4.10
     '@types/express': ^5.0.6
@@ -80,18 +81,18 @@ catalogs:
     '@types/mockjs': ^1.0.10
     '@types/morgan': ^1.9.10
     '@types/multer': ^2.1.0
-    '@types/node': ^25.9.1
+    '@types/node': ^25.9.4
     '@types/request-ip': ^0.0.41
     '@types/serve-favicon': ^2.5.7
 
   dev:
     supertest: ^7.2.2
-    concurrently: ^9.2.1
+    concurrently: ^9.2.3
     jiti: ^2.7.0
     nodemon: ^3.1.14
     tsc-alias: ^1.8.17
-    tsx: ^4.22.3
-    typescript: ^5.9.3
+    tsx: ^4.22.4
+    typescript: ^6.0.3
     vitest: ^4.1.9
 
 peerDependencyRules:

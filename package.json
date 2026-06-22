@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "version": "1.0.1",
-  "packageManager": "pnpm@11.2.2",
+  "packageManager": "pnpm@11.8.0",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -25,6 +25,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@lincy/markdown-it-toc-and-anchor": "catalog:prod",
     "@lincy/utils": "catalog:prod",
     "axios": "catalog:prod",
     "baidu-aip-sdk": "catalog:prod",

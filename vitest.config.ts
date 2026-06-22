@@ -14,14 +14,13 @@ export default defineConfig({
         },
         server: {
             deps: {
-                inline: ['markdown-it-toc-and-anchor', 'markdown-it', 'highlight.js'],
+                inline: ['@lincy/markdown-it-toc-and-anchor', 'markdown-it', 'highlight.js'],
             },
         },
     },
     resolve: {
         alias: {
             '~': path.resolve(__dirname, 'src'),
-            'markdown-it/lib/token': path.resolve(__dirname, 'node_modules/markdown-it/lib/token.mjs'),
         },
     },
 })

@@ -1,6 +1,6 @@
+import markdownItTocAndAnchor from '@lincy/markdown-it-toc-and-anchor'
 import hljs from 'highlight.js'
 import markdownIt from 'markdown-it'
-import markdownItTocAndAnchor from 'markdown-it-toc-and-anchor'
 
 const md = markdownIt({
     breaks: true,

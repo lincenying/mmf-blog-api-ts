@@ -1,3 +1,13 @@
+## 2026-06-22 14:28:09
+
+### 修复 markdown-it v14 与 markdown-it-toc-and-anchor 模块解析冲突
+
+**Commit message:**
+
+```
+fix: 修复 markdown-it-toc-and-anchor 找不到 token 模块
+```
+
 ## 2026-06-22 12:15:00
 
 ### 修复 supertest TestAgent 类型导入错误
