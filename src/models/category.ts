@@ -31,4 +31,7 @@ CategorySchema.virtual('id').get(function () {
     return this._id.toString()
 })
 
+CategorySchema.index({ cate_order: -1 })
+CategorySchema.index({ is_delete: 1 })
+
 export default mongoose.model<Category>('Category', CategorySchema)

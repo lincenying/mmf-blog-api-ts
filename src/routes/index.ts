@@ -1,6 +1,7 @@
 import type { Req } from '~/types'
 import express from 'express'
-import * as backendUser from '../api/backend-user.helper'
+import * as backendUser from '../modules/admin/admin.service'
+import { fail } from '../utils/response'
 
 const router = express.Router()
 
@@ -15,10 +16,7 @@ router.post('/', async (req: Req<object, { email: string, password: string, user
 })
 
 router.get('/{*index}', (_req, res) => {
-    res.json({
-        code: -200,
-        message: '没有找到该页面',
-    })
+    res.json(fail('没有找到该页面'))
 })
 
 export default router

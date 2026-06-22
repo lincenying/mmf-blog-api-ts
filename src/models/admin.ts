@@ -31,4 +31,7 @@ AdminSchema.virtual('id').get(function () {
     return this._id.toString()
 })
 
+AdminSchema.index({ username: 1 })
+AdminSchema.index({ is_delete: 1 })
+
 export default mongoose.model<User>('Admin', AdminSchema)

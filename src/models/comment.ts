@@ -49,4 +49,7 @@ CommentSchema.virtual('id').get(function () {
 
 CommentSchema.plugin(mongooseAutopopulate)
 
+CommentSchema.index({ article_id: 1, is_delete: 1 })
+CommentSchema.index({ userid: 1 })
+
 export default mongoose.model<Comment>('Comment', CommentSchema)

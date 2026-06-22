@@ -35,45 +35,5 @@ export const secret = ''`
     }
 }
 
-function creatShiHua() {
-    if (!fsExistsSync('./src/config/shihua.js')) {
-        const secret = `export const APP_ID = ''
-export const API_KEY = ''
-export const SECRET_KEY = ''`
-        fs.writeFileSync('./src/config/shihua.js', secret)
-        console.log('./src/config/shihua.js: 生成成功')
-    }
-    else {
-        console.log('./src/config/shihua.js: 已存在, 自动跳过')
-    }
-}
-
-function creatQiNiu() {
-    if (!fsExistsSync('./src/config/qiniu.js')) {
-        const secret = `export const accessKey = ''
-export const secretKey = ''
-export const bucket = ''`
-        fs.writeFileSync('./src/config/qiniu.js', secret)
-        console.log('./src/config/qiniu.js: 生成成功')
-    }
-    else {
-        console.log('./src/config/qiniu.js: 已存在, 自动跳过')
-    }
-}
-
-function creatTuJiDao() {
-    if (!fsExistsSync('./src/config/tujidao.js')) {
-        const secret = 'export const cookies = \'\''
-        fs.writeFileSync('./src/config/tujidao.js', secret)
-        console.log('./src/config/tujidao.js: 生成成功')
-    }
-    else {
-        console.log('./src/config/tujidao.js: 已存在, 自动跳过')
-    }
-}
-
 creatSecret()
 creatMpApp()
-creatShiHua()
-creatQiNiu()
-creatTuJiDao()

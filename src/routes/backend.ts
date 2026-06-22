@@ -1,12 +1,36 @@
 import express from 'express'
 
-import * as backendArticle from '../api/backend-article'
-import * as backendCategory from '../api/backend-category'
-import * as backendUser from '../api/backend-user'
-import * as frontendUser from '../api/frontend-user'
-
 import cors from '../middlewares/cors'
 import isAdmin from '../middlewares/is-admin'
+import { validate } from '../middlewares/validate'
+
+import * as adminController from '../modules/admin/admin.controller'
+import {
+    idQueryValidator as adminIdQueryValidator,
+    listQueryValidator as adminListQueryValidator,
+    loginBodyValidator as adminLoginBodyValidator,
+    modifyBodyValidator as adminModifyBodyValidator,
+} from '../modules/admin/admin.validator'
+import * as articleController from '../modules/article/article.controller'
+import {
+    idQueryValidator as articleIdQueryValidator,
+    insertBodyValidator as articleInsertBodyValidator,
+    listQueryValidator as articleListQueryValidator,
+    modifyBodyValidator as articleModifyBodyValidator,
+} from '../modules/article/article.validator'
+import * as categoryController from '../modules/category/category.controller'
+import {
+    idQueryValidator as categoryIdQueryValidator,
+    insertBodyValidator as categoryInsertBodyValidator,
+    modifyBodyValidator as categoryModifyBodyValidator,
+} from '../modules/category/category.validator'
+import * as userController from '../modules/user/user.controller'
+import {
+    idQueryValidator as userIdQueryValidator,
+    listQueryValidator as userListQueryValidator,
+    modifyBodyValidator as userModifyBodyValidator,
+} from '../modules/user/user.validator'
+import { fail } from '../utils/response'
 
 const router = express.Router()
 
@@ -15,61 +39,35 @@ router.options('/{*backend}', cors)
 // API
 // ================ 后台 ================
 // ------- 文章 -------
-// 管理时, 获取文章列表
-router.get('/article/list', isAdmin, backendArticle.getList)
-// 管理时, 获取单篇文章
-router.get('/article/item', isAdmin, backendArticle.getItem)
-// 管理时, 发布文章
-router.post('/article/insert', isAdmin, backendArticle.insert)
-// 管理时, 删除文章
-router.get('/article/delete', isAdmin, backendArticle.deletes)
-// 管理时, 恢复文章
-router.get('/article/recover', isAdmin, backendArticle.recover)
-// 管理时, 编辑文章
-router.post('/article/modify', isAdmin, backendArticle.modify)
+router.get('/article/list', isAdmin, validate(articleListQueryValidator), articleController.getList)
+router.get('/article/item', isAdmin, validate(articleIdQueryValidator), articleController.getItem)
+router.post('/article/insert', isAdmin, validate(articleInsertBodyValidator), articleController.insert)
+router.get('/article/delete', isAdmin, validate(articleIdQueryValidator), articleController.deletes)
+router.get('/article/recover', isAdmin, validate(articleIdQueryValidator), articleController.recover)
+router.post('/article/modify', isAdmin, validate(articleModifyBodyValidator), articleController.modify)
 // ------- 分类 -------
-// 管理时, 获取分类列表
-router.get('/category/list', backendCategory.getList)
-// 管理时, 获取单个分类
-router.get('/category/item', backendCategory.getItem)
-// 管理时, 添加分类
-router.post('/category/insert', isAdmin, backendCategory.insert)
-// 管理时, 删除分类
-router.get('/category/delete', isAdmin, backendCategory.deletes)
-// 管理时, 恢复分类
-router.get('/category/recover', isAdmin, backendCategory.recover)
-// 管理时, 编辑分类
-router.post('/category/modify', isAdmin, backendCategory.modify)
+router.get('/category/list', categoryController.getList)
+router.get('/category/item', validate(categoryIdQueryValidator), categoryController.getItem)
+router.post('/category/insert', isAdmin, validate(categoryInsertBodyValidator), categoryController.insert)
+router.get('/category/delete', isAdmin, validate(categoryIdQueryValidator), categoryController.deletes)
+router.get('/category/recover', isAdmin, validate(categoryIdQueryValidator), categoryController.recover)
+router.post('/category/modify', isAdmin, validate(categoryModifyBodyValidator), categoryController.modify)
 // ------- 管理 -------
-// 后台登录
-router.post('/admin/login', backendUser.login)
-// 管理列表
-router.get('/admin/list', isAdmin, backendUser.getList)
-// 获取单个管理员
-router.get('/admin/item', isAdmin, backendUser.getItem)
-// 编辑管理员
-router.post('/admin/modify', isAdmin, backendUser.modify)
-// 删除管理员
-router.get('/admin/delete', isAdmin, backendUser.deletes)
-// 恢复管理员
-router.get('/admin/recover', isAdmin, backendUser.recover)
-
-// 用户列表
-router.get('/user/list', isAdmin, frontendUser.getList)
-// 获取单个用户
-router.get('/user/item', isAdmin, frontendUser.getItem)
-// 编辑用户
-router.post('/user/modify', isAdmin, frontendUser.modify)
-// 删除用户
-router.get('/user/delete', isAdmin, frontendUser.deletes)
-// 恢复用户
-router.get('/user/recover', isAdmin, frontendUser.recover)
+router.post('/admin/login', validate(adminLoginBodyValidator), adminController.login)
+router.get('/admin/list', isAdmin, validate(adminListQueryValidator), adminController.getList)
+router.get('/admin/item', isAdmin, validate(adminIdQueryValidator), adminController.getItem)
+router.post('/admin/modify', isAdmin, validate(adminModifyBodyValidator), adminController.modify)
+router.get('/admin/delete', isAdmin, validate(adminIdQueryValidator), adminController.deletes)
+router.get('/admin/recover', isAdmin, validate(adminIdQueryValidator), adminController.recover)
+// ------- 用户管理 -------
+router.get('/user/list', isAdmin, validate(userListQueryValidator), userController.getList)
+router.get('/user/item', isAdmin, validate(userIdQueryValidator), userController.getItem)
+router.post('/user/modify', isAdmin, validate(userModifyBodyValidator), userController.modify)
+router.get('/user/delete', isAdmin, validate(userIdQueryValidator), userController.deletes)
+router.get('/user/recover', isAdmin, validate(userIdQueryValidator), userController.recover)
 
 router.get('/{*backend}', (_req, res) => {
-    res.json({
-        code: -200,
-        message: '没有找到该页面',
-    })
+    res.json(fail('没有找到该页面'))
 })
 
 export default router

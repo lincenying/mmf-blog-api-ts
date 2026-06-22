@@ -12,10 +12,10 @@ import favicon from 'serve-favicon'
 
 // 引入 api  路由
 import mockjs from './mockjs/index'
-import appRoutes from './routes/app'
 import backendRoutes from './routes/backend'
 import frontendRoutes from './routes/frontend'
 import routes from './routes/index'
+import { fail } from './utils/response'
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
@@ -103,17 +103,13 @@ app.use(cookieParser())
 
 app.use('/static', serve('./public', true))
 app.use('/uploads', serve('./uploads', true))
-app.use('/api/app', appRoutes)
 app.use('/api/frontend', frontendRoutes)
 app.use('/api/backend', backendRoutes)
 app.use('/backend', routes)
 app.use('/mockjs', mockjs)
 
 app.get('/{*default}', (_req, res) => {
-    res.json({
-        code: -200,
-        message: '没有找到该页面',
-    })
+    res.json(fail('没有找到该页面'))
 })
 
 const port = process.env.PORT || '4000'

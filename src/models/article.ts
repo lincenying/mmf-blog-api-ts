@@ -46,4 +46,9 @@ ArticleSchema.virtual('id').get(function () {
     return this._id.toString()
 })
 
+ArticleSchema.index({ title: 1 })
+ArticleSchema.index({ category: 1, is_delete: 1 })
+ArticleSchema.index({ update_date: -1 })
+ArticleSchema.index({ is_delete: 1 })
+
 export default mongoose.model<Article>('Article', ArticleSchema)

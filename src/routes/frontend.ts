@@ -1,67 +1,67 @@
 import express from 'express'
 
-import * as frontendArticle from '../api/frontend-article'
-import * as frontendComment from '../api/frontend-comment'
-import * as frontendLike from '../api/frontend-like'
-import * as frontendUser from '../api/frontend-user'
-
 import cors from '../middlewares/cors'
 import isAdmin from '../middlewares/is-admin'
 import isUser from '../middlewares/is-user'
+import { validate } from '../middlewares/validate'
+
+import * as commentController from '../modules/comment/comment.controller'
+import {
+    idQueryValidator as commentIdQueryValidator,
+    insertBodyValidator as commentInsertBodyValidator,
+    listQueryValidator as commentListQueryValidator,
+} from '../modules/comment/comment.validator'
+import * as likeController from '../modules/like/like.controller'
+import { idQueryValidator as likeIdQueryValidator } from '../modules/like/like.validator'
+import * as publicArticleController from '../modules/public-article/public-article.controller'
+import {
+    idQueryValidator as publicArticleIdQueryValidator,
+    listQueryValidator as publicArticleListQueryValidator,
+    trendingQueryValidator,
+} from '../modules/public-article/public-article.validator'
+import * as userController from '../modules/user/user.controller'
+import {
+    accountBodyValidator,
+    jscodeBodyValidator,
+    loginBodyValidator,
+    passwordBodyValidator,
+    registerBodyValidator,
+    wxLoginBodyValidator,
+} from '../modules/user/user.validator'
+import { fail } from '../utils/response'
 
 const router = express.Router()
 
 router.options('/{*frotend}', cors)
 
-// API
+// ------ 评论管理（后台）------
+router.get('/comment/delete', isAdmin, validate(commentIdQueryValidator), commentController.deletes)
+router.get('/comment/recover', isAdmin, validate(commentIdQueryValidator), commentController.recover)
 
-// ------ 评论 ------
-// 删除评论
-router.get('/comment/delete', isAdmin, frontendComment.deletes)
-// 恢复评论
-router.get('/comment/recover', isAdmin, frontendComment.recover)
 // ================= 前台 =================
 // ------ 文章 ------
-// 前台浏览时, 获取文章列表
-router.get('/article/list', frontendArticle.getList)
-// 前台浏览时, 获取单篇文章
-router.get('/article/item', frontendArticle.getItem)
-// 前台浏览时, 热门文章
-router.get('/trending', frontendArticle.getTrending)
+router.get('/article/list', validate(publicArticleListQueryValidator), publicArticleController.getList)
+router.get('/article/item', validate(publicArticleIdQueryValidator), publicArticleController.getItem)
+router.get('/trending', validate(trendingQueryValidator), publicArticleController.getTrending)
 // ------ 评论 ------
-// 发布评论
-router.post('/comment/insert', isUser, frontendComment.insert)
-// 读取评论列表
-router.get('/comment/list', frontendComment.getList)
+router.post('/comment/insert', isUser, validate(commentInsertBodyValidator), commentController.insert)
+router.get('/comment/list', validate(commentListQueryValidator), commentController.getList)
 // ------ 用户 ------
-// 前台注册
-router.post('/user/insert', frontendUser.insert)
-// 前台登录
-router.post('/user/login', frontendUser.login)
-// 微信登录
-router.post('/user/wxLogin', frontendUser.wxLogin)
-router.post('/user/jscode2session', frontendUser.jscodeToSession)
-// 前台退出
-router.post('/user/logout', frontendUser.logout)
-// 前台账号读取
-router.get('/user/account', isUser, frontendUser.getItem)
-// 前台账号修改
-router.post('/user/account', isUser, frontendUser.account)
-// 前台密码修改
-router.post('/user/password', isUser, frontendUser.password)
+router.post('/user/insert', validate(registerBodyValidator), userController.insert)
+router.post('/user/login', validate(loginBodyValidator), userController.login)
+router.post('/user/wxLogin', validate(wxLoginBodyValidator), userController.wxLogin)
+router.post('/user/jscode2session', validate(jscodeBodyValidator), userController.jscodeToSession)
+router.post('/user/logout', userController.logout)
+router.get('/user/account', isUser, userController.getItem)
+router.post('/user/account', isUser, validate(accountBodyValidator), userController.account)
+router.post('/user/password', isUser, validate(passwordBodyValidator), userController.password)
 // ------ 喜欢 ------
-// 喜欢
-router.get('/like', isUser, frontendLike.like)
-// 取消喜欢
-router.get('/unlike', isUser, frontendLike.unlike)
-// 重置喜欢
-router.get('/reset/like', isUser, frontendLike.resetLike)
+router.get('/like', isUser, validate(likeIdQueryValidator), likeController.like)
+router.get('/unlike', isUser, validate(likeIdQueryValidator), likeController.unlike)
+router.get('/reset/like', isUser, likeController.resetLike)
 
 router.get('/{*frotend}', (_req, res) => {
-    res.json({
-        code: -200,
-        message: '没有找到该页面',
-    })
+    res.json(fail('没有找到该页面'))
 })
 
 export default router

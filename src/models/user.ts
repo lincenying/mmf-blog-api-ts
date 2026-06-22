@@ -35,4 +35,7 @@ UserSchema.virtual('id').get(function () {
     return this._id.toString()
 })
 
+UserSchema.index({ username: 1 })
+UserSchema.index({ is_delete: 1 })
+
 export default mongoose.model<User>('User', UserSchema)

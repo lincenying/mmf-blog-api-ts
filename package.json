@@ -31,6 +31,7 @@
     "cookie-parser": "catalog:prod",
     "dayjs": "catalog:prod",
     "express": "catalog:prod",
+    "express-validator": "catalog:",
     "highlight.js": "catalog:prod",
     "jsonwebtoken": "catalog:prod",
     "lru-cache": "catalog:prod",

@@ -1,6 +1,7 @@
 import type { NextFunction } from 'express'
 import type { Req, Res } from '~/types'
 import { checkJWT } from '../utils/check-jwt'
+import { failWithCode } from '../utils/response'
 
 /**
  * 中间件函数，用于校验用户是否通过登录验证。
@@ -28,19 +29,10 @@ export default async (req: Req, res: Res, next: NextFunction) => {
             res.cookie('b_userid', '', { maxAge: 0 })
             res.cookie('b_username', '', { maxAge: 0 })
 
-            res.json({
-                code: -500,
-                message: '登录验证失败',
-                data: '',
-            })
+            res.json(failWithCode(-500, '登录验证失败'))
         }
     }
     else {
-        // 未发现用户信息，直接返回错误信息
-        res.json({
-            code: -500,
-            message: '请先登录',
-            data: '',
-        })
+        res.json(failWithCode(-500, '请先登录'))
     }
 }
