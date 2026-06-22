@@ -1,3 +1,37 @@
+## 2026-06-22 12:15:00
+
+### 修复 supertest TestAgent 类型导入错误
+
+- `tests/helpers/app.ts` 使用 `supertest.Agent` 定义并导出 `TestAgent` 类型别名
+- `tests/helpers/auth.ts` 改为从 `./app` 导入 `TestAgent`
+
+**Commit message:**
+
+```
+fix: 修复 supertest TestAgent 类型导入错误
+```
+
+## 2026-06-22 12:02:24
+
+### Vitest 接口测试（直连本地 MongoDB）
+
+- 新增 Vitest + Supertest 测试基础设施（`vitest.config.ts`、`tests/setup.ts`）
+- 重构 `src/app.ts` 导出 `createApp()`，测试环境跳过 HTTP listen
+- 新增 `tests/helpers/`（app、auth、db、fixtures）与 8 个测试文件，覆盖 41 个 JSON API
+- 测试直连本地 `mmfblog_v2` 开发库，读接口基于库内数据断言，写接口以鉴权/校验为主
+- 微信 `jscode2session` 使用 mock axios，markdown 渲染在测试中 mock 以避免依赖冲突
+- `package.json` 新增 `test` / `test:watch` / `test:coverage` 脚本
+
+**Commit message:**
+
+```
+test: 新增 Vitest 接口测试直连本地 MongoDB
+
+- 搭建 Supertest 测试基础设施与 helpers
+- 覆盖 backend/frontend 共 41 个 JSON API
+- createApp 导出支持测试环境复用
+```
+
 ## 2026-06-22 11:18:30
 
 ### 审查问题修复

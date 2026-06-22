@@ -19,7 +19,10 @@
     "start": "npm run deploy",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:ts": "tsc --noEmit"
+    "lint:ts": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@lincy/utils": "catalog:prod",
@@ -31,7 +34,7 @@
     "cookie-parser": "catalog:prod",
     "dayjs": "catalog:prod",
     "express": "catalog:prod",
-    "express-validator": "catalog:",
+    "express-validator": "catalog:prod",
     "highlight.js": "catalog:prod",
     "jsonwebtoken": "catalog:prod",
     "lru-cache": "catalog:prod",
@@ -63,12 +66,15 @@
     "@types/node": "catalog:types",
     "@types/request-ip": "catalog:types",
     "@types/serve-favicon": "catalog:types",
+    "@types/supertest": "catalog:types",
     "concurrently": "catalog:dev",
     "eslint": "catalog:lint",
     "jiti": "catalog:dev",
     "nodemon": "catalog:dev",
+    "supertest": "catalog:dev",
     "tsc-alias": "catalog:dev",
     "tsx": "catalog:dev",
-    "typescript": "catalog:dev"
+    "typescript": "catalog:dev",
+    "vitest": "catalog:dev"
   }
 }

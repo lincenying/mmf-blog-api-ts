@@ -11,7 +11,7 @@
       "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -22,7 +22,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"],
   "tsc-alias": {
     "resolveFullPaths": true
