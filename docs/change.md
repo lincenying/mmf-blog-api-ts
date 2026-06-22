@@ -1,3 +1,16 @@
+## 2026-06-22 16:34:00
+
+### 修复 TypeScript 6.0 tsconfig 弃用选项导致编译失败
+
+- 移除已弃用的 `baseUrl`，将 `paths` 改为显式相对路径 `./src/*`
+- 将 `moduleResolution` 从 `node10` 迁移为 `bundler`（TS 6 推荐）
+
+**Commit message:**
+
+```
+fix: 修复 TypeScript 6.0 tsconfig 弃用选项编译错误
+```
+
 ## 2026-06-22 14:28:09
 
 ### 修复 markdown-it v14 与 markdown-it-toc-and-anchor 模块解析冲突
