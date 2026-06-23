@@ -1,3 +1,17 @@
+## 2026-06-23 11:41:35
+
+### 调整 tsc 编译输出目录结构
+
+- 设置 `rootDir: "src"`，使 `src` 下文件直接编译到 `dist`，不再生成 `dist/src`
+- 从编译范围移除 `tests`，避免 `dist/tests` 产物
+- 新增 `tsconfig.lint.json`，`lint:ts` 仍对 `src` 与 `tests` 做类型检查
+
+**Commit message:**
+
+```
+build: 调整 tsc 输出为 dist 根目录并排除 tests
+```
+
 ## 2026-06-22 16:34:00
 
 ### 修复 TypeScript 6.0 tsconfig 弃用选项导致编译失败

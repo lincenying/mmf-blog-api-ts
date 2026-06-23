@@ -38,16 +38,15 @@ packages:
 
 catalogs:
   prod:
-    '@lincy/markdown-it-toc-and-anchor': ^4.2.0
+    '@lincy/markdown-it-toc-and-anchor': ^5.0.0
     '@lincy/utils': ^0.7.3
     axios: ^1.18.0
-    baidu-aip-sdk: ^4.16.16
-    base64-img: ^1.0.4
     cheerio: 1.0.0
     compression: ^1.8.1
     cookie-parser: ^1.4.7
     dayjs: ^1.11.21
     express: ^5.2.1
+    express-validator: ^7.3.2
     highlight.js: ^11.11.1
     jsonwebtoken: ^9.0.3
     lru-cache: ^11.5.1
@@ -64,7 +63,6 @@ catalogs:
     serve-favicon: ^2.5.1
     tslib: ^2.8.1
     twig: ^3.0.0
-    express-validator: ^7.3.2
 
   lint:
     '@lincy/eslint-config': ^7.2.0

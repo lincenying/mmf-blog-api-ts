@@ -3,6 +3,7 @@
     "target": "ESNext",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
+    "rootDir": "src",
     "module": "es2015",
     "moduleResolution": "bundler",
     "paths": {
@@ -10,7 +11,7 @@
       "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["node", "vitest/globals"],
+    "types": ["node"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -21,8 +22,8 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "tests/**/*"],
-  "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "config/**/*", "dist/**/*", "public/**/*", "tests/**/*"],
   "tsc-alias": {
     "resolveFullPaths": true
   }
