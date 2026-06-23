@@ -1,3 +1,16 @@
+## 2026-06-23 21:55:00
+
+### 修复 tests 中 Vitest 全局类型（describe/it/expect）未识别
+
+- 新增 `tests/tsconfig.json`，继承 `tsconfig.lint.json` 并覆盖 `exclude`，使 IDE 与 tsc 能正确类型检查测试文件
+- 新增 `tests/vitest-env.d.ts`，引用 `vitest/globals` 全局类型
+
+**Commit message:**
+
+```
+fix: 修复 tests 目录 Vitest 全局类型未识别
+```
+
 ## 2026-06-23 11:41:35
 
 ### 调整 tsc 编译输出目录结构
