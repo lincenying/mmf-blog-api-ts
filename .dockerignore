@@ -1,3 +1,14 @@
-.venv
-dist
 node_modules
+dist
+.git
+.env
+.venv
+.cursor
+.vscode
+.qoder
+tests
+docs
+*.md
+.DS_Store
+coverage
+*.log

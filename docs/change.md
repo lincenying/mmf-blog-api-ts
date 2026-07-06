@@ -1,3 +1,20 @@
+## 2026-07-06 15:50:00
+
+### 优化 Docker 镜像体积
+
+- 重构 Dockerfile 为三阶段构建：`prod-deps` → `build` → `production`
+- 生产阶段不再重复 `pnpm install`，直接 COPY prod `node_modules`，去除 pnpm 全局安装与 store 冗余
+- 构建阶段先 COPY lockfile 再 install，提升层缓存命中率
+- 使用 Corepack 替代 `npm install -g pnpm`
+- 启用 BuildKit cache mount 加速依赖安装
+- 完善 `.dockerignore`，排除 tests、docs、.git 等无关文件
+
+**Commit message:**
+
+```
+build: 优化 Docker 三阶段构建减小镜像体积
+```
+
 ## 2026-07-06 15:14:00
 
 ### 在 package.json 中声明 ESM 模块类型
