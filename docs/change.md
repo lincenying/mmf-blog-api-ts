@@ -1,3 +1,31 @@
+## 2026-07-06 15:14:00
+
+### 在 package.json 中声明 ESM 模块类型
+
+- 新增 `"type": "module"`，消除 Node 运行 `dist/app.js` 时的 MODULE_TYPELESS_PACKAGE_JSON 警告
+- 不影响 `tsc` 编译，TypeScript 仍以 `tsconfig.json` 为准
+
+**Commit message:**
+
+```
+chore: 声明 package.json type module
+```
+
+## 2026-07-06 15:07:00
+
+### 修复 tsc 编译后 ESM 导入缺少 .js 后缀导致 deploy 失败
+
+- 在 `build` 脚本中增加 `tsc-alias` 步骤，编译后为相对路径导入自动补全 `.js` 后缀
+- 新增 `tsc:alias` 脚本，复用 `tsconfig.json` 中已有的 `tsc-alias.resolveFullPaths` 配置
+- 构建前清理 `dist`，避免旧产物干扰路径解析
+- 将 `src/mongoose.ts` 重命名为 `src/db.ts`，避免与 npm 包 `mongoose` 在 `tsc-alias` 解析时冲突
+
+**Commit message:**
+
+```
+build: 构建后运行 tsc-alias 补全 ESM 导入后缀
+```
+
 ## 2026-06-23 21:55:00
 
 ### 修复 tests 中 Vitest 全局类型（describe/it/expect）未识别

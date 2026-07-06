@@ -1,5 +1,5 @@
 import type { ClientSession, Query } from 'mongoose'
-import mongoose from '../mongoose'
+import mongoose from '../db'
 
 function isTransactionUnsupported(err: unknown) {
     if (!(err instanceof Error)) {

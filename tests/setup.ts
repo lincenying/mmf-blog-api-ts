@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 
-import mongoose from '../src/mongoose'
+import mongoose from '../src/db'
 import { resetTestAgent } from './helpers/app'
 
 vi.mock('../src/utils/markdown', () => ({

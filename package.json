@@ -1,7 +1,8 @@
 {
   "name": "mmf-blog-api-ts",
+  "type": "module",
   "version": "1.0.1",
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.10.0",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
   "license": "MIT",
@@ -11,8 +12,9 @@
   },
   "scripts": {
     "tsc": "tsc",
+    "tsc:alias": "tsc-alias -p tsconfig.json",
     "init:config": "tsx src/init.ts",
-    "build": "npm run init:config && npm run tsc",
+    "build": "npm run init:config && rm -rf dist && npm run tsc && npm run tsc:alias",
     "deploy": "node dist/app.js",
     "deploy-watch": "nodemon --delay 500ms --watch ./dist dist/app.js",
     "serve": "nodemon --watch ./src --exec tsx ./src/app.ts",
