@@ -67,23 +67,23 @@ After the success of the administrator to add, will automatically generate the a
 docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
 docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
-docker build -t lincenying/api-server:1.25.1029 -f ./Dockerfile .
+docker build -t lincenying/api-express:1.26.0727 -f ./Dockerfile .
 # 运行镜像
 docker run -d \
 -p 4008:4000 \
---name container-api-server \
-lincenying/api-server:1.25.1029
+--name container-api-express \
+lincenying/api-express:1.26.0727
 # 进入容器
-docker exec -it container-api-server /bin/bash
+docker exec -it container-api-express /bin/bash
 # 停止容器
-docker stop container-api-server
+docker stop container-api-express
 # 删除容器
-docker rm container-api-server
+docker rm container-api-express
 # 删除镜像
-docker rmi images-api-server
+docker rmi lincenying/api-express
 ```
 
-## docker-compose
+## docker compose
 
 修改`docker-compose.yml`中的`mongo.volumes`配置, 将宿主机数据库路径映射到容器中
 
@@ -94,6 +94,6 @@ volumes:
 
 ```bash
 # 生成镜像及启动容器
-docker-compose build
-docker-compose up -d
+docker compose -f docker-compose.yml build
+docker compose -f docker-compose.yml up -d
 ```

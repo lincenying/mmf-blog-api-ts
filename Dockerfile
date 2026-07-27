@@ -41,9 +41,9 @@ CMD ["node", "./dist/app.js"]
 # docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
 # docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
 # 构建镜像
-# docker build -t lincenying/api-server:1.25.1029 -f ./Dockerfile .
+# docker build -t lincenying/api-express:1.26.0727 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 4008:4000 --name container-api lincenying/api-server:1.25.1029
+# docker run -d -p 4008:4000 --name container-api lincenying/api-express:1.26.0727
 # 进入镜像
 # docker exec -it container-api /bin/sh
 # 停止容器
@@ -51,4 +51,4 @@ CMD ["node", "./dist/app.js"]
 # 删除容器
 # docker rm container-api
 # 删除镜像
-# docker rmi lincenying/api-server:1.25.1029
+# docker rmi lincenying/api-express:1.26.0727
