@@ -49,7 +49,6 @@ export async function insert(reqBody: CategoryInsert) {
             cate_order,
             cate_num: 0,
             creat_date: getNowTime(),
-            update_date: getNowTime(),
             is_delete: 0,
             timestamp: Number(getNowTime('X')),
         }
@@ -109,7 +108,6 @@ export async function modify(reqBody: CategoryModify) {
             {
                 cate_name,
                 cate_order,
-                update_date: getNowTime(),
             },
             { new: true },
         ).exec()

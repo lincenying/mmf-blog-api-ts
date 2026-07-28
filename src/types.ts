@@ -56,8 +56,6 @@ export interface Category {
     cate_num?: number
     /** * 创建时间 */
     creat_date?: string
-    /** * 编辑时间 */
-    update_date?: string
     /** * 是否删除: 0: 正常 | 1: 已删除 */
     is_delete?: number
     /** * 发布时间戳 */

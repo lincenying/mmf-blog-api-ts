@@ -1,3 +1,16 @@
+## 2026-07-28 14:36:08
+
+### 移除 categories 表不存在的 update_date 字段
+
+- 从 `Category` 类型、模型 Schema 中删除 `update_date`
+- 分类新增、编辑逻辑不再写入 `update_date`
+
+**Commit message:**
+
+```
+fix: 移除分类表中不存在的 update_date 字段
+```
+
 ## 2026-07-06 15:50:00
 
 ### 优化 Docker 镜像体积
