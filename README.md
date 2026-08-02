@@ -70,7 +70,7 @@ docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
 docker build -t lincenying/api-express:1.26.0727 -f ./Dockerfile .
 # 运行镜像
 docker run -d \
--p 4008:4000 \
+-p 4000:4000 \
 --name container-api-express \
 lincenying/api-express:1.26.0727
 # 进入容器

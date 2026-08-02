@@ -43,7 +43,7 @@ CMD ["node", "./dist/app.js"]
 # 构建镜像
 # docker build -t lincenying/api-express:1.26.0727 -f ./Dockerfile .
 # 运行镜像
-# docker run -d -p 4008:4000 --name container-api lincenying/api-express:1.26.0727
+# docker run -d -p 4000:4000 --name container-api lincenying/api-express:1.26.0727
 # 进入镜像
 # docker exec -it container-api /bin/sh
 # 停止容器

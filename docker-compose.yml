@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     ports:
-      - 4008:4000
+      - 4000:4000
     depends_on:
       - db_mongo
     networks:
