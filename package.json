@@ -1,7 +1,7 @@
 {
   "name": "mmf-blog-api-ts",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.26.0803",
   "packageManager": "pnpm@11.10.0",
   "description": "mmf blog api server",
   "author": "lincenying &lt;lincenying@qq.com&gt;",
