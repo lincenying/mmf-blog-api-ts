@@ -64,8 +64,9 @@ After the success of the administrator to add, will automatically generate the a
 
 ```bash
 # 第一次执行时, 如果node镜像拉不下来, 可以执行以下命令:
-docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22
-docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:22-alpine3.22 node:22-alpine
+docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
+docker tag swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24 node:24-alpine
+docker rmi swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:24.22.2-alpine3.24
 # 构建镜像
 docker build -t lincenying/api-express:1.26.0727 -f ./Dockerfile .
 # 运行镜像
